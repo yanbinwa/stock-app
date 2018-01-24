@@ -1,0 +1,1 @@
+[{"taskName":"Industry","taskClass":"com.yanbinwa.stock.service.collection.task.CommissionIndustryCollectionTask"}]
