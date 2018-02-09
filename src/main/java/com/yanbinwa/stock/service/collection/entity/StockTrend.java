@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,4 +39,15 @@ public class StockTrend implements Serializable
     @Column
     private double currentPrice;
 
+    public StockTrend()
+    {
+        
+    }
+    
+    public StockTrend(IndustryToStock stock)
+    {
+        this.stockId = stock.getSymbol();
+        this.createdate = new Date();
+        this.currentPrice = stock.getCurrent();
+    }
 }

@@ -18,6 +18,10 @@ import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.service.collection.element.Industry;
+import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
+import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStockCollectionElement;
+import com.yanbinwa.stock.service.collection.entity.StockTrend;
+import com.yanbinwa.stock.service.collection.utils.StockTrendUtils;
 
 /**
  * 这里每一个Industry单独作为一个task，应该在CommissionIndustry中创建
@@ -35,6 +39,10 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
     private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
     private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
     private static final int periodInterval = Period.SECOND_IN_MINUTE;
+    
+//    private static final DayWindow[] dayWindowArray = {};
+//    private static final HourWindow[] hourWindowArray = {};
+//    private static final int periodInterval = Period.SECOND_IN_MINUTE;
     
     private Industry industry;
     
@@ -76,6 +84,8 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
         }
         URL url = new URL(builder.build());
         String json = request(url);
+        List<StockTrend> stockList = getStockTrendFromQuery(json);
+        StockTrendUtils.storeStockTrend(stockList);
         logger.debug("result is json " + json);
     }
 
@@ -120,6 +130,29 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
     public Industry getIndutry()
     {
         return this.industry;
+    }
+    
+    private List<StockTrend> getStockTrendFromQuery(String result)
+    {
+        try
+        {
+            IndustryToStockCollectionElement element = 
+                    (IndustryToStockCollectionElement)JsonUtils.getObject(result, IndustryToStockCollectionElement.class);
+            if (element == null || element.getData() == null)
+            {
+                return null;
+            }
+            List<StockTrend> ret = new ArrayList<StockTrend>();
+            for (IndustryToStock industryToStock : element.getData())
+            {
+                ret.add(new StockTrend(industryToStock));
+            }
+            return ret;
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
     }
     
     class MyConstants

@@ -20,7 +20,7 @@ public class CollectionController
     /**
      * 这里可以输入多个stockId，以及开始时间和截止时间
      */
-    @RequestMapping(value="/getStockTrend", method = RequestMethod.GET)
+    @RequestMapping(value="/getStockTrend", method = RequestMethod.POST)
     public String getStockTrend(@RequestBody StockTrendRequest request)
     {
         return collectionService.getStockTrend(request);

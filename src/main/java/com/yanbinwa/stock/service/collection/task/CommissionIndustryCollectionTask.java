@@ -48,6 +48,7 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
     private static final HourWindow[] hourWindowArray = {HourWindow.HOUR8};
     private static final int periodInterval = Period.SECOND_IN_DAY;
     
+//    private static final DayWindow[] dayWindowArray = {};
 //    private static final HourWindow[] hourWindowArray = {};
 //    private static final int periodInterval = Period.SECOND_IN_MINUTE;
     
@@ -104,7 +105,7 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
             builder.delete(0, builder.length());
         }
         //这里需要将结果对照之前redis中的结果，如果有出入，需要将新增和修改或者删除的task加入到TaskManager中
-        //updateCommissionIndustry(res);
+        updateCommissionIndustry(res);
         System.out.println(res);
     }
     
