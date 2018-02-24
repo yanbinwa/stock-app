@@ -1,4 +1,4 @@
-package com.yanbinwa.stock.service.collection.entity;
+package com.yanbinwa.stock.service.aggragation.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
+import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,11 +21,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="stockTrend", indexes = {@Index(name = "stockIdAndTimeIndex", columnList = "stockId,createdate")})
-public class StockTrend implements Serializable
-{   
-    private static final long serialVersionUID = -6550777752269466791L;
-    
+@Table(name="stockTrendAgg1m", indexes = {@Index(name = "stockIdAndTimeIndex", columnList = "stockId,createdate")})
+public class StockTrendAgg1m implements Serializable, StockTrend
+{       
+    private static final long serialVersionUID = 5894977025020845954L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,15 +39,8 @@ public class StockTrend implements Serializable
     @Column
     private double currentPrice;
 
-    public StockTrend()
+    public StockTrendAgg1m()
     {
         
-    }
-    
-    public StockTrend(IndustryToStock stock)
-    {
-        this.stockId = stock.getSymbol();
-        this.createdate = new Date();
-        this.currentPrice = stock.getCurrent();
     }
 }

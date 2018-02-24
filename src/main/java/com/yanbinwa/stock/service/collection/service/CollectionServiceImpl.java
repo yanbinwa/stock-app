@@ -5,8 +5,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yanbinwa.stock.service.collection.dao.StockTrendDao;
-import com.yanbinwa.stock.service.collection.entity.StockTrend;
+import com.yanbinwa.stock.service.collection.dao.StockTrendRawDao;
+import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
 import com.yanbinwa.stock.service.collection.request.StockTrendRequest;
 
 /**
@@ -20,16 +20,16 @@ import com.yanbinwa.stock.service.collection.request.StockTrendRequest;
 public class CollectionServiceImpl implements CollectionService
 {
     @Autowired
-    StockTrendDao stockTrendDao;
+    StockTrendRawDao stockTrendRawDao;
 
     @Override
     public String getStockTrend(StockTrendRequest request)
     {
-        StockTrend stock = new StockTrend();
+        StockTrendRaw stock = new StockTrendRaw();
         stock.setStockId("SZ300347");
         stock.setCreatedate(new Date());
         stock.setCurrentPrice(36.4);
-        stockTrendDao.save(stock);
+        stockTrendRawDao.save(stock);
         return null;
     }
 

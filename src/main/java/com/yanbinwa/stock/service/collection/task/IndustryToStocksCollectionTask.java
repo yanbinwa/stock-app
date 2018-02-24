@@ -17,11 +17,13 @@ import com.yanbinwa.stock.common.type.DayWindow;
 import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
+import com.yanbinwa.stock.entity.stockTrend.StockTrend;
+import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
 import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStockCollectionElement;
-import com.yanbinwa.stock.service.collection.entity.StockTrend;
-import com.yanbinwa.stock.service.collection.utils.StockTrendUtils;
+import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
+import com.yanbinwa.stock.utils.StockTrendUtils;
 
 /**
  * 这里每一个Industry单独作为一个task，应该在CommissionIndustry中创建
@@ -36,13 +38,13 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
 
     private static Logger logger = Logger.getLogger(IndustryToStocksCollectionTask.class);
     
-    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
-    private static final int periodInterval = Period.SECOND_IN_MINUTE;
-    
-//    private static final DayWindow[] dayWindowArray = {};
-//    private static final HourWindow[] hourWindowArray = {};
+//    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
+//    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
 //    private static final int periodInterval = Period.SECOND_IN_MINUTE;
+    
+    private static final DayWindow[] dayWindowArray = {};
+    private static final HourWindow[] hourWindowArray = {};
+    private static final int periodInterval = Period.SECOND_IN_MINUTE;
     
     private Industry industry;
     
@@ -85,7 +87,7 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
         URL url = new URL(builder.build());
         String json = request(url);
         List<StockTrend> stockList = getStockTrendFromQuery(json);
-        StockTrendUtils.storeStockTrend(stockList);
+        StockTrendUtils.storeStockTrend(stockList, StockTrendType.TYPE_RAW);
         logger.debug("result is json " + json);
     }
 
@@ -145,7 +147,7 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
             List<StockTrend> ret = new ArrayList<StockTrend>();
             for (IndustryToStock industryToStock : element.getData())
             {
-                ret.add(new StockTrend(industryToStock));
+                ret.add(new StockTrendRaw(industryToStock));
             }
             return ret;
         }

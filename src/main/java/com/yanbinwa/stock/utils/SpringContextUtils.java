@@ -1,4 +1,4 @@
-package com.yanbinwa.stock.service.collection.utils;
+package com.yanbinwa.stock.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
