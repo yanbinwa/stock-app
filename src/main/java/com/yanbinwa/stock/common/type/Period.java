@@ -86,7 +86,7 @@ public class Period
             }
             else
             {
-                nextTimestamp = System.currentTimeMillis() + interval * MILLISECOND_IN_SECOND;
+                nextTimestamp = System.currentTimeMillis() + ((long)interval) * MILLISECOND_IN_SECOND;
             }
             return true;
         }
@@ -98,7 +98,7 @@ public class Period
         }
         else
         {
-            date = new Date(System.currentTimeMillis() + interval * MILLISECOND_IN_SECOND);
+            date = new Date(System.currentTimeMillis() + ((long)interval) * MILLISECOND_IN_SECOND);
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);        

@@ -4,6 +4,7 @@ public class Constants
 {
     public static final int REGULAR_MANAGER_THREAD_POOL_SIZE = 100;
     public static final String REGULAR_MANAGER_TASK_FILE_KEY = "REGULAR_MANAGER_TASK_FILE";
+    public static final String REGULAR_MANAGER_INTRINSIC_TASK_FILE_KEY = "REGULAR_MANAGER_INTRINSIC_TASK_FILE";
     
     public static final long PERIOD_DEFAULT_NEXT_TIMESTAMP = -1L;
     public static final int REGULAR_POLL_INTERVAL = 1000;

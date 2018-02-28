@@ -23,6 +23,7 @@ import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
 import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStockCollectionElement;
 import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
+import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 
 /**
@@ -87,6 +88,7 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
         URL url = new URL(builder.build());
         String json = request(url);
         List<StockTrend> stockList = getStockTrendFromQuery(json);
+        updateIndustryToStockId(stockList, industry.getIndustryName());
         StockTrendUtils.storeStockTrend(stockList, StockTrendType.TYPE_RAW);
         logger.debug("result is json " + json);
     }
@@ -155,6 +157,16 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
         {
             return null;
         }
+    }
+    
+    private void updateIndustryToStockId(List<StockTrend> stockTrendList, String industryName)
+    {
+        List<String> stockIds = new ArrayList<String>();
+        for (StockTrend stockTrend : stockTrendList)
+        {
+            stockIds.add(stockTrend.getStockId());
+        }
+        CollectionUtils.setIndustryToStockId(industryName, stockIds.toString());
     }
     
     class MyConstants

@@ -1,4 +1,5 @@
 REGULAR_MANAGER_TASK_FILE=/Users/emotibot/Documents/workspace/stock/stock-app/file/task.txt
+REGULAR_MANAGER_INTRINSIC_TASK_FILE=/Users/emotibot/Documents/workspace/stock/stock-app/file/regularTask.txt
 
 REDIS_HOST=docker
 REDIS_PORT=6379

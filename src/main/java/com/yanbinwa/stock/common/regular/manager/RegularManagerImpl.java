@@ -41,6 +41,7 @@ public class RegularManagerImpl implements RegularManager
     /* key为taskname, value为该task过期的时间点 */
     private Map<String, Long> runningTaskTimeoutMap = new ConcurrentHashMap<String, Long>();
     private String taskStoreFile = ConfigManager.INSTANCE.getPropertyString(Constants.REGULAR_MANAGER_TASK_FILE_KEY);
+    private String regularTaskStoreFile = ConfigManager.INSTANCE.getPropertyString(Constants.REGULAR_MANAGER_INTRINSIC_TASK_FILE_KEY);
     private Thread regularPollThread = null;
     private Thread checkTaskFinishThread = null;
     
@@ -137,6 +138,12 @@ public class RegularManagerImpl implements RegularManager
         return taskName + "-" + taskClass;
     }
     
+    /**
+     * 这里有两种task，一种是需要触发添加的，另一种是系统初始就需要的task
+     * 
+     * 同样具有两个task相关的文件，一个是task.txt，记录系统中所有的task，
+     * 另一个是regularTask.txt, 记录系统启动时需要运行的task，所以task.txt中可能会包含regularTask.txt中的任务
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void loadTask()
     {
@@ -149,6 +156,22 @@ public class RegularManagerImpl implements RegularManager
         }
         Type resultType = new TypeToken<List<RegularTaskWarp>>(){}.getType();
         List<RegularTaskWarp> taskWarpList = (List<RegularTaskWarp>) JsonUtils.getObject(storeContext, resultType);
+        
+        String regularStoreContext = FileUtils.readFile(regularTaskStoreFile);
+        if (StringUtils.isEmpty(storeContext))
+        {
+            logger.info("can not load task map from " + regularTaskStoreFile);
+            return;
+        }
+        List<RegularTaskWarp> regularTaskWarpList = (List<RegularTaskWarp>) JsonUtils.getObject(regularStoreContext, resultType);
+        for (RegularTaskWarp taskWarp : regularTaskWarpList)
+        {
+            if (!taskWarpList.contains(taskWarp))
+            {
+                taskWarpList.add(taskWarp);
+            }
+        }
+        
         for (RegularTaskWarp taskWarp : taskWarpList)
         {
             String taskName = taskWarp.getTaskName();

@@ -36,6 +36,32 @@ public class CollectionUtils
         }
     }
     
+    public static void setIndustryToStockId(String industryName, String stockIds)
+    {
+        if (RedisUtils.isReady())
+        {
+            RedisUtils.set(generateKey(MyConstants.INDUSTRY_STOCKID_KEY + "-" + industryName), stockIds);
+        }
+    }
+    
+    public static String getIndustryToStockId(String industryName)
+    {
+        String ret = null;
+        if (RedisUtils.isReady())
+        {
+            ret = RedisUtils.get(generateKey(MyConstants.INDUSTRY_STOCKID_KEY + "-" + industryName));
+        }
+        return ret;
+    }
+    
+    public static void deleteIndustryToStockId(String industryName)
+    {
+        if (RedisUtils.isReady())
+        {
+            RedisUtils.delete(generateKey(MyConstants.INDUSTRY_STOCKID_KEY + "-" + industryName));
+        }
+    }
+    
     private static String generateKey(String originalKey)
     {
         return MyConstants.COLLECTION_KEY + "-" + originalKey;
@@ -46,4 +72,5 @@ class MyConstants
 {
     public static final String COLLECTION_KEY = "collection";
     public static final String COMMISSION_INDUSTRY_KEY = "commission_industry";
+    public static final String INDUSTRY_STOCKID_KEY = "industry_stockId";
 }

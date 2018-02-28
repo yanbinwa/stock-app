@@ -516,8 +516,7 @@ public class StockTrendUtils
     public static void stockTrendAggragationLogic(StockTrendType fromType, StockTrendType toType, int interval, boolean tag, Class<? extends StockTrend> stockTrendClass)
     {
         long endTimestamp = System.currentTimeMillis();
-        //long startTimestamp = endTimestamp - interval * 1000;
-        long startTimestamp = 0;
+        long startTimestamp = endTimestamp - interval * 1000;
         List<StockTrend> fetchStockTrendList = StockTrendUtils.getStockTrendByDate(fromType, 
                 new Date(startTimestamp), new Date(endTimestamp));
         if (fetchStockTrendList == null || fetchStockTrendList.isEmpty())
