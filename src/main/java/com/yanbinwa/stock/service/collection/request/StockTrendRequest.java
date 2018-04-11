@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +24,8 @@ public class StockTrendRequest
     @SerializedName("endTimestamp")
     @Expose
     private long endTimestamp;
+    
+    @SerializedName("stockTrendType")
+    @Expose
+    private StockTrendType stockTrendType;
 }

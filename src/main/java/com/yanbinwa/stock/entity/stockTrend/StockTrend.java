@@ -2,7 +2,7 @@ package com.yanbinwa.stock.entity.stockTrend;
 
 import java.util.Date;
 
-public interface StockTrend
+public interface StockTrend extends Comparable<StockTrend>
 {
     public Long getId();
     

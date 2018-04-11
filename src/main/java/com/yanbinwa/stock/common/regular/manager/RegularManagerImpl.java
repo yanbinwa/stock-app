@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
 
@@ -44,6 +45,8 @@ public class RegularManagerImpl implements RegularManager
     private String regularTaskStoreFile = ConfigManager.INSTANCE.getPropertyString(Constants.REGULAR_MANAGER_INTRINSIC_TASK_FILE_KEY);
     private Thread regularPollThread = null;
     private Thread checkTaskFinishThread = null;
+    
+    private ReentrantLock storeTaskLock = new ReentrantLock();
     
     public RegularManagerImpl()
     {
@@ -196,17 +199,25 @@ public class RegularManagerImpl implements RegularManager
     
     private void storeTask()
     {
-        List<AbstractRegularTask> taskList = new ArrayList<AbstractRegularTask>(taskMap.values());
-        List<RegularTaskWarp> taskWarpList = new ArrayList<RegularTaskWarp>();
-        for (AbstractRegularTask task : taskList)
+        storeTaskLock.lock();
+        try
         {
-            taskWarpList.add(task.getTaskWarp());
+            List<AbstractRegularTask> taskList = new ArrayList<AbstractRegularTask>(taskMap.values());
+            List<RegularTaskWarp> taskWarpList = new ArrayList<RegularTaskWarp>();
+            for (AbstractRegularTask task : taskList)
+            {
+                taskWarpList.add(task.getTaskWarp());
+            }
+            String storeContext = JsonUtils.getJsonStr(taskWarpList);
+            boolean ret = FileUtils.writeFile(taskStoreFile, storeContext);
+            if (!ret)
+            {
+                logger.error("can not store task file");
+            }
         }
-        String storeContext = JsonUtils.getJsonStr(taskWarpList);
-        boolean ret = FileUtils.writeFile(taskStoreFile, storeContext);
-        if (!ret)
+        finally
         {
-            logger.error("can not store task file");
+            storeTaskLock.unlock();
         }
     }
     
@@ -250,6 +261,7 @@ public class RegularManagerImpl implements RegularManager
     {
         while(true)
         {
+            boolean isTaskRemoved = false;
             for(Map.Entry<String, Future<?>> entry : runningTaskMap.entrySet())
             {
                 String taskKey = entry.getKey();
@@ -280,8 +292,13 @@ public class RegularManagerImpl implements RegularManager
                     else
                     {
                         taskMap.remove(taskKey);
+                        isTaskRemoved = true;
                     }
                 }
+            }
+            if (isTaskRemoved)
+            {
+                storeTask();
             }
             try
             {

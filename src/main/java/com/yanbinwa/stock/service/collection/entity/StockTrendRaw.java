@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.yanbinwa.stock.entity.stockTrend.StockTrend;
+import com.yanbinwa.stock.entity.stockTrend.AbstractStockTrend;
 import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
 
 import lombok.Getter;
@@ -23,7 +23,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="stockTrendRaw", indexes = {@Index(name = "stockIdAndTimeIndex", columnList = "stockId,createdate")})
-public class StockTrendRaw implements Serializable, StockTrend
+public class StockTrendRaw extends AbstractStockTrend implements Serializable
 {   
     private static final long serialVersionUID = -6550777752269466791L;
     

@@ -193,29 +193,29 @@ public class StockTrendUtils
         return newStockTrendList;
     }
     
-    public static List<StockTrend> getStockTrendByDate(StockTrendType type, Date startDate, Date endDate)
+    public static List<StockTrend> getStockTrendByDate(StockTrendType type, String stockId, Date startDate, Date endDate)
     {
         switch(type)
         {
         case TYPE_RAW:
-            return getStockTrendRawByDate(startDate, endDate);
+            return getStockTrendRawByDate(stockId, startDate, endDate);
         case TYPE_1MIN:
-            return getStockTrendAgg1MinByDate(startDate, endDate);
+            return getStockTrendAgg1MinByDate(stockId, startDate, endDate);
         case TYPE_5MIN:
-            return getStockTrendAgg5MinByDate(startDate, endDate);
+            return getStockTrendAgg5MinByDate(stockId, startDate, endDate);
         case TYPE_1H:
-            return getStockTrendAgg1hByDate(startDate, endDate);
+            return getStockTrendAgg1hByDate(stockId, startDate, endDate);
         case TYPE_1D:
-            return getStockTrendAgg1dByDate(startDate, endDate);
+            return getStockTrendAgg1dByDate(stockId, startDate, endDate);
         case TYPE_1W:
-            return getStockTrendAgg1wByDate(startDate, endDate);
+            return getStockTrendAgg1wByDate(stockId, startDate, endDate);
         case TYPE_1M:
-            return getStockTrendAgg1mByDate(startDate, endDate);
+            return getStockTrendAgg1mByDate(stockId, startDate, endDate);
         }
         return null;
     }
     
-    private static Specification<StockTrendRaw> getSpecificationForStockTrendRawByDate(Date startDate, Date endDate)
+    private static Specification<StockTrendRaw> getSpecificationForStockTrendRawByDate(String stockId, Date startDate, Date endDate)
     {
         Specification<StockTrendRaw> querySpecifi = new Specification<StockTrendRaw>() 
         {
@@ -232,13 +232,17 @@ public class StockTrendUtils
                 {
                     predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
                 }
+                if (stockId != null)
+                {
+                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+                }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } 
         };
         return querySpecifi;
     }
     
-    private static Specification<StockTrendAgg1Min> getSpecificationForStockTrendAgg1MinByDate(Date startDate, Date endDate)
+    private static Specification<StockTrendAgg1Min> getSpecificationForStockTrendAgg1MinByDate(String stockId, Date startDate, Date endDate)
     {
         Specification<StockTrendAgg1Min> querySpecifi = new Specification<StockTrendAgg1Min>() 
         {
@@ -255,13 +259,17 @@ public class StockTrendUtils
                 {
                     predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
                 }
+                if (stockId != null)
+                {
+                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+                }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } 
         };
         return querySpecifi;
     }
     
-    private static Specification<StockTrendAgg5Min> getSpecificationForStockTrendAgg5MinByDate(Date startDate, Date endDate)
+    private static Specification<StockTrendAgg5Min> getSpecificationForStockTrendAgg5MinByDate(String stockId, Date startDate, Date endDate)
     {
         Specification<StockTrendAgg5Min> querySpecifi = new Specification<StockTrendAgg5Min>() 
         {
@@ -278,13 +286,17 @@ public class StockTrendUtils
                 {
                     predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
                 }
+                if (stockId != null)
+                {
+                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+                }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } 
         };
         return querySpecifi;
     }
     
-    private static Specification<StockTrendAgg1h> getSpecificationForStockTrendAgg1hByDate(Date startDate, Date endDate)
+    private static Specification<StockTrendAgg1h> getSpecificationForStockTrendAgg1hByDate(String stockId, Date startDate, Date endDate)
     {
         Specification<StockTrendAgg1h> querySpecifi = new Specification<StockTrendAgg1h>() 
         {
@@ -301,13 +313,17 @@ public class StockTrendUtils
                 {
                     predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
                 }
+                if (stockId != null)
+                {
+                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+                }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } 
         };
         return querySpecifi;
     }
     
-    private static Specification<StockTrendAgg1d> getSpecificationForStockTrendAgg1dByDate(Date startDate, Date endDate)
+    private static Specification<StockTrendAgg1d> getSpecificationForStockTrendAgg1dByDate(String stockId, Date startDate, Date endDate)
     {
         Specification<StockTrendAgg1d> querySpecifi = new Specification<StockTrendAgg1d>() 
         {
@@ -324,13 +340,17 @@ public class StockTrendUtils
                 {
                     predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
                 }
+                if (stockId != null)
+                {
+                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+                }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } 
         };
         return querySpecifi;
     }
     
-    private static Specification<StockTrendAgg1w> getSpecificationForStockTrendAgg1wByDate(Date startDate, Date endDate)
+    private static Specification<StockTrendAgg1w> getSpecificationForStockTrendAgg1wByDate(String stockId, Date startDate, Date endDate)
     {
         Specification<StockTrendAgg1w> querySpecifi = new Specification<StockTrendAgg1w>() 
         {
@@ -347,13 +367,17 @@ public class StockTrendUtils
                 {
                     predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
                 }
+                if (stockId != null)
+                {
+                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+                }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } 
         };
         return querySpecifi;
     }
     
-    private static Specification<StockTrendAgg1m> getSpecificationForStockTrendAgg1mByDate(Date startDate, Date endDate)
+    private static Specification<StockTrendAgg1m> getSpecificationForStockTrendAgg1mByDate(String stockId, Date startDate, Date endDate)
     {
         Specification<StockTrendAgg1m> querySpecifi = new Specification<StockTrendAgg1m>() 
         {
@@ -370,71 +394,75 @@ public class StockTrendUtils
                 {
                     predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
                 }
+                if (stockId != null)
+                {
+                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+                }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } 
         };
         return querySpecifi;
     }
     
-    private static List<StockTrend> getStockTrendRawByDate(Date startDate, Date endDate)
+    private static List<StockTrend> getStockTrendRawByDate(String stockId, Date startDate, Date endDate)
     {
-        List<StockTrendRaw> queryResult = stockTrendUtils.stockTrendRawDao.findAll(getSpecificationForStockTrendRawByDate(startDate, endDate));
+        List<StockTrendRaw> queryResult = stockTrendUtils.stockTrendRawDao.findAll(getSpecificationForStockTrendRawByDate(stockId, startDate, endDate));
         List<StockTrend> ret = new ArrayList<StockTrend>();
         ret.addAll(queryResult);
         return ret;
     }
     
-    private static List<StockTrend> getStockTrendAgg1MinByDate(Date startDate, Date endDate)
+    private static List<StockTrend> getStockTrendAgg1MinByDate(String stockId, Date startDate, Date endDate)
     {
-        List<StockTrendAgg1Min> queryResult = stockTrendUtils.stockTrendAgg1MinDao.findAll(getSpecificationForStockTrendAgg1MinByDate(startDate, endDate));
+        List<StockTrendAgg1Min> queryResult = stockTrendUtils.stockTrendAgg1MinDao.findAll(getSpecificationForStockTrendAgg1MinByDate(stockId, startDate, endDate));
         List<StockTrend> ret = new ArrayList<StockTrend>();
         ret.addAll(queryResult);
         return ret;
     }
     
-    private static List<StockTrend> getStockTrendAgg5MinByDate(Date startDate, Date endDate)
+    private static List<StockTrend> getStockTrendAgg5MinByDate(String stockId, Date startDate, Date endDate)
     {
-        List<StockTrendAgg5Min> queryResult = stockTrendUtils.stockTrendAgg5MinDao.findAll(getSpecificationForStockTrendAgg5MinByDate(startDate, endDate));
+        List<StockTrendAgg5Min> queryResult = stockTrendUtils.stockTrendAgg5MinDao.findAll(getSpecificationForStockTrendAgg5MinByDate(stockId, startDate, endDate));
         List<StockTrend> ret = new ArrayList<StockTrend>();
         ret.addAll(queryResult);
         return ret;
     }
     
-    private static List<StockTrend> getStockTrendAgg1hByDate(Date startDate, Date endDate)
+    private static List<StockTrend> getStockTrendAgg1hByDate(String stockId, Date startDate, Date endDate)
     {
-        List<StockTrendAgg1h> queryResult = stockTrendUtils.stockTrendAgg1hDao.findAll(getSpecificationForStockTrendAgg1hByDate(startDate, endDate));
+        List<StockTrendAgg1h> queryResult = stockTrendUtils.stockTrendAgg1hDao.findAll(getSpecificationForStockTrendAgg1hByDate(stockId, startDate, endDate));
         List<StockTrend> ret = new ArrayList<StockTrend>();
         ret.addAll(queryResult);
         return ret;
     }
     
-    private static List<StockTrend> getStockTrendAgg1dByDate(Date startDate, Date endDate)
+    private static List<StockTrend> getStockTrendAgg1dByDate(String stockId, Date startDate, Date endDate)
     {
-        List<StockTrendAgg1d> queryResult = stockTrendUtils.stockTrendAgg1dDao.findAll(getSpecificationForStockTrendAgg1dByDate(startDate, endDate));
+        List<StockTrendAgg1d> queryResult = stockTrendUtils.stockTrendAgg1dDao.findAll(getSpecificationForStockTrendAgg1dByDate(stockId, startDate, endDate));
         List<StockTrend> ret = new ArrayList<StockTrend>();
         ret.addAll(queryResult);
         return ret;
     }
     
-    private static List<StockTrend> getStockTrendAgg1wByDate(Date startDate, Date endDate)
+    private static List<StockTrend> getStockTrendAgg1wByDate(String stockId, Date startDate, Date endDate)
     {
-        List<StockTrendAgg1w> queryResult = stockTrendUtils.stockTrendAgg1wDao.findAll(getSpecificationForStockTrendAgg1wByDate(startDate, endDate));
+        List<StockTrendAgg1w> queryResult = stockTrendUtils.stockTrendAgg1wDao.findAll(getSpecificationForStockTrendAgg1wByDate(stockId, startDate, endDate));
         List<StockTrend> ret = new ArrayList<StockTrend>();
         ret.addAll(queryResult);
         return ret;
     }
     
-    private static List<StockTrend> getStockTrendAgg1mByDate(Date startDate, Date endDate)
+    private static List<StockTrend> getStockTrendAgg1mByDate(String stockId, Date startDate, Date endDate)
     {
-        List<StockTrendAgg1m> queryResult = stockTrendUtils.stockTrendAgg1mDao.findAll(getSpecificationForStockTrendAgg1mByDate(startDate, endDate));
+        List<StockTrendAgg1m> queryResult = stockTrendUtils.stockTrendAgg1mDao.findAll(getSpecificationForStockTrendAgg1mByDate(stockId, startDate, endDate));
         List<StockTrend> ret = new ArrayList<StockTrend>();
         ret.addAll(queryResult);
         return ret;
     }
     
-    public static void deleteStockTrendByDate(StockTrendType type, Date startDate, Date endDate)
+    public static void deleteStockTrendByDate(StockTrendType type, String stockId, Date startDate, Date endDate)
     {
-        List<StockTrend> deleteStockTrendList = getStockTrendByDate(type, startDate, endDate);
+        List<StockTrend> deleteStockTrendList = getStockTrendByDate(type, stockId, startDate, endDate);
         if (deleteStockTrendList == null || deleteStockTrendList.isEmpty())
         {
             return;
@@ -517,7 +545,7 @@ public class StockTrendUtils
     {
         long endTimestamp = System.currentTimeMillis();
         long startTimestamp = endTimestamp - interval * 1000;
-        List<StockTrend> fetchStockTrendList = StockTrendUtils.getStockTrendByDate(fromType, 
+        List<StockTrend> fetchStockTrendList = StockTrendUtils.getStockTrendByDate(fromType, null, 
                 new Date(startTimestamp), new Date(endTimestamp));
         if (fetchStockTrendList == null || fetchStockTrendList.isEmpty())
         {
@@ -566,7 +594,7 @@ public class StockTrendUtils
         StockTrendUtils.storeStockTrend(resultStockTrendList, toType);
         if (tag)
         {
-            StockTrendUtils.deleteStockTrendByDate(fromType, new Date(startTimestamp), new Date(endTimestamp));
+            StockTrendUtils.deleteStockTrendByDate(fromType, null, new Date(startTimestamp), new Date(endTimestamp));
         }
     }
 }

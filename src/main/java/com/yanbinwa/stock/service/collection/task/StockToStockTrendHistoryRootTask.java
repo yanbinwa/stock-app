@@ -42,7 +42,7 @@ public class StockToStockTrendHistoryRootTask extends AbstractCollector
             {
                 for (StockTrendType stockTrendType : stockTrendTypes)
                 {
-                    StockToStockTrendHistoryTask task = new StockToStockTrendHistoryTask("StockToStockTrendHistoryTask-" + stockId, stockId, stockTrendType);
+                    StockToStockTrendHistoryTask task = new StockToStockTrendHistoryTask("StockToStockTrendHistoryTask-" + stockTrendType + stockId, stockId, stockTrendType);
                     RegularManagerSingleton.getInstance().addRegularTask(task);
                 }
             }
