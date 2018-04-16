@@ -20,4 +20,10 @@ public class Constants
     public static final String TOMCAT_MAX_CONNECTION_KEY = "TOMCAT_MAX_CONNECTION";
     public static final String TOMCAT_MAX_THREAD_KEY = "TOMCAT_MAX_THREAD";
     public static final String TOMCAT_CONNECTION_TIMEOUT_KEY = "TOMCAT_CONNECTION_TIMEOUT";
+    
+    public static final int INCREATE = 1;
+    public static final int DECREATE = -1;
+    public static final String TRAIN_DATA_DATAS = "datas";
+    public static final String TRAIN_DATA_RESULTS = "results";
+    public static final String PREDICT_DATA = "data";
 }
