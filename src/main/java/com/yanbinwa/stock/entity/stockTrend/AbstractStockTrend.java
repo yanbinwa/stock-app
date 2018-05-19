@@ -1,8 +1,11 @@
 package com.yanbinwa.stock.entity.stockTrend;
 
+import com.emotibot.middleware.utils.JsonUtils;
+
 public abstract class AbstractStockTrend implements StockTrend 
 {
-
+    
+    
     @Override
     public int compareTo(StockTrend other)
     {
@@ -18,6 +21,12 @@ public abstract class AbstractStockTrend implements StockTrend
         {
             return 0;
         }
+    }
+    
+    @Override
+    public String toString()
+    {
+        return JsonUtils.getJsonStr(this);
     }
     
 }

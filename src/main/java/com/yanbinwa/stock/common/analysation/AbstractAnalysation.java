@@ -1,11 +1,14 @@
 package com.yanbinwa.stock.common.analysation;
 
+import org.apache.log4j.Logger;
+
 import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
 import com.yanbinwa.stock.common.type.Period;
 
 public abstract class AbstractAnalysation extends AbstractRegularTask implements Analysation
 {
-
+    private static Logger logger = Logger.getLogger(AbstractAnalysation.class);
+    
     public AbstractAnalysation(String taskName)
     {
         super(taskName);
@@ -24,7 +27,7 @@ public abstract class AbstractAnalysation extends AbstractRegularTask implements
     @Override
     public void execute()
     {
-        System.out.println(getClass().getSimpleName() + " aggragation...");
+        logger.debug(getClass().getSimpleName() + " aggragation...");
         analysationLogic();
     }
 }

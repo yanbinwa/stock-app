@@ -1,7 +1,6 @@
 package com.yanbinwa.stock.service.collection.task;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,8 +17,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.emotibot.middleware.utils.JsonUtils;
-import com.emotibot.middleware.utils.StringUtils;
-import com.google.gson.reflect.TypeToken;
 import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.URLMapper;
 import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
@@ -106,28 +103,19 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
         }
         //这里需要将结果对照之前redis中的结果，如果有出入，需要将新增和修改或者删除的task加入到TaskManager中
         updateCommissionIndustry(res);
-        System.out.println(res);
     }
     
     /**
      * 或者redis中存放的数据，如何为空，则生成一个对应的
      * @param res
      */
-    @SuppressWarnings({ "unchecked", "unused" })
     private void updateCommissionIndustry(Map<String, Industry> res)
     {
-        Map<String, Industry> oldIndustryMap = null;
-        String commissionIndustryInfo = CollectionUtils.getCommissionIndustry();
-        if (StringUtils.isEmpty(commissionIndustryInfo))
+        Map<String, Industry> oldIndustryMap = CollectionUtils.getCommissionIndustry();
+        if (oldIndustryMap == null)
         {
             oldIndustryMap = new HashMap<String, Industry>();
         }
-        else
-        {
-            Type resultType = new TypeToken<Map<String, Industry>>(){}.getType();
-            oldIndustryMap = (Map<String, Industry>) JsonUtils.getObject(commissionIndustryInfo, resultType);
-        }
-        
         updateCommissionIndustryTask(res, oldIndustryMap);
         CollectionUtils.setCommissionIndustry(JsonUtils.getJsonStr(res));
     }

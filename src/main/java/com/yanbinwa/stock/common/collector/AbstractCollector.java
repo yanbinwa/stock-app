@@ -3,6 +3,8 @@ package com.yanbinwa.stock.common.collector;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+
 import com.yanbinwa.stock.common.http.HttpRequestHelper;
 import com.yanbinwa.stock.common.http.URLMapper;
 import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
@@ -10,6 +12,7 @@ import com.yanbinwa.stock.common.type.Period;
 
 public abstract class AbstractCollector extends AbstractRegularTask implements Collector
 {
+    private static Logger logger = Logger.getLogger(AbstractCollector.class);
     
     public AbstractCollector(String taskName)
     {
@@ -29,7 +32,7 @@ public abstract class AbstractCollector extends AbstractRegularTask implements C
     @Override
     public void execute()
     {
-        System.out.println(getClass().getSimpleName() + " collecting...");
+        logger.debug(getClass().getSimpleName() + " collecting...");
 
         int retryTime = MyConstants.RETRY_TIME;
 
@@ -50,7 +53,7 @@ public abstract class AbstractCollector extends AbstractRegularTask implements C
                     {
                         throw e;
                     }
-                    System.out.println("Collector:   -> " + loopTime + " times");
+                    logger.debug("Collector:   -> " + loopTime + " times");
                     updateCookie(MyConstants.WEBSITE);
                     loopTime ++;
                 }
@@ -64,7 +67,7 @@ public abstract class AbstractCollector extends AbstractRegularTask implements C
     
     protected String request(URL url) throws IOException 
     {
-        System.out.println("url: " + url);
+        logger.debug("url: " + url);
         return new HttpRequestHelper(MyConstants.WEBSITE).request(url);
     }
     

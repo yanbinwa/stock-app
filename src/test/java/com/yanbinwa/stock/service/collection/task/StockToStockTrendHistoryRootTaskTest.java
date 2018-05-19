@@ -20,7 +20,7 @@ public class StockToStockTrendHistoryRootTaskTest
         Thread.sleep(1000);
         StockToStockTrendHistoryRootTask task = new StockToStockTrendHistoryRootTask("StockToStockTrendHistoryRootTask");
         task.execute();
-        Thread.sleep(100000);
+        Thread.sleep(10000000);
     }
 
 }

@@ -17,10 +17,12 @@ import com.yanbinwa.stock.utils.StockTrendUtils;
 
 public class StockTrendAggragation1dTask extends AbstractAggragation
 {
-    private static Logger logger = Logger.getLogger(StockTrendAggragation1MinTask.class);
+    private static Logger logger = Logger.getLogger(StockTrendAggragation1dTask.class);
     
-    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
+//    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
+//    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
+    private static final DayWindow[] dayWindowArray = {};
+    private static final HourWindow[] hourWindowArray = {};
     private static final int periodInterval = Period.SECOND_IN_DAY;
     
     public StockTrendAggragation1dTask(String taskName)

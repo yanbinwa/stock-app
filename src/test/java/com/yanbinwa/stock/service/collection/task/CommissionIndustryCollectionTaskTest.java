@@ -20,10 +20,12 @@ public class CommissionIndustryCollectionTaskTest
     public String taskString = "Industry";
     
     @Test
-    public void test() throws MalformedURLException, IOException
+    public void test() throws MalformedURLException, IOException, InterruptedException
     {
+        Thread.sleep(1000);
         CommissionIndustryCollectionTask commissionIndustryCollector = new CommissionIndustryCollectionTask(taskString);
         commissionIndustryCollector.collectLogic();
+        Thread.sleep(100000);
     }
 
 }

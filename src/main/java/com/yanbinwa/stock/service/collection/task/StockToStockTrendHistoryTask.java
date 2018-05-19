@@ -31,17 +31,30 @@ public class StockToStockTrendHistoryTask extends AbstractCollector
     
     private String stockId;
     private StockTrendType stockTrendType;
+    private long startTimestamp;
+    private long endTimestamp;
     
     public StockToStockTrendHistoryTask(String taskName)
     {
         super(taskName);
+        this.startTimestamp = 0L;
+        this.endTimestamp = System.currentTimeMillis();
     }
     
-    public StockToStockTrendHistoryTask(String taskName, String stockId, StockTrendType stockTrendType)
+    public StockToStockTrendHistoryTask(String taskName, long startTimestamp, long endTimestamp)
+    {
+        super(taskName);
+        this.startTimestamp = startTimestamp;
+        this.endTimestamp = endTimestamp;
+    }
+    
+    public StockToStockTrendHistoryTask(String taskName, String stockId, StockTrendType stockTrendType, long startTimestamp, long endTimestamp)
     {
         super(taskName);
         this.stockId = stockId;
         this.stockTrendType = stockTrendType;
+        this.startTimestamp = startTimestamp;
+        this.endTimestamp = endTimestamp;
     }
 
     @Override
@@ -63,8 +76,8 @@ public class StockToStockTrendHistoryTask extends AbstractCollector
         RequestParaBuilder builder = new RequestParaBuilder(target);
         builder.addParameter("symbol", stockId)
                 .addParameter("period", stockPeriodStr)
-                .addParameter("begin", 0)
-                .addParameter("end", System.currentTimeMillis());
+                .addParameter("begin", startTimestamp)
+                .addParameter("end", endTimestamp);
         
         URL url = new URL(builder.build());
         String json = request(url);
@@ -180,6 +193,13 @@ public class StockToStockTrendHistoryTask extends AbstractCollector
                 stockTrend.setStockId(stockId);
                 stockTrend.setCurrentPrice(stockObj.get("close").getAsDouble());
                 stockTrend.setCreatedate(new Date(stockObj.get("timestamp").getAsLong()));
+                stockTrend.setOpen(stockObj.get("open").getAsDouble());
+                stockTrend.setHigh(stockObj.get("high").getAsDouble());
+                stockTrend.setClose(stockObj.get("close").getAsDouble());
+                stockTrend.setLow(stockObj.get("low").getAsDouble());
+                stockTrend.setChg(stockObj.get("chg").getAsDouble());
+                stockTrend.setPercent(stockObj.get("percent").getAsDouble());
+                stockTrend.setTurnrate(stockObj.get("turnrate").getAsDouble());
                 stockTrendList.add(stockTrend);
             }
             return stockTrendList;

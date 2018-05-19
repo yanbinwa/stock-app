@@ -3,6 +3,7 @@ package com.yanbinwa.stock.common.regular.manager;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -229,7 +230,8 @@ public class RegularManagerImpl implements RegularManager
     {
         while(true)
         {
-            for(Map.Entry<String, AbstractRegularTask> entry : taskMap.entrySet())
+            Map<String, AbstractRegularTask> taskMapTmp = new HashMap<String, AbstractRegularTask>(taskMap);
+            for(Map.Entry<String, AbstractRegularTask> entry : taskMapTmp.entrySet())
             {
                 String taskKey = entry.getKey();
                 AbstractRegularTask task = entry.getValue();
@@ -262,7 +264,9 @@ public class RegularManagerImpl implements RegularManager
         while(true)
         {
             boolean isTaskRemoved = false;
-            for(Map.Entry<String, Future<?>> entry : runningTaskMap.entrySet())
+            List<String> finishKeyList = new ArrayList<String>();
+            Map<String, Future<?>> runningTaskMapTmp = new HashMap<String, Future<?>>(runningTaskMap);
+            for(Map.Entry<String, Future<?>> entry : runningTaskMapTmp.entrySet())
             {
                 String taskKey = entry.getKey();
                 Future<?> future = entry.getValue();
@@ -282,10 +286,14 @@ public class RegularManagerImpl implements RegularManager
                 }
                 if (isFinish)
                 {
-                    runningTaskMap.remove(taskKey);
-                    runningTaskTimeoutMap.remove(taskKey);
+                    finishKeyList.add(taskKey);  
                     AbstractRegularTask task = taskMap.get(taskKey);
-                    if (task.isPeriodTask())
+                    if (task == null)
+                    {
+                        logger.error("task is null: " + taskKey);
+                        isTaskRemoved = true;
+                    }
+                    else if (task.isPeriodTask())
                     {
                         task.getPeriod().setNextTime();
                     }
@@ -298,6 +306,11 @@ public class RegularManagerImpl implements RegularManager
             }
             if (isTaskRemoved)
             {
+                for (String taskKey : finishKeyList)
+                {
+                    runningTaskMap.remove(taskKey);
+                    runningTaskTimeoutMap.remove(taskKey);
+                }
                 storeTask();
             }
             try

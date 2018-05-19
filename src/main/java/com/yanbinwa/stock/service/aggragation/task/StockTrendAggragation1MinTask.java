@@ -27,8 +27,10 @@ public class StockTrendAggragation1MinTask extends AbstractAggragation
 {
     private static Logger logger = Logger.getLogger(StockTrendAggragation1MinTask.class);
     
-    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
+//    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
+//    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
+    private static final DayWindow[] dayWindowArray = {};
+    private static final HourWindow[] hourWindowArray = {};
     private static final int periodInterval = Period.SECOND_IN_MINUTE;
     
     public StockTrendAggragation1MinTask(String taskName)

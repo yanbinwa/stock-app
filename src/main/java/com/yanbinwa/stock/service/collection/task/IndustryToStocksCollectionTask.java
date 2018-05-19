@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -13,18 +12,15 @@ import com.emotibot.middleware.utils.JsonUtils;
 import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.RequestParaBuilder;
 import com.yanbinwa.stock.common.http.URLMapper;
-import com.yanbinwa.stock.common.type.DayWindow;
-import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
-import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
 import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStockCollectionElement;
+import com.yanbinwa.stock.service.collection.entity.StockMetaData;
 import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
-import com.yanbinwa.stock.utils.StockTrendUtils;
 
 /**
  * 这里每一个Industry单独作为一个task，应该在CommissionIndustry中创建
@@ -43,9 +39,9 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
 //    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
 //    private static final int periodInterval = Period.SECOND_IN_MINUTE;
     
-    private static final DayWindow[] dayWindowArray = {};
-    private static final HourWindow[] hourWindowArray = {};
-    private static final int periodInterval = Period.SECOND_IN_MINUTE;
+//    private static final DayWindow[] dayWindowArray = {};
+//    private static final HourWindow[] hourWindowArray = {};
+//    private static final int periodInterval = Period.SECOND_IN_MINUTE;
     
     private Industry industry;
     
@@ -89,22 +85,27 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
         String json = request(url);
         List<StockTrend> stockList = getStockTrendFromQuery(json);
         updateIndustryToStockId(stockList, industry.getIndustryName());
-        StockTrendUtils.storeStockTrend(stockList, StockTrendType.TYPE_RAW);
+        List<StockMetaData> stockMateDataList = getStockMetaDataFromQuery(json);
+        updateStockMetaData(stockMateDataList);
+        //StockTrendUtils.storeStockTrend(stockList, StockTrendType.TYPE_RAW);
         logger.debug("result is json " + json);
     }
 
     @Override
     public Period generatePeriod()
     {
+//        Period period = new Period();
+//        period.setPeriodType(PeriodType.PERIOD);
+//        period.setInterval(periodInterval);
+//        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
+//        Collections.addAll(dayWindowList, dayWindowArray);
+//        period.setDayWindowList(dayWindowList);
+//        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
+//        Collections.addAll(hourWindowList, hourWindowArray);
+//        period.setHourWindowList(hourWindowList);
+//        return period;
         Period period = new Period();
-        period.setPeriodType(PeriodType.PERIOD);
-        period.setInterval(periodInterval);
-        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
-        Collections.addAll(dayWindowList, dayWindowArray);
-        period.setDayWindowList(dayWindowList);
-        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
-        Collections.addAll(hourWindowList, hourWindowArray);
-        period.setHourWindowList(hourWindowList);
+        period.setPeriodType(PeriodType.NONE);
         return period;
     }
 
@@ -166,12 +167,47 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
         {
             stockIds.add(stockTrend.getStockId());
         }
-        CollectionUtils.setIndustryToStockId(industryName, stockIds.toString());
+        CollectionUtils.setIndustryToStockId(industryName, stockIds);
+    }
+    
+    private List<StockMetaData> getStockMetaDataFromQuery(String result)
+    {
+        try
+        {
+            IndustryToStockCollectionElement element = 
+                    (IndustryToStockCollectionElement)JsonUtils.getObject(result, IndustryToStockCollectionElement.class);
+            if (element == null || element.getData() == null)
+            {
+                return null;
+            }
+            List<StockMetaData> ret = new ArrayList<StockMetaData>();
+            for (IndustryToStock industryToStock : element.getData())
+            {
+                StockMetaData stockMetaData = new StockMetaData();
+                stockMetaData.setStockId(industryToStock.getSymbol());
+                stockMetaData.setName(industryToStock.getName());
+                stockMetaData.setVolume(industryToStock.getVolume());
+                ret.add(stockMetaData);
+            }
+            return ret;
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
+    }
+    
+    private void updateStockMetaData(List<StockMetaData> stockMetaDataList)
+    {
+        for (StockMetaData stockMetaData : stockMetaDataList)
+        {
+            CollectionUtils.setStockMetaData(stockMetaData.getStockId(), stockMetaData);
+        }
     }
     
     class MyConstants
     {
-        public static final int TIMEOUT = 1000;
+        public static final int TIMEOUT = 10000;
     }
 
 }

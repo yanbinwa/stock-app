@@ -39,6 +39,27 @@ public class StockTrendRaw extends AbstractStockTrend implements Serializable
     
     @Column
     private double currentPrice;
+    
+    @Column
+    private double open;
+    
+    @Column
+    private double high;
+    
+    @Column
+    private double close;
+    
+    @Column
+    private double low;
+    
+    @Column
+    private double chg;
+    
+    @Column
+    private double percent;
+    
+    @Column
+    private double turnrate;
 
     public StockTrendRaw()
     {
