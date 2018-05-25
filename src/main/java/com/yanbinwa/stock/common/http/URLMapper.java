@@ -6,7 +6,7 @@ public enum URLMapper
 
     MAIN_PAGE("https://xueqiu.com"),
     COMPREHENSIVE_PAGE("https://xueqiu.com/hq"),
-
+    HU_SHEN_PAGE("https://xueqiu.com/stock/cata/stocklist.json"),
     HU_SHEN_NEWS_REF_JSON("https://xueqiu.com/statuses/topic.json"),
     STOCK_SHAREHOLDERS_JSON("https://xueqiu.com/stock/f10/shareholdernum.json"),
     STOCK_SELECTOR_JSON("https://xueqiu.com/stock/screener/screen.json"),

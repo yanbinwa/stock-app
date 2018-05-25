@@ -597,4 +597,17 @@ public class StockTrendUtils
             StockTrendUtils.deleteStockTrendByDate(fromType, null, new Date(startTimestamp), new Date(endTimestamp));
         }
     }
+    
+    public static List<StockTrend> getStockTrendFromWindowGap(List<StockTrend> stockTrendList, long startTimestamp, long endTimestamp)
+    {
+        List<StockTrend> ret = new ArrayList<StockTrend>();
+        for (StockTrend stockTrend : stockTrendList)
+        {
+            if (stockTrend.getCreatedate().getTime() >= startTimestamp && stockTrend.getCreatedate().getTime() <= endTimestamp)
+            {
+                ret.add(stockTrend);
+            }
+        }
+        return ret;
+    }
 }

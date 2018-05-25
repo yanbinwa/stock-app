@@ -1,5 +1,7 @@
 package com.yanbinwa.stock.common.utils;
 
+import java.util.Set;
+
 import com.yanbinwa.stock.common.redis.RedisSingleton;
 
 public class RedisUtils
@@ -19,6 +21,11 @@ public class RedisUtils
     public static boolean delete(String key)
     {
         return redisClient.delete(key);
+    }
+    
+    public static Set<String> keys(String key)
+    {
+        return redisClient.keys(key);
     }
     
     //用于初始化服务的

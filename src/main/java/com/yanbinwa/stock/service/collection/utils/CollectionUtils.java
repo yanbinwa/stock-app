@@ -1,8 +1,10 @@
 package com.yanbinwa.stock.service.collection.utils;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.emotibot.middleware.utils.JsonUtils;
 import com.emotibot.middleware.utils.StringUtils;
@@ -70,6 +72,11 @@ public class CollectionUtils
         deleteRedisCache(generateKey(MyConstants.INDUSTRY_STOCKID_KEY + "-" + industryName));
     }
     
+    public static void deleteAllIndustryToStockId()
+    {
+        deleteAllRedisCache(generateKey(MyConstants.INDUSTRY_STOCKID_KEY + "*"));
+    }
+    
     public static void setStockMetaData(String stockId, StockMetaData stockMetaData)
     {
         setRedisCache(generateKey(MyConstants.STOCK_META_DATA_KEY + "-" + stockId), stockMetaData.toString());
@@ -86,6 +93,24 @@ public class CollectionUtils
         return stockMetaData;
     }
     
+    public static void deleteStockMetaData(String stockId)
+    {
+        deleteRedisCache(generateKey(MyConstants.STOCK_META_DATA_KEY + "-" + stockId));
+    }
+    
+    public static void deleteAllStockMetaData()
+    {
+        deleteAllRedisCache(generateKey(MyConstants.STOCK_META_DATA_KEY + "*"));
+    }
+    
+    public static List<String> getAllStockId()
+    {
+        Set<String> keys = getRedisKeys(generateKey(MyConstants.STOCK_META_DATA_KEY + "-*"));
+        List<String> ret = new ArrayList<String>();
+        keys.stream().map(key -> key.replace(MyConstants.COLLECTION_KEY + "-" + MyConstants.STOCK_META_DATA_KEY + "-", "")).forEach(stockId -> ret.add(stockId));
+        return ret;
+    }
+    
     public static void setStockTrendData(String stockId, StockTrendRaw stockTrend)
     {
         setRedisCache(generateKey(MyConstants.STOCK_TREND_KEY + "-" + stockId), stockTrend.toString());
@@ -100,6 +125,16 @@ public class CollectionUtils
         }
         StockTrendRaw stockTrend = (StockTrendRaw) JsonUtils.getObject(json, StockTrendRaw.class);
         return stockTrend;
+    }
+    
+    private static Set<String> getRedisKeys(String keyPattern)
+    {
+        Set<String> ret = null;
+        if (RedisUtils.isReady())
+        {
+            ret = RedisUtils.keys(keyPattern);
+        }
+        return ret;
     }
     
     private static String getRedisCache(String key)
@@ -125,6 +160,22 @@ public class CollectionUtils
         if (RedisUtils.isReady())
         {
             RedisUtils.delete(key);
+        }
+    }
+    
+    private static void deleteAllRedisCache(String keyPattern)
+    {
+        if (RedisUtils.isReady())
+        {
+            Set<String> keys = RedisUtils.keys(keyPattern);
+            if (keys == null)
+            {
+                return;
+            }
+            for (String key : keys)
+            {
+                RedisUtils.delete(key);
+            }
         }
     }
     

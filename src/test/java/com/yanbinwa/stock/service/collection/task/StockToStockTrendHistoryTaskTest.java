@@ -19,7 +19,7 @@ public class StockToStockTrendHistoryTaskTest
     public void test()
     {
         //SZ300085
-        StockToStockTrendHistoryTask task = new StockToStockTrendHistoryTask("StockToStockTrendHistoryTask", "SZ300404", StockTrendType.TYPE_1D, 0, System.currentTimeMillis());
+        StockToStockTrendHistoryTask task = new StockToStockTrendHistoryTask("StockToStockTrendHistoryTask", "SZ002795", StockTrendType.TYPE_1D, 0, System.currentTimeMillis());
         task.execute();
     }
 

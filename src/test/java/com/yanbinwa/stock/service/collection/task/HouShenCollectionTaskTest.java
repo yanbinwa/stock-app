@@ -1,5 +1,8 @@
 package com.yanbinwa.stock.service.collection.task;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,13 +14,16 @@ import com.yanbinwa.stock.StockApplication;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = StockApplication.class)
 @WebAppConfiguration
-public class StockToStockTrendTodayHistoryTaskTest
+public class HouShenCollectionTaskTest
 {
+    public String taskString = "HouShen";
+    
     @Test
-    public void test()
+    public void test() throws InterruptedException, MalformedURLException, IOException
     {
-        //SZ300085
-        StockToStockTrendTodayHistoryTask task = new StockToStockTrendTodayHistoryTask("StockToStockTrendHistoryTask", "SZ002795");
-        task.execute();
+        Thread.sleep(1000);
+        HouShenCollectionTask houShenCollectionTask = new HouShenCollectionTask(taskString);
+        houShenCollectionTask.collectLogic();
+        Thread.sleep(100000);
     }
 }

@@ -1,5 +1,7 @@
 package com.yanbinwa.stock.common.redis;
 
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 
 import com.emotibot.middleware.conf.ConfigManager;
@@ -161,6 +163,24 @@ public enum RedisSingleton
             {
                 jedis.del(key);
                 return true;
+            }
+            finally
+            {
+                jedis.close();
+            }
+        }
+        
+        public Set<String> keys(String keyPattern)
+        {
+            if (!isReady)
+            {
+                return null;
+            }
+            Jedis jedis = jedisPool.getResource();
+            try
+            {
+                Set<String> keys = jedis.keys(keyPattern);
+                return keys;
             }
             finally
             {
