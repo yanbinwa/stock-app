@@ -18,7 +18,7 @@ public class StockToStockTrendHistoryRootTaskTest
     public void test() throws InterruptedException
     {
         Thread.sleep(1000);
-        StockToStockTrendHistoryRootTask task = new StockToStockTrendHistoryRootTask("StockToStockTrendHistoryRootTask");
+        StockToStockTrendHistoryRootTask task = new StockToStockTrendHistoryRootTask("StockToStockTrendHistoryRootTask", 1483200000000L, System.currentTimeMillis());
         task.execute();
         Thread.sleep(10000000);
     }

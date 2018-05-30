@@ -2,15 +2,14 @@ package com.yanbinwa.stock.service.collection.task;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
-import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
 
 public class StockToStockTrendHistoryRootTask extends AbstractCollector
@@ -39,37 +38,20 @@ public class StockToStockTrendHistoryRootTask extends AbstractCollector
     @Override
     public void collectLogic() throws MalformedURLException, IOException
     {
-        Map<String, Industry> industryMap = CollectionUtils.getCommissionIndustry();
-        if (industryMap == null)
-        {
-            return;
-        }
-        for (String industryName : industryMap.keySet())
-        {
-            List<String> stockIdList = CollectionUtils.getIndustryToStockId(industryName);
-            if (stockIdList == null)
+        List<String> stockIdList = CollectionUtils.getAllStockId();
+        stockIdList.stream().forEach(stockId -> {
+            Arrays.asList(stockTrendTypes).stream().forEach(stockTrendType -> RegularManagerSingleton.getInstance().addRegularTask(
+                    new StockToStockTrendHistoryTask("StockToStockTrendHistoryTask-" + stockTrendType + stockId, 
+                            stockId, stockTrendType, startTimestamp, endTimestamp)));
+            try
             {
-                continue;
-            }
-            for (String stockId : stockIdList)
+                Thread.sleep(300);
+            } 
+            catch (InterruptedException e)
             {
-                for (StockTrendType stockTrendType : stockTrendTypes)
-                {
-                    StockToStockTrendHistoryTask task = new StockToStockTrendHistoryTask("StockToStockTrendHistoryTask-" + stockTrendType + stockId, 
-                            stockId, stockTrendType, startTimestamp, endTimestamp);
-                    RegularManagerSingleton.getInstance().addRegularTask(task);
-                    try
-                    {
-                        Thread.sleep(300);
-                    } 
-                    catch (InterruptedException e)
-                    {
-                        e.printStackTrace();
-                        return;
-                    }
-                }
+                e.printStackTrace();
             }
-        }
+        });
     }
 
     @Override

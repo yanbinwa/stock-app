@@ -16,17 +16,20 @@ import com.yanbinwa.stock.service.analysation.strategy.Strategy;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = StockApplication.class)
 @WebAppConfiguration
-public class FetchIdeaStockTrendByIdTaskTest
+public class FetchIdeaStockTrendRootTaskTest
 {
+
     private Strategy strategy = new ContinueIncreaseStrategy();
     
     @Test
-    public void test()
+    public void test() throws InterruptedException
     {
+        Thread.sleep(1000);
         Date startDate = TimeUtils.getDateFromStr("20180501", "yyyyMMdd");
-        Date endDate = TimeUtils.getDateFromStr("20180528", "yyyyMMdd");
-        FetchIdeaStockTrendByIdTask task = new FetchIdeaStockTrendByIdTask("FetchIdeaStockTrendByIdTask", "SH603320", startDate.getTime(), endDate.getTime(), strategy);
+        Date endDate = TimeUtils.getDateFromStr("20180529", "yyyyMMdd");
+        FetchIdeaStockTrendRootTask task = new FetchIdeaStockTrendRootTask("FetchIdeaStockTrendRootTask", startDate.getTime(), endDate.getTime(), strategy);
         task.execute();
+        Thread.sleep(10000000);
     }
 
 }

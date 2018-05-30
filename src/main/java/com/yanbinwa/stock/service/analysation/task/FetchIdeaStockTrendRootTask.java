@@ -1,41 +1,40 @@
-package com.yanbinwa.stock.service.collection.task;
+package com.yanbinwa.stock.service.analysation.task;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
-import com.emotibot.middleware.utils.TimeUtils;
-import com.yanbinwa.stock.common.collector.AbstractCollector;
+import com.yanbinwa.stock.common.analysation.AbstractAnalysation;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
+import com.yanbinwa.stock.service.analysation.strategy.Strategy;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
 
-public class StockToStockTrendByDateRootTask extends AbstractCollector
+public class FetchIdeaStockTrendRootTask extends AbstractAnalysation
 {
     private long startTimestamp;
     private long endTimestamp;
+    private Strategy strategy;
     
-    public StockToStockTrendByDateRootTask(String taskName, long startTimestamp, long endTimestamp)
+    public FetchIdeaStockTrendRootTask(String taskName)
+    {
+        super(taskName);
+    }
+    
+    public FetchIdeaStockTrendRootTask(String taskName, long startTimestamp, long endTimestamp, Strategy strategy)
     {
         super(taskName);
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
+        this.strategy = strategy;
     }
 
     @Override
-    public void collectLogic() throws MalformedURLException, IOException
+    public void analysationLogic()
     {
-        //不处理时间跨度较大的case
-        if ((endTimestamp - startTimestamp) % TimeUtils.MILLISECOND_IN_DAY > 30)
-        {
-            return;
-        }
         List<String> stockIdList = CollectionUtils.getAllStockId();
         stockIdList.stream().forEach(stockId -> {
-            StockToStockTrendByDateTask task = new StockToStockTrendByDateTask("StockToStockTrendByDateTask-" + startTimestamp + "-" + endTimestamp + "-" + stockId, 
-                    stockId, TimeUtils.getDateListFromStartAndEndTimestamp(startTimestamp, endTimestamp));
-            RegularManagerSingleton.getInstance().addRegularTask(task);
+            RegularManagerSingleton.getInstance().addRegularTask(
+                    new FetchIdeaStockTrendByIdTask("FetchIdeaStockTrendById-" + startTimestamp + "-" + endTimestamp + "-" + stockId, stockId, startTimestamp, endTimestamp, strategy));
             try
             {
                 Thread.sleep(30);
@@ -63,6 +62,6 @@ public class StockToStockTrendByDateRootTask extends AbstractCollector
 
     class MyConstants
     {
-        public static final int TIMEOUT = 1000;
+        public static final int TIMEOUT = 10000;
     }
 }

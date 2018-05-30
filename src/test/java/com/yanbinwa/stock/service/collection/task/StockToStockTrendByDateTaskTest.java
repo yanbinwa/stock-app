@@ -25,8 +25,8 @@ public class StockToStockTrendByDateTaskTest
     public void test() throws MalformedURLException, IOException
     {
         List<Date> dateList = new ArrayList<Date>();
-        dateList.add(TimeUtils.getDateFromStr("20180516", "yyyyMMdd"));
-        dateList.add(TimeUtils.getDateFromStr("20180517", "yyyyMMdd"));
+        dateList.add(TimeUtils.getDateFromStr("20180527", "yyyyMMdd"));
+        dateList.add(TimeUtils.getDateFromStr("20180529", "yyyyMMdd"));
         StockToStockTrendByDateTask task = new StockToStockTrendByDateTask("StockToStockTrendByDateTask", "SZ300219", dateList);
         task.collectLogic();
     }
