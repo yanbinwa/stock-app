@@ -42,7 +42,7 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
     private static Logger logger = Logger.getLogger(CommissionIndustryCollectionTask.class);
     
     private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR8};
+    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR8_FH};
     private static final int periodInterval = Period.SECOND_IN_DAY;
     
 //    private static final DayWindow[] dayWindowArray = {};

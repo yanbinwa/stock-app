@@ -142,7 +142,7 @@ public class DrawStockTrendUtils
         DateAxis domainAxis = new DateAxis();
         domainAxis.setAutoRange(false);
         Date eda = sdf.parse(endDate);
-        eda.setTime(eda.getTime() + 1);
+        eda.setTime(eda.getTime() + 1 + (long)TimeUtils.MILLISECOND_IN_DAY);
         Date sda = sdf.parse(startDate);
         sda.setTime(sda.getTime() - 1);
         domainAxis.setRange(sda, eda);

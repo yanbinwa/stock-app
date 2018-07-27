@@ -58,7 +58,7 @@ public class HouShenCollectionTask extends AbstractCollector
             URL url = new URL(builder.build());
             String json = request(url);
             
-            List<StockMetaData> stockMetaDataList = getStockTrendFromQuery(json);
+            List<StockMetaData> stockMetaDataList = getStockMetaDataFromQuery(json);
             if (stockMetaDataList == null)
             {
                 break;
@@ -70,7 +70,7 @@ public class HouShenCollectionTask extends AbstractCollector
         stockIdToMetaDatMap.values().stream().forEach(stockMetaData -> CollectionUtils.setStockMetaData(stockMetaData.getStockId(), stockMetaData));
     }
     
-    private List<StockMetaData> getStockTrendFromQuery(String json)
+    private List<StockMetaData> getStockMetaDataFromQuery(String json)
     {
         JsonObject stockJsonObject = (JsonObject) JsonUtils.getObject(json, JsonObject.class);
         List<StockMetaData> stockMetaDataList = new ArrayList<StockMetaData>();

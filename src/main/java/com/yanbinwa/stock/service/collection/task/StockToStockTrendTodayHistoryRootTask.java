@@ -20,7 +20,7 @@ import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
 public class StockToStockTrendTodayHistoryRootTask extends AbstractCollector
 {
     private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR16};
+    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR16_FH};
     private static final int periodInterval = Period.SECOND_IN_DAY;
     
     private static StockTrendType[] stockTrendTypes = {StockTrendType.TYPE_1D};

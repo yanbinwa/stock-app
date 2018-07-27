@@ -117,7 +117,8 @@ public class StockToStockTrendByDateTask extends AbstractCollector
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.info("Can not get stock data, stockId: " + stockId + "; date: " + date.toString());
+            //e.printStackTrace();
             return null;
         }
     }

@@ -10,6 +10,7 @@ import com.emotibot.middleware.utils.JsonUtils;
 import com.emotibot.middleware.utils.StringUtils;
 import com.google.gson.reflect.TypeToken;
 import com.yanbinwa.stock.common.utils.RedisUtils;
+import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.entity.StockMetaData;
 import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
@@ -106,17 +107,21 @@ public class CollectionUtils
     public static List<String> getAllStockId()
     {
         Set<String> keys = getRedisKeys(generateKey(MyConstants.STOCK_META_DATA_KEY + "-*"));
+        if (keys == null)
+        {
+            return null;
+        }
         List<String> ret = new ArrayList<String>();
         keys.stream().map(key -> key.replace(MyConstants.COLLECTION_KEY + "-" + MyConstants.STOCK_META_DATA_KEY + "-", "")).forEach(stockId -> ret.add(stockId));
         return ret;
     }
     
-    public static void setStockTrendData(String stockId, StockTrendRaw stockTrend)
+    public static void setStockTrendData(String stockId, StockTrend stockTrend)
     {
         setRedisCache(generateKey(MyConstants.STOCK_TREND_KEY + "-" + stockId), stockTrend.toString());
     }
     
-    public static StockTrendRaw getStockTrendData(String stockId)
+    public static StockTrend getStockTrendData(String stockId)
     {
         String json = getRedisCache(generateKey(MyConstants.STOCK_TREND_KEY + "-" + stockId));
         if (StringUtils.isEmpty(json))

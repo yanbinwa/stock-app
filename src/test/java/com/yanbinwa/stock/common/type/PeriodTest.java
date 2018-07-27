@@ -13,7 +13,7 @@ public class PeriodTest
 
     //public static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
     public static final DayWindow[] dayWindowArray = {};
-    public static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
+    public static final HourWindow[] hourWindowArray = {HourWindow.HOUR19_SH};
     public static final String dateStr = "2017-11-17 14:59:16";
     
     @Test

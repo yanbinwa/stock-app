@@ -22,8 +22,8 @@ public class StockToStockTrendByDateRootTaskTest
     public void test() throws MalformedURLException, IOException, InterruptedException
     {
         Thread.sleep(1000);
-        long startTimestamp = TimeUtils.getDateFromStr("20180529", "yyyyMMdd").getTime();
-        long endTimestamp = TimeUtils.getDateFromStr("20180529", "yyyyMMdd").getTime();
+        long startTimestamp = TimeUtils.getDateFromStr("20180719", "yyyyMMdd").getTime();
+        long endTimestamp = TimeUtils.getDateFromStr("20180726", "yyyyMMdd").getTime();
         StockToStockTrendByDateRootTask task = new StockToStockTrendByDateRootTask("StockToStockTrendByDateRootTask", startTimestamp, endTimestamp);
         task.collectLogic();
         Thread.sleep(200000);
