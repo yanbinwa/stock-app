@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1h;
 
 @Repository
-public interface StockTrendAgg1hDao extends JpaRepository<StockTrendAgg1h, Long>, JpaSpecificationExecutor<StockTrendAgg1h>
-{
-    
+public interface StockTrendAgg1hDao extends JpaRepository<StockTrendAgg1h, Long>, JpaSpecificationExecutor<StockTrendAgg1h> {
+
 }

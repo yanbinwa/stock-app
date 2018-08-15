@@ -10,8 +10,7 @@ import com.google.gson.annotations.SerializedName;
 import com.yanbinwa.stock.common.constants.Constants;
 import com.yanbinwa.stock.common.utils.ListUtils;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * 设定执行周期，包括是否是周期，下一次运行的时间（不管是否为周期，都要有运行的时间，这个时间会不断更新），运行的时间窗口（分为每周和每天的窗口），运行的周期
@@ -19,8 +18,9 @@ import lombok.Setter;
  * @author emotibot
  *
  */
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Period
 {
     public static final int MILLISECOND_IN_SECOND = 1000;
@@ -48,11 +48,6 @@ public class Period
     @SerializedName("periodType")
     @Expose
     private PeriodType periodType = PeriodType.NONE;
-    
-    public Period()
-    {
-        
-    }
     
     public boolean shouldExecute()
     {
@@ -168,7 +163,13 @@ public class Period
             }
         }
     }
-    
+
+    /**
+     * 需要处理半小时的问题
+     *
+     * @param calendar
+     * @return
+     */
     private Calendar chooseTime(Calendar calendar)
     {
         if (ListUtils.isEmpty(hourWindowList))
@@ -184,8 +185,8 @@ public class Period
                     return calendar;
                 }
             }
-            calendar.add(Calendar.HOUR_OF_DAY, 1);
-            clearHourTime(calendar);
+            calendar.add(Calendar.MINUTE, 30);
+            clearMinTime(calendar);
         }
     }
     
@@ -200,6 +201,12 @@ public class Period
     private Calendar clearHourTime(Calendar calandar)
     {
         calandar.set(Calendar.MINUTE, 0);
+        calandar.set(Calendar.SECOND, 0);
+        return calandar;
+    }
+
+    private Calendar clearMinTime(Calendar calandar)
+    {
         calandar.set(Calendar.SECOND, 0);
         return calandar;
     }

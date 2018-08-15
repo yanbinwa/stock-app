@@ -4,11 +4,11 @@ import com.emotibot.middleware.utils.JsonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Industry
 {
     
@@ -19,17 +19,6 @@ public class Industry
     @SerializedName("industryInfo")
     @Expose
     private String industryInfo;
-    
-    public Industry()
-    {
-        
-    }
-    
-    public Industry(String industryName, String industryInfo)
-    {
-        this.industryName = industryName;
-        this.industryInfo = industryInfo;
-    }
     
     @Override
     public String toString()

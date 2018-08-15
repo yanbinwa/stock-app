@@ -1,28 +1,29 @@
 package com.yanbinwa.stock.service.trade.utils;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
+import com.emotibot.middleware.utils.StringUtils;
 import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import com.yanbinwa.stock.service.trade.component.TransactionComponent;
 import com.yanbinwa.stock.service.trade.dao.AccountDao;
 import com.yanbinwa.stock.service.trade.dao.StockAccountDao;
-import com.yanbinwa.stock.service.trade.element.StockBuyRequest;
+import com.yanbinwa.stock.service.trade.dao.StockTradeApplyDao;
+import com.yanbinwa.stock.service.trade.dao.StockTradeDao;
+import com.yanbinwa.stock.service.trade.element.BuildAccountRequest;
+import com.yanbinwa.stock.service.trade.element.StockTradeRequest;
 import com.yanbinwa.stock.service.trade.entity.Account;
-import com.yanbinwa.stock.service.trade.entity.StockAccount;
+import com.yanbinwa.stock.service.trade.entity.StockTrade;
+import com.yanbinwa.stock.service.trade.entity.StockTradeApply;
 import com.yanbinwa.stock.utils.HolidayUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.annotation.PostConstruct;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 这里会对交易进行处理
@@ -46,37 +47,48 @@ import com.yanbinwa.stock.utils.HolidayUtils;
  * 6. 返回一个申请单号，可以查询
  * 7. 撤销股票申请(会将申请的资金回退到账户中)
  * 8. 查询申请
+ *
+ * 需要将service中的功能放在Utils中
  * 
  * @author emotibot
  *
  */
 @Component
+@EnableTransactionManagement
+@Slf4j
 public class StockTradeUtils
 {
     private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9_SH, HourWindow.HOUR10_FH, HourWindow.HOUR10_SH, HourWindow.HOUR11_FH, HourWindow.HOUR13_FH, HourWindow.HOUR13_SH, HourWindow.HOUR14_FH, HourWindow.HOUR14_SH};
-    
+    public static StockTradeUtils stockTradeUtils;
+
     @Autowired
     AccountDao accountDao;
     
     @Autowired
     StockAccountDao stockAccountDao;
-    
-    /**
-     * @param stockBuyRequest
-     * @return 是否交易成功
-     */
-    public boolean buyStock(StockBuyRequest stockBuyRequest)
+
+    @Autowired
+    StockTradeApplyDao stockTradeApplyDao;
+
+    @Autowired
+    StockTradeDao stockTradeDao;
+
+    @Autowired
+    TransactionComponent transactionComponent;
+
+    @PostConstruct
+    public void init()
     {
-        return false;
+        stockTradeUtils = this;
     }
-    
+
     /**
      * 去除节假日，去除周末，9:30 - 11:30, 13:00 - 15:00
      * 
      * @param timestamp
      * @return
      */
-    public boolean isDealTime(long timestamp)
+    public static boolean isDealTime(long timestamp)
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
@@ -105,10 +117,13 @@ public class StockTradeUtils
      * @param stockId
      * @return
      */
-    public boolean isStockSuspension(String stockId)
+    public static boolean isStockSuspension(String stockId)
     {
         StockTrend stockTrend = CollectionUtils.getStockTrendData(stockId);
-        return stockTrend == null;
+        if (stockTrend == null || stockTrend.getHigh() == 0d) {
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -117,40 +132,105 @@ public class StockTradeUtils
      * @param accountId
      * @return
      */
-    public double getAccountBalance(long accountId)
+    public static double getAccountBalance(long accountId)
     {
-        Account account = accountDao.findOne(accountId);
+        Account account = stockTradeUtils.accountDao.findOne(accountId);
         return account.getDeposit();
     }
     
-    /**
-     * 查询某一个账户的某一个股票持有信息
-     * 
-     * @param accountId
-     * @param stockId
-     * @return
-     */
-    public double getAccountStockNum(long accountId, String stockId)
-    {
-        Specification<StockAccount> querySpecifi = new Specification<StockAccount>() 
-        {
-            @Override
-            public Predicate toPredicate(Root<StockAccount> root, CriteriaQuery<?> paramCriteriaQuery, 
-                    CriteriaBuilder cb)
-            {
-                List<Predicate> predicates = new ArrayList<>();
-                predicates.add(cb.equal(root.get("accountId").as(Long.class), accountId));
-                predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            } 
-        };
-        StockAccount stockAccount = stockAccountDao.findOne(querySpecifi);
-        if (stockAccount == null)
-        {
-            return 0.0d;
-        }
-        return stockAccount.getNum();
+//    /**
+//     * 查询某一个账户的某一个股票持有信息
+//     *
+//     * @param accountId
+//     * @param stockId
+//     * @return
+//     */
+//    public static StockAccount getAccountStock(long accountId, String stockId)
+//    {
+//        Specification<StockAccount> querySpecifi = new Specification<StockAccount>()
+//        {
+//            @Override
+//            public Predicate toPredicate(Root<StockAccount> root, CriteriaQuery<?> paramCriteriaQuery,
+//                    CriteriaBuilder cb)
+//            {
+//                List<Predicate> predicates = new ArrayList<>();
+//                predicates.add(cb.equal(root.get("accountId").as(Long.class), accountId));
+//                predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+//                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+//            }
+//        };
+//        return stockTradeUtils.stockAccountDao.findOne(querySpecifi);
+//    }
+
+    public static Account getAccountByAccountId(long accountId) {
+        return stockTradeUtils.accountDao.findOne(accountId);
     }
-    
-    
+
+    public static void updateAccount(Account account) {
+        stockTradeUtils.accountDao.save(account);
+    }
+
+    public static List<StockTrade> getStockTradeByAccountId(long accountId) {
+        return stockTradeUtils.stockTradeDao.findAllByAccountId(accountId);
+    }
+
+    public static List<StockTradeApply> getAllStockTradeApply() {
+        return stockTradeUtils.stockTradeApplyDao.findAll();
+    }
+
+    public static List<StockTradeApply> getStockTradeApplyByAccountId(long accountId) {
+        return stockTradeUtils.stockTradeApplyDao.findAllByAccountId(accountId);
+    }
+
+    /**
+     * 执行买卖申请，事务操作
+     *
+     */
+    public static boolean execStockTradeApply(StockTradeApply stockTradeApply) {
+        return stockTradeUtils.transactionComponent.execStockTradeApply(stockTradeApply);
+    }
+
+    public static boolean applyTradeStock(StockTradeRequest stockTradeRequest) {
+        Account account = stockTradeUtils.getAccountByAccountId(stockTradeRequest.getAccountId());
+        if (account == null) {
+            return false;
+        }
+        if (stockTradeUtils.isStockSuspension(stockTradeRequest.getStockId())) {
+            return false;
+        }
+
+        if (stockTradeRequest.isBuyStock()) {
+            return stockTradeUtils.transactionComponent.applyBuyStock(stockTradeRequest, account);
+        } else {
+            return stockTradeUtils.transactionComponent.applySaleStock(stockTradeRequest);
+        }
+    }
+
+    public static boolean recallTradeStock(Long id) {
+        StockTradeApply stockTradeApply = stockTradeUtils.stockTradeApplyDao.findOne(id);
+        if (stockTradeApply == null) {
+            log.info("没有找到申请");
+            return false;
+        }
+        if (stockTradeApply.isBuyStock()) {
+            return stockTradeUtils.transactionComponent.recallBuyStockApply(stockTradeApply);
+        } else {
+            return stockTradeUtils.transactionComponent.recallSaleStockApply(stockTradeApply);
+        }
+    }
+
+    public static boolean buildAccount(BuildAccountRequest buildAccountRequest) {
+        if (StringUtils.isEmpty(buildAccountRequest.getName())) {
+            return false;
+        }
+        Account account = stockTradeUtils.accountDao.findOneByName(buildAccountRequest.getName());
+        if (account != null) {
+            return false;
+        }
+        account = new Account();
+        account.setName(buildAccountRequest.getName());
+        account.setDeposit(buildAccountRequest.getDeposit());
+        stockTradeUtils.accountDao.save(account);
+        return true;
+    }
 }

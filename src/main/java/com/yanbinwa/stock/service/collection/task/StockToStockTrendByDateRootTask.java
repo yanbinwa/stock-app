@@ -1,21 +1,27 @@
 package com.yanbinwa.stock.service.collection.task;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.List;
-
 import com.emotibot.middleware.utils.TimeUtils;
 import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import lombok.Data;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.List;
+
+@Data
 public class StockToStockTrendByDateRootTask extends AbstractCollector
 {
     private long startTimestamp;
     private long endTimestamp;
-    
+
+    public StockToStockTrendByDateRootTask(String taskName) {
+        super(taskName);
+    }
+
     public StockToStockTrendByDateRootTask(String taskName, long startTimestamp, long endTimestamp)
     {
         super(taskName);

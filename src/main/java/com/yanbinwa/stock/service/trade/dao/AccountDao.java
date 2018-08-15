@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.yanbinwa.stock.service.trade.entity.Account;
 
 @Repository
-public interface AccountDao extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account>
-{
-    
+public interface AccountDao extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
+    Account findOneByName(String name);
 }

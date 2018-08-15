@@ -25,6 +25,7 @@ import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
 import com.yanbinwa.stock.utils.StockTrendUtils;
+import lombok.Data;
 
 /**
  * 1. 更新当前股票信息，写入到redis中，20秒请求一次
@@ -38,22 +39,30 @@ import com.yanbinwa.stock.utils.StockTrendUtils;
  * @author emotibot
  *
  */
+@Data
 public class CurrentStockTrendTask extends AbstractCollector
 {
     private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
     private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9_SH, HourWindow.HOUR10_FH, HourWindow.HOUR10_SH, HourWindow.HOUR11_FH, HourWindow.HOUR13_FH, HourWindow.HOUR13_SH, HourWindow.HOUR14_FH, HourWindow.HOUR14_SH};
-    private static final int periodInterval = Period.MILLISECOND_IN_SECOND * 20;
+    private static final int periodInterval = 20;
     
     private static final String[] STOCK_PREFIX = {"SH60", "SZ30", "SZ00"};
     
     private int pageIndex;
+    private int pageSize;
     private Map<String, StockTrend> stockIdToStockTrend;
-    
-    public CurrentStockTrendTask(String taskName, int pageIndex)
+
+    public CurrentStockTrendTask(String taskName)
+    {
+        super(taskName);
+        this.pageIndex = 0;
+    }
+
+    public CurrentStockTrendTask(String taskName, int pageIndex, int pageSize)
     {
         super(taskName);
         this.pageIndex = pageIndex;
-        stockIdToStockTrend = new ConcurrentHashMap<String, StockTrend>();
+        this.pageSize = pageSize;
     }
 
     @Override
@@ -62,7 +71,7 @@ public class CurrentStockTrendTask extends AbstractCollector
         String target = URLMapper.HU_SHEN_PAGE.toString();
         RequestParaBuilder builder = new RequestParaBuilder(target);
         builder.addParameter("page", pageIndex);
-        builder.addParameter("size", MyConstants.PAGE_SIZE);
+        builder.addParameter("size", pageSize);
         builder.addParameter("order", "desc");
         builder.addParameter("orderby", "percent");
         builder.addParameter("type", "11%2C12");
@@ -75,8 +84,6 @@ public class CurrentStockTrendTask extends AbstractCollector
         {
             return;
         }
-        //更新到map中
-        stockTrendList.forEach(stockTrend -> stockIdToStockTrend.put(stockTrend.getStockId(), stockTrend));
         //更新到redis中
         stockTrendList.stream().forEach(stockTrend -> CollectionUtils.setStockTrendData(stockTrend.getStockId(), stockTrend));
         //更新到数据库中
@@ -115,6 +122,10 @@ public class CurrentStockTrendTask extends AbstractCollector
                 stockTrend.setStockId(symbol);
                 stockTrend.setCreatedate(new Date());
                 stockTrend.setCurrentPrice(stockTrendObj.get("current").getAsDouble());
+                stockTrend.setPercent(stockTrendObj.get("percent").getAsDouble());
+                stockTrend.setChg(stockTrendObj.get("change").getAsDouble());
+                stockTrend.setHigh(stockTrendObj.get("high").getAsDouble());
+                stockTrend.setLow(stockTrendObj.get("low").getAsDouble());
                 stockTrendList.add(stockTrend);
             }
             return stockTrendList;
@@ -149,7 +160,6 @@ public class CurrentStockTrendTask extends AbstractCollector
 
     class MyConstants
     {
-        public static final int TIMEOUT = 1000;
-        public static final int PAGE_SIZE = 100; 
+        public static final int TIMEOUT = 10000;
     }
 }

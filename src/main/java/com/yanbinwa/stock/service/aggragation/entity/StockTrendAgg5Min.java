@@ -11,15 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.yanbinwa.stock.entity.stockTrend.AbstractStockTrend;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="stockTrendAgg5Min", indexes = {@Index(name = "stockIdAndTimeIndex", columnList = "stockId,createdate")})
 public class StockTrendAgg5Min extends AbstractStockTrend implements Serializable
@@ -59,10 +58,4 @@ public class StockTrendAgg5Min extends AbstractStockTrend implements Serializabl
     
     @Column
     private double turnrate;
-
-
-    public StockTrendAgg5Min()
-    {
-        
-    }
 }

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
 import org.apache.log4j.Logger;
 
 import com.emotibot.middleware.utils.JsonUtils;
@@ -29,7 +30,7 @@ import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
  * @author emotibot
  *
  */
-
+@Data
 public class IndustryToStocksCollectionTask extends AbstractCollector
 {
 
@@ -113,12 +114,6 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
     public void setTimeout()
     {
         this.timeout = MyConstants.TIMEOUT;
-    }
-    
-    @Override
-    public void upLoad(String uploadStr)
-    {
-        this.industry = (Industry) JsonUtils.getObject(uploadStr, Industry.class);
     }
     
     @Override

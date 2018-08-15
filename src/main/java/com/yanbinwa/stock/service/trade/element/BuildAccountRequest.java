@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockSaleRequest
-{
-    private String stockId;
-    private Long accountId;
-    private double price;
-    private int num;
+public class BuildAccountRequest {
+    private String name;
+    private double deposit;
 }

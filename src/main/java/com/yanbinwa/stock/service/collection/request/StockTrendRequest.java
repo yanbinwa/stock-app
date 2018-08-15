@@ -6,11 +6,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class StockTrendRequest
 {
     @SerializedName("stockIdList")

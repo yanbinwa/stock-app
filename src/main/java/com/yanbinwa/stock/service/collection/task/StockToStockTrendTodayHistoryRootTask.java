@@ -16,7 +16,9 @@ import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import lombok.Data;
 
+@Data
 public class StockToStockTrendTodayHistoryRootTask extends AbstractCollector
 {
     private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};

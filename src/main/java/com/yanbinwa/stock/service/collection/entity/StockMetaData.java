@@ -4,11 +4,11 @@ import com.emotibot.middleware.utils.JsonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class StockMetaData
 {
     @SerializedName("stockId")
@@ -22,11 +22,6 @@ public class StockMetaData
     @SerializedName("volume")
     @Expose
     private double volume;
-    
-    public StockMetaData()
-    {
-        
-    }
     
     @Override
     public String toString()

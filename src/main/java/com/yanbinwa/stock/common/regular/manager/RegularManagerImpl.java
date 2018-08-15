@@ -1,6 +1,15 @@
 package com.yanbinwa.stock.common.regular.manager;
 
-import java.lang.reflect.Constructor;
+import com.emotibot.middleware.conf.ConfigManager;
+import com.emotibot.middleware.utils.JsonUtils;
+import com.emotibot.middleware.utils.StringUtils;
+import com.google.gson.reflect.TypeToken;
+import com.yanbinwa.stock.common.constants.Constants;
+import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
+import com.yanbinwa.stock.common.regular.task.RegularTaskWarp;
+import com.yanbinwa.stock.common.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,17 +21,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.log4j.Logger;
-
-import com.emotibot.middleware.conf.ConfigManager;
-import com.emotibot.middleware.utils.JsonUtils;
-import com.emotibot.middleware.utils.StringUtils;
-import com.google.gson.reflect.TypeToken;
-import com.yanbinwa.stock.common.constants.Constants;
-import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
-import com.yanbinwa.stock.common.regular.task.RegularTaskWarp;
-import com.yanbinwa.stock.common.utils.FileUtils;
-
 /**
  * 需要标注哪些任务还在进行当中，这样就不会多次触发，在一个任务结束后首先判读是否为period服务，如果不是，就直接从taskMap中丢弃
  * 任务超时如何处理？？？这里要考虑，每种task均有自己的超时处理
@@ -32,10 +30,9 @@ import com.yanbinwa.stock.common.utils.FileUtils;
  * @author emotibot
  *
  */
-
+@Slf4j
 public class RegularManagerImpl implements RegularManager
 {
-    private static Logger logger = Logger.getLogger(RegularManagerImpl.class);
     private ExecutorService executorService = Executors.newFixedThreadPool(Constants.REGULAR_MANAGER_THREAD_POOL_SIZE);
     private Map<String, AbstractRegularTask> taskMap = new ConcurrentHashMap<String, AbstractRegularTask>();
     /* key为taskname，value为对于的future task */
@@ -60,10 +57,10 @@ public class RegularManagerImpl implements RegularManager
         String taskKey = generateTaskKey(task);
         if (taskMap.containsKey(taskKey))
         {
-            logger.error(String.format("Task %s has already added", task.getTaskName()));
+            log.error(String.format("Task %s has already added", task.getTaskName()));
             return false;
         }
-        logger.info(String.format("Task %s is added", task.getTaskName()));
+        log.info(String.format("Task %s is added", task.getTaskName()));
         taskMap.put(taskKey, task);
         storeTask();
         return true;
@@ -75,11 +72,11 @@ public class RegularManagerImpl implements RegularManager
         String taskKey = generateTaskKey(task);
         if (!taskMap.containsKey(taskKey))
         {
-            logger.info(String.format("Task %s is not added yet, just add it", task.getTaskName()));
+            log.info(String.format("Task %s is not added yet, just add it", task.getTaskName()));
             taskMap.put(taskKey, task);
             return true;
         }
-        logger.info(String.format("Task %s is updated", task.getTaskName()));
+        log.info(String.format("Task %s is updated", task.getTaskName()));
         taskMap.put(taskKey, task);
         storeTask();
         return true;
@@ -91,10 +88,10 @@ public class RegularManagerImpl implements RegularManager
         String taskKey = generateTaskKey(taskName, taskClass);
         if (!taskMap.containsKey(taskKey))
         {
-            logger.error(String.format("Task %s is not added yet", taskName));
+            log.error(String.format("Task %s is not added yet", taskName));
             return false;
         }
-        logger.info(String.format("Task %s is removed", taskName));
+        log.info(String.format("Task %s is removed", taskName));
         taskMap.remove(taskKey);
         storeTask();
         return true;
@@ -108,25 +105,9 @@ public class RegularManagerImpl implements RegularManager
     {
         loadTask();
         
-        regularPollThread = new Thread(new Runnable() {
-
-            @Override
-            public void run()
-            {
-                regularPoll();
-            }
-            
-        });
+        regularPollThread = new Thread(() -> regularPoll());
         
-        checkTaskFinishThread = new Thread(new Runnable() {
-
-            @Override
-            public void run()
-            {
-                checkTaskFinish();
-            }
-            
-        });
+        checkTaskFinishThread = new Thread(() -> checkTaskFinish());
         
         regularPollThread.start();
         checkTaskFinishThread.start();
@@ -155,7 +136,7 @@ public class RegularManagerImpl implements RegularManager
         String storeContext = FileUtils.readFile(taskStoreFile);
         if (StringUtils.isEmpty(storeContext))
         {
-            logger.info("can not load task map from " + taskStoreFile);
+            log.info("can not load task map from " + taskStoreFile);
             return;
         }
         Type resultType = new TypeToken<List<RegularTaskWarp>>(){}.getType();
@@ -164,7 +145,7 @@ public class RegularManagerImpl implements RegularManager
         String regularStoreContext = FileUtils.readFile(regularTaskStoreFile);
         if (StringUtils.isEmpty(storeContext))
         {
-            logger.info("can not load task map from " + regularTaskStoreFile);
+            log.info("can not load task map from " + regularTaskStoreFile);
             return;
         }
         List<RegularTaskWarp> regularTaskWarpList = (List<RegularTaskWarp>) JsonUtils.getObject(regularStoreContext, resultType);
@@ -178,17 +159,15 @@ public class RegularManagerImpl implements RegularManager
         
         for (RegularTaskWarp taskWarp : taskWarpList)
         {
-            String taskName = taskWarp.getTaskName();
-            String taskClass = taskWarp.getTaskClass();
-            String uploadStr = taskWarp.getUploadStr();
             try
             {
-                Class taskClazz = Class.forName(taskClass);
-                Constructor taskConstructor = taskClazz.getConstructor(new Class[] {String.class});
-                AbstractRegularTask task = (AbstractRegularTask) taskConstructor.newInstance(taskName);
-                task.upLoad(uploadStr);
+                AbstractRegularTask task = AbstractRegularTask.buildRegularTask(taskWarp, (Class<? extends AbstractRegularTask>) Class.forName(taskWarp.getTaskClass()));
+                if (task == null) {
+                    log.error("fail to upload task: " + taskWarp);
+                    continue;
+                }
                 taskMap.put(generateTaskKey(task), task);
-                logger.debug("task [" + generateTaskKey(task) + "] has been add to taskMap");
+                log.debug("task [" + generateTaskKey(task) + "] has been add to taskMap");
             } 
             catch (Exception e)
             {
@@ -213,7 +192,7 @@ public class RegularManagerImpl implements RegularManager
             boolean ret = FileUtils.writeFile(taskStoreFile, storeContext);
             if (!ret)
             {
-                logger.error("can not store task file");
+                log.error("can not store task file");
             }
         }
         finally
@@ -258,14 +237,17 @@ public class RegularManagerImpl implements RegularManager
             }
         }
     }
-    
+
+    /**
+     * 如果执行结束或者timeout后，且是循环的task时，应该需要从runningTaskMap和runningTaskTimeoutMap中删除
+     */
     private void checkTaskFinish()
     {
         while(true)
         {
             boolean isTaskRemoved = false;
-            List<String> finishKeyList = new ArrayList<String>();
-            Map<String, Future<?>> runningTaskMapTmp = new HashMap<String, Future<?>>(runningTaskMap);
+            List<String> finishKeyList = new ArrayList<>();
+            Map<String, Future<?>> runningTaskMapTmp = new HashMap<>(runningTaskMap);
             for(Map.Entry<String, Future<?>> entry : runningTaskMapTmp.entrySet())
             {
                 String taskKey = entry.getKey();
@@ -290,7 +272,7 @@ public class RegularManagerImpl implements RegularManager
                     AbstractRegularTask task = taskMap.get(taskKey);
                     if (task == null)
                     {
-                        logger.error("task is null: " + taskKey);
+                        log.error("task is null: " + taskKey);
                         isTaskRemoved = true;
                     }
                     else if (task.isPeriodTask())
@@ -302,15 +284,12 @@ public class RegularManagerImpl implements RegularManager
                         taskMap.remove(taskKey);
                         isTaskRemoved = true;
                     }
+                    runningTaskMap.remove(taskKey);
+                    runningTaskTimeoutMap.remove(taskKey);
                 }
             }
             if (isTaskRemoved)
             {
-                for (String taskKey : finishKeyList)
-                {
-                    runningTaskMap.remove(taskKey);
-                    runningTaskTimeoutMap.remove(taskKey);
-                }
                 storeTask();
             }
             try

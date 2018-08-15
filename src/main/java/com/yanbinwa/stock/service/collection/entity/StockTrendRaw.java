@@ -1,26 +1,19 @@
 package com.yanbinwa.stock.service.collection.entity;
 
+import com.yanbinwa.stock.entity.stockTrend.AbstractStockTrend;
+import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.yanbinwa.stock.entity.stockTrend.AbstractStockTrend;
-import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
-
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="stockTrendRaw", indexes = {@Index(name = "stockIdAndTimeIndex", columnList = "stockId,createdate")})
 public class StockTrendRaw extends AbstractStockTrend implements Serializable
@@ -60,11 +53,6 @@ public class StockTrendRaw extends AbstractStockTrend implements Serializable
     
     @Column
     private double turnrate;
-
-    public StockTrendRaw()
-    {
-        
-    }
     
     public StockTrendRaw(IndustryToStock stock)
     {

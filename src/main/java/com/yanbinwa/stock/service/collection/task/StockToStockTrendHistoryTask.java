@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Data;
 import org.apache.log4j.Logger;
 
 import com.emotibot.middleware.utils.JsonUtils;
@@ -25,6 +26,7 @@ import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1m;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1w;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 
+@Data
 public class StockToStockTrendHistoryTask extends AbstractCollector
 {
     private static Logger logger = Logger.getLogger(StockToStockTrendHistoryTask.class);

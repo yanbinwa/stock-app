@@ -19,6 +19,7 @@ import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.service.collection.entity.StockMetaData;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
+@Data
 public class HouShenCollectionTask extends AbstractCollector
 {
 

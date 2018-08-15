@@ -3,18 +3,15 @@ package com.yanbinwa.stock.common.regular.task;
 import com.emotibot.middleware.utils.JsonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegularTaskWarp
 {
-    public RegularTaskWarp()    
-    {
-        
-    }
     
     @SerializedName("taskName")
     @Expose

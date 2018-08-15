@@ -1,14 +1,16 @@
 package com.yanbinwa.stock.service.analysation.task;
 
-import java.util.List;
-
 import com.yanbinwa.stock.common.analysation.AbstractAnalysation;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.service.analysation.strategy.Strategy;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import lombok.Data;
 
+import java.util.List;
+
+@Data
 public class FetchIdeaStockTrendRootTask extends AbstractAnalysation
 {
     private long startTimestamp;

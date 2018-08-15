@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockBuyRequest
+public class StockTradeRequest
 {
     private String stockId;
     private Long accountId;
     private double price;
     private int num;
+    private boolean isBuyStock;
 }

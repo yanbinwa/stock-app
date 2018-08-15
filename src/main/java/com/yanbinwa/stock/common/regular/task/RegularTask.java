@@ -26,7 +26,7 @@ public interface RegularTask extends Runnable
     
     public RegularTaskWarp getTaskWarp();
     
-    public void upLoad(String uploadStr);
+//    public void upLoad(String uploadStr);
     
     public String createUploadStr();
 }

@@ -7,8 +7,8 @@ public class Constants
     public static final String REGULAR_MANAGER_INTRINSIC_TASK_FILE_KEY = "REGULAR_MANAGER_INTRINSIC_TASK_FILE";
     
     public static final long PERIOD_DEFAULT_NEXT_TIMESTAMP = -1L;
-    public static final int REGULAR_POLL_INTERVAL = 1000;
-    public static final int REGULAR_CHECK_INTERVAL = 1000;
+    public static final int REGULAR_POLL_INTERVAL = 100;
+    public static final int REGULAR_CHECK_INTERVAL = 100;
     
     public static final String AREA_CODE_KEY = "AREA_CODE";
     public static final String USER_ID_KEY = "USER_ID";
@@ -26,4 +26,9 @@ public class Constants
     public static final String TRAIN_DATA_DATAS = "datas";
     public static final String TRAIN_DATA_RESULTS = "results";
     public static final String PREDICT_DATA = "data";
+
+    //return info
+    public static final String CODE_KEY = "code";
+    public static final String MESSAGE_KEY = "msg";
+    public static final String DATA_KEY = "data";
 }

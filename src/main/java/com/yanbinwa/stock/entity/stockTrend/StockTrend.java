@@ -4,35 +4,35 @@ import java.util.Date;
 
 public interface StockTrend extends Comparable<StockTrend>
 {
-    public Long getId();
+    Long getId();
     
-    public String getStockId();
-    public void setStockId(String stockId);
+    String getStockId();
+    void setStockId(String stockId);
     
-    public Date getCreatedate();
-    public void setCreatedate(Date createdate);
+    Date getCreatedate();
+    void setCreatedate(Date createdate);
     
-    public double getCurrentPrice();
-    public void setCurrentPrice(double currentPrice);
+    double getCurrentPrice();
+    void setCurrentPrice(double currentPrice);
     
-    public double getOpen();
-    public void setOpen(double open);
+    double getOpen();
+    void setOpen(double open);
     
-    public double getHigh();
-    public void setHigh(double high);
+    double getHigh();
+    void setHigh(double high);
     
-    public double getClose();
-    public void setClose(double close);
+    double getClose();
+    void setClose(double close);
     
-    public double getLow();
-    public void setLow(double low);
+    double getLow();
+    void setLow(double low);
     
-    public double getChg();
-    public void setChg(double chg);
+    double getChg();
+    void setChg(double chg);
     
-    public double getPercent();
-    public void setPercent(double percent);
+    double getPercent();
+    void setPercent(double percent);
     
-    public double getTurnrate();
-    public void setTurnrate(double turnrate);
+    double getTurnrate();
+    void setTurnrate(double turnrate);
 }

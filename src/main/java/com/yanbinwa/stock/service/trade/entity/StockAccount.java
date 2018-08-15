@@ -12,6 +12,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 这里记录了每一个用户拥有的某一支股票的数量
+ *
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

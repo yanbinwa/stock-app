@@ -12,7 +12,7 @@ public class HolidayUtilsTest
     @Test
     public void test()
     {
-        test2();
+        test1();
     }
 
     public void test1()

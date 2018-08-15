@@ -1,16 +1,5 @@
 package com.yanbinwa.stock.service.analysation.task;
 
-import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.emotibot.middleware.request.HttpRequest;
 import com.emotibot.middleware.request.HttpRequestType;
 import com.emotibot.middleware.response.HttpResponse;
@@ -26,12 +15,13 @@ import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.analysation.element.TrainData;
 import com.yanbinwa.stock.service.analysation.utils.TrainDataUtils;
 import com.yanbinwa.stock.utils.StockTrendUtils;
+import lombok.Data;
+import org.apache.log4j.Logger;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.net.HttpURLConnection;
+import java.util.*;
 
-@Getter
-@Setter
+@Data
 public class ConfirmModelTask extends AbstractAnalysation
 {
     private static Logger logger = Logger.getLogger(ConfirmModelTask.class);
@@ -40,7 +30,12 @@ public class ConfirmModelTask extends AbstractAnalysation
     private long startTimestamp;
     private long endTimestamp;
     private double increaseRate;
-    
+
+    public ConfirmModelTask(String taskName)
+    {
+        super(taskName);
+    }
+
     public ConfirmModelTask(String taskName, StockTrendType type, int trendNum, long startTimestamp, long endTimestamp, double increaseRate)
     {
         super(taskName);

@@ -10,11 +10,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class TrainData
 {
     @SerializedName("stockPrices")
@@ -24,11 +23,6 @@ public class TrainData
     @SerializedName("tag")
     @Expose
     private int tag;
-    
-    public TrainData()
-    {
-        
-    }
     
     public TrainData(List<StockTrend> stockTrends, int tag)
     {

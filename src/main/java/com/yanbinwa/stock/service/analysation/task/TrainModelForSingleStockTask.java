@@ -3,9 +3,7 @@ package com.yanbinwa.stock.service.analysation.task;
 import com.yanbinwa.stock.common.analysation.AbstractAnalysation;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
-
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * 这里是对特定股票的历史数据进行拟合，针对个股的算法
@@ -13,12 +11,16 @@ import lombok.Setter;
  * @author emotibot
  *
  */
-@Getter
-@Setter
+@Data
 public class TrainModelForSingleStockTask extends AbstractAnalysation
 {
     private String stockId;
-    
+
+    public TrainModelForSingleStockTask(String taskName)
+    {
+        super(taskName);
+    }
+
     public TrainModelForSingleStockTask(String taskName, String stockId)
     {
         super(taskName);

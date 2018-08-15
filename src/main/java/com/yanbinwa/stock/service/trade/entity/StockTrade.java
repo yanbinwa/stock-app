@@ -32,6 +32,15 @@ import lombok.NoArgsConstructor;
 @Table(name="stockTrade", indexes = {@Index(name = "stockIdAndAccountAndTimeIndex", columnList = "stockId,accountId,createdate")})
 public class StockTrade
 {
+    public StockTrade(StockTradeApply stockTradeApply) {
+        this.accountId = stockTradeApply.getAccountId();
+        this.stockId = stockTradeApply.getStockId();
+        this.createdate = new Date();
+        this.num = stockTradeApply.getNum();
+        this.price = stockTradeApply.getPrice();
+        this.isBuyStock = stockTradeApply.isBuyStock();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,7 +59,11 @@ public class StockTrade
     
     @Column
     private double price;
-    
+
+    /**
+     * 买入还是卖出
+     *
+     */
     @Column
-    private double isBuyStock;
+    private boolean isBuyStock;
 }

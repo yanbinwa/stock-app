@@ -1,14 +1,19 @@
 package com.yanbinwa.stock.common.regular.task;
 
+import com.emotibot.middleware.utils.JsonUtils;
 import com.yanbinwa.stock.common.constants.Constants;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
+import com.yanbinwa.stock.utils.DTOUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.lang.reflect.Constructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractRegularTask implements RegularTask
 {
     protected String taskName;
@@ -27,14 +32,12 @@ public abstract class AbstractRegularTask implements RegularTask
      * 正规创建时使用的方法
      * 
      * @param taskName
-     * @param taskClass
      */
     public AbstractRegularTask(String taskName)
     {
         this.taskName = taskName;
         this.taskClass = this.getClass().getName();
-        perparePeriod();
-        setTimeout();
+        init();
     }
     
     /**
@@ -49,8 +52,7 @@ public abstract class AbstractRegularTask implements RegularTask
         this.taskName = taskName;
         this.taskClass = taskClass;
         this.period = period;
-        perparePeriod();
-        setTimeout();
+        init();
     }
     
     /**
@@ -58,15 +60,13 @@ public abstract class AbstractRegularTask implements RegularTask
      * 
      * @param taskName
      * @param taskClass
-     * @param period
      */
     public AbstractRegularTask(String taskName, String taskClass)
     {
         this.taskName = taskName;
         this.taskClass = taskClass;
         this.period = null;
-        perparePeriod();
-        setTimeout();
+        init();
     }
     
     @Override
@@ -102,18 +102,36 @@ public abstract class AbstractRegularTask implements RegularTask
     }
     
     @Override
-    public void upLoad(String uploadStr)
-    {
-        
-    }
-    
-    @Override
     public String createUploadStr()
     {
-        return "";
+        return DTOUtils.toJsonStr(this);
     }
-    
-    private void perparePeriod()
+
+    protected void init() {
+        if (period != null) {
+            period.setNextTimestamp(Constants.PERIOD_DEFAULT_NEXT_TIMESTAMP);
+        }
+        preparePeriod();
+        setTimeout();
+    }
+
+    public static <T extends AbstractRegularTask> T buildRegularTask(RegularTaskWarp regularTaskWarp, Class<T> clazz) {
+        try {
+//            Constructor taskConstructor = clazz.getConstructor(new Class[] {String.class});
+            T regularTask = upLoad(clazz, regularTaskWarp.getUploadStr());
+            regularTask.init();
+            return regularTask;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static <T extends AbstractRegularTask> T upLoad(Class<T> clazz, String uploadStr)
+    {
+        return (T) JsonUtils.getObject(uploadStr, clazz);
+    }
+
+    private void preparePeriod()
     {
         if (period == null)
         {

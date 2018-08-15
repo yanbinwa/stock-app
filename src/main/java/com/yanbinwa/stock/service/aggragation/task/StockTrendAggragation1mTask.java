@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.Data;
 import org.apache.log4j.Logger;
 
 import com.yanbinwa.stock.common.aggragation.AbstractAggragation;
@@ -15,6 +16,7 @@ import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1m;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 
+@Data
 public class StockTrendAggragation1mTask extends AbstractAggragation
 {
     private static Logger logger = Logger.getLogger(StockTrendAggragation1mTask.class);

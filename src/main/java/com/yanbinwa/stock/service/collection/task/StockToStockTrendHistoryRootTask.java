@@ -11,7 +11,9 @@ import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import lombok.Data;
 
+@Data
 public class StockToStockTrendHistoryRootTask extends AbstractCollector
 {
 

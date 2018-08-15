@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
+import lombok.Data;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,6 +38,7 @@ import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
  * @author emotibot
  *
  */
+@Data
 public class CommissionIndustryCollectionTask extends AbstractCollector
 {
     private static Logger logger = Logger.getLogger(CommissionIndustryCollectionTask.class);
