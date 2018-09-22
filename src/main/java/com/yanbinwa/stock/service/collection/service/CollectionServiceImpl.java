@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.emotibot.middleware.utils.TimeUtils;
+import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
+import com.yanbinwa.stock.service.collection.request.FetchHistoryStockTrendRequest;
+import com.yanbinwa.stock.service.collection.task.StockToStockTrendByDateRootTask;
 import org.springframework.stereotype.Service;
 
 import com.emotibot.middleware.utils.JsonUtils;
@@ -38,7 +42,7 @@ public class CollectionServiceImpl implements CollectionService
         long startTimestamp = request.getStartTimestamp();
         long endTimestamp = request.getEndTimestamp();
         Map<String, List<StockTrend>> stockIdToStockTrendListMap = 
-                new HashMap<String, List<StockTrend>>();
+                new HashMap<>();
         for (String stockId : stockIdList)
         {
             List<StockTrend> stockTrendList = 
@@ -47,5 +51,13 @@ public class CollectionServiceImpl implements CollectionService
             stockIdToStockTrendListMap.put(stockId, stockTrendList);
         }
         return JsonUtils.getJsonStr(stockIdToStockTrendListMap);
-    } 
+    }
+
+    @Override
+    public void fetchHistoryStockTrend(FetchHistoryStockTrendRequest fetchHistoryStockTrendRequest) {
+        long startTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getStartTime(), "yyyyMMdd").getTime();
+        long endTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getEndTime(), "yyyyMMdd").getTime();
+        StockToStockTrendByDateRootTask task = new StockToStockTrendByDateRootTask("StockToStockTrendByDateRootTask", startTimestamp, endTimestamp);
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
 }

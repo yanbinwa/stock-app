@@ -1,43 +1,27 @@
 package com.yanbinwa.stock.utils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.yanbinwa.stock.entity.stockTrend.StockTrend;
+import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
+import com.yanbinwa.stock.service.aggragation.dao.*;
+import com.yanbinwa.stock.service.aggragation.entity.*;
+import com.yanbinwa.stock.service.collection.dao.StockTrendRawDao;
+import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.*;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
-import com.yanbinwa.stock.entity.stockTrend.StockTrend;
-import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
-import com.yanbinwa.stock.service.aggragation.dao.StockTrendAgg1MinDao;
-import com.yanbinwa.stock.service.aggragation.dao.StockTrendAgg1dDao;
-import com.yanbinwa.stock.service.aggragation.dao.StockTrendAgg1hDao;
-import com.yanbinwa.stock.service.aggragation.dao.StockTrendAgg1mDao;
-import com.yanbinwa.stock.service.aggragation.dao.StockTrendAgg1wDao;
-import com.yanbinwa.stock.service.aggragation.dao.StockTrendAgg5MinDao;
-import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1Min;
-import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1d;
-import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1h;
-import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1m;
-import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1w;
-import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg5Min;
-import com.yanbinwa.stock.service.collection.dao.StockTrendRawDao;
-import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
-
+@Slf4j
 @Component
 public class StockTrendUtils
 {
-    private static Logger logger = Logger.getLogger(StockTrendUtils.class);
     public static StockTrendUtils stockTrendUtils;
     
     @Autowired
@@ -100,25 +84,25 @@ public class StockTrendUtils
         switch(type)
         {
         case TYPE_RAW:
-            stockTrendUtils.stockTrendRawDao.save(stockTrendListToStockTrendRawList(stockTrendList));
+            stockTrendUtils.stockTrendRawDao.saveAll(stockTrendListToStockTrendRawList(stockTrendList));
             break;
         case TYPE_1MIN:
-            stockTrendUtils.stockTrendAgg1MinDao.save(stockTrendListToStockTrendAgg1MinList(stockTrendList));
+            stockTrendUtils.stockTrendAgg1MinDao.saveAll(stockTrendListToStockTrendAgg1MinList(stockTrendList));
             break;
         case TYPE_5MIN:
-            stockTrendUtils.stockTrendAgg5MinDao.save(stockTrendListToStockTrendAgg5MinList(stockTrendList));
+            stockTrendUtils.stockTrendAgg5MinDao.saveAll(stockTrendListToStockTrendAgg5MinList(stockTrendList));
             break;
         case TYPE_1H:
-            stockTrendUtils.stockTrendAgg1hDao.save(stockTrendListToStockTrendAgg1hList(stockTrendList));
+            stockTrendUtils.stockTrendAgg1hDao.saveAll(stockTrendListToStockTrendAgg1hList(stockTrendList));
             break;
         case TYPE_1D:
-            stockTrendUtils.stockTrendAgg1dDao.save(stockTrendListToStockTrendAgg1dList(stockTrendList));
+            stockTrendUtils.stockTrendAgg1dDao.saveAll(stockTrendListToStockTrendAgg1dList(stockTrendList));
             break;
         case TYPE_1W:
-            stockTrendUtils.stockTrendAgg1wDao.save(stockTrendListToStockTrendAgg1wList(stockTrendList));
+            stockTrendUtils.stockTrendAgg1wDao.saveAll(stockTrendListToStockTrendAgg1wList(stockTrendList));
             break;
         case TYPE_1M:
-            stockTrendUtils.stockTrendAgg1mDao.save(stockTrendListToStockTrendAgg1mList(stockTrendList));
+            stockTrendUtils.stockTrendAgg1mDao.saveAll(stockTrendListToStockTrendAgg1mList(stockTrendList));
             break;
         }
     }
@@ -496,43 +480,43 @@ public class StockTrendUtils
     private static void deleteStockTrendRawByDate(List<StockTrend> deleteStockTrendList)
     {
         List<StockTrendRaw> deleteStockTrends = stockTrendListToStockTrendRawList(deleteStockTrendList);
-        stockTrendUtils.stockTrendRawDao.delete(deleteStockTrends);
+        stockTrendUtils.stockTrendRawDao.deleteAll(deleteStockTrends);
     }
     
     private static void deleteStockTrendAgg1MinByDate(List<StockTrend> deleteStockTrendList)
     {
         List<StockTrendAgg1Min> deleteStockTrends = stockTrendListToStockTrendAgg1MinList(deleteStockTrendList);
-        stockTrendUtils.stockTrendAgg1MinDao.delete(deleteStockTrends);
+        stockTrendUtils.stockTrendAgg1MinDao.deleteAll(deleteStockTrends);
     }
     
     private static void deleteStockTrendAgg5MinByDate(List<StockTrend> deleteStockTrendList)
     {
         List<StockTrendAgg5Min> deleteStockTrends = stockTrendListToStockTrendAgg5MinList(deleteStockTrendList);
-        stockTrendUtils.stockTrendAgg5MinDao.delete(deleteStockTrends);
+        stockTrendUtils.stockTrendAgg5MinDao.deleteAll(deleteStockTrends);
     }
     
     private static void deleteStockTrendAgg1hByDate(List<StockTrend> deleteStockTrendList)
     {
         List<StockTrendAgg1h> deleteStockTrends = stockTrendListToStockTrendAgg1hList(deleteStockTrendList);
-        stockTrendUtils.stockTrendAgg1hDao.delete(deleteStockTrends);
+        stockTrendUtils.stockTrendAgg1hDao.deleteAll(deleteStockTrends);
     }
     
     private static void deleteStockTrendAgg1dByDate(List<StockTrend> deleteStockTrendList)
     {
         List<StockTrendAgg1d> deleteStockTrends = stockTrendListToStockTrendAgg1dList(deleteStockTrendList);
-        stockTrendUtils.stockTrendAgg1dDao.delete(deleteStockTrends);
+        stockTrendUtils.stockTrendAgg1dDao.deleteAll(deleteStockTrends);
     }
     
     private static void deleteStockTrendAgg1wByDate(List<StockTrend> deleteStockTrendList)
     {
         List<StockTrendAgg1w> deleteStockTrends = stockTrendListToStockTrendAgg1wList(deleteStockTrendList);
-        stockTrendUtils.stockTrendAgg1wDao.delete(deleteStockTrends);
+        stockTrendUtils.stockTrendAgg1wDao.deleteAll(deleteStockTrends);
     }
     
     private static void deleteStockTrendAgg1mByDate(List<StockTrend> deleteStockTrendList)
     {
         List<StockTrendAgg1m> deleteStockTrends = stockTrendListToStockTrendAgg1mList(deleteStockTrendList);
-        stockTrendUtils.stockTrendAgg1mDao.delete(deleteStockTrends);
+        stockTrendUtils.stockTrendAgg1mDao.deleteAll(deleteStockTrends);
     }
     
     /**
@@ -549,7 +533,7 @@ public class StockTrendUtils
                 new Date(startTimestamp), new Date(endTimestamp));
         if (fetchStockTrendList == null || fetchStockTrendList.isEmpty())
         {
-            logger.info("fetchStockTrendList is empty");
+            log.info("fetchStockTrendList is empty");
             return;
         }
         Map<String, List<StockTrend>> stockIdToStockTrendListMap = new HashMap<String, List<StockTrend>>();
@@ -577,7 +561,7 @@ public class StockTrendUtils
             catch (Exception e)
             {
                 e.printStackTrace();
-                logger.error("can not build StockTrend");
+                log.error("can not build StockTrend");
                 return;
             } 
             double aggCurrentPrice = 0;

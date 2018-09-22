@@ -16,15 +16,15 @@ import com.yanbinwa.stock.service.analysation.element.TrainData;
 import com.yanbinwa.stock.service.analysation.utils.TrainDataUtils;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 import lombok.Data;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.HttpURLConnection;
 import java.util.*;
 
 @Data
+@Slf4j
 public class ConfirmModelTask extends AbstractAnalysation
 {
-    private static Logger logger = Logger.getLogger(ConfirmModelTask.class);
     private StockTrendType type;
     private int trendNum;
     private long startTimestamp;
@@ -120,7 +120,7 @@ public class ConfirmModelTask extends AbstractAnalysation
                 HttpResponse response = HttpUtils.call(request, 10000);
                 if (response.getStateCode() != HttpURLConnection.HTTP_OK)
                 {
-                    logger.error("analysationLogic is fail");
+                    log.error("analysationLogic is fail");
                     continue;
                 }
                 count ++;
@@ -131,7 +131,7 @@ public class ConfirmModelTask extends AbstractAnalysation
                 }
             }
         }
-        logger.info("count is: " + count + "; errorCount is: " + errorCount + "; errorRate: " + errorCount / (double) count);
+        log.info("count is: " + count + "; errorCount is: " + errorCount + "; errorRate: " + errorCount / (double) count);
     }
 
     @Override

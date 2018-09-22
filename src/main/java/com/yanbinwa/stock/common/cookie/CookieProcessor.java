@@ -1,20 +1,19 @@
 package com.yanbinwa.stock.common.cookie;
 
+import com.yanbinwa.stock.common.http.RequestParaBuilder;
+import com.yanbinwa.stock.config.EnvConfig;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import com.emotibot.middleware.conf.ConfigManager;
-import com.yanbinwa.stock.common.constants.Constants;
-import com.yanbinwa.stock.common.http.RequestParaBuilder;
 
 public interface CookieProcessor
 {
     default String updateCookie(String website) throws Exception 
     {
-        String areacode = ConfigManager.INSTANCE.getPropertyString(Constants.AREA_CODE_KEY);
-        String userID = ConfigManager.INSTANCE.getPropertyString(Constants.USER_ID_KEY);
-        String passwd = ConfigManager.INSTANCE.getPropertyString(Constants.PASSWORD_KEY);
-        boolean rememberMe = ConfigManager.INSTANCE.getPropertyBoolean(Constants.REMEMBER_ME_KEY);
+        String areacode = EnvConfig.envConfig.getAreaCode();
+        String userID = EnvConfig.envConfig.getUserId();
+        String passwd = EnvConfig.envConfig.getPasswd();
+        Boolean rememberMe = Boolean.valueOf(EnvConfig.envConfig.getRememberMe());
 
         HttpURLConnection connection = null;
         if (userID != null && passwd != null) 

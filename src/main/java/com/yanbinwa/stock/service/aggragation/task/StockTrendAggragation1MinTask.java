@@ -1,12 +1,5 @@
 package com.yanbinwa.stock.service.aggragation.task;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import lombok.Data;
-import org.apache.log4j.Logger;
-
 import com.yanbinwa.stock.common.aggragation.AbstractAggragation;
 import com.yanbinwa.stock.common.type.DayWindow;
 import com.yanbinwa.stock.common.type.HourWindow;
@@ -15,6 +8,12 @@ import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1Min;
 import com.yanbinwa.stock.utils.StockTrendUtils;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 定期从数据库中获取一段时间内股票数据，按照Id来进行聚合操作
@@ -25,10 +24,9 @@ import com.yanbinwa.stock.utils.StockTrendUtils;
  *
  */
 @Data
+@Slf4j
 public class StockTrendAggragation1MinTask extends AbstractAggragation
 {
-    private static Logger logger = Logger.getLogger(StockTrendAggragation1MinTask.class);
-    
 //    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
 //    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
     private static final DayWindow[] dayWindowArray = {};
@@ -46,7 +44,7 @@ public class StockTrendAggragation1MinTask extends AbstractAggragation
     @Override
     public void aggragationLogic()
     {
-        logger.info("aggragationLogic start: " + taskName);
+        log.info("aggragationLogic start: " + taskName);
         StockTrendUtils.stockTrendAggragationLogic(StockTrendType.TYPE_RAW, StockTrendType.TYPE_1MIN, periodInterval, true, StockTrendAgg1Min.class);
     }
 

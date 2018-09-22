@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
-import org.apache.log4j.Logger;
-
 import com.emotibot.middleware.utils.JsonUtils;
 import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.RequestParaBuilder;
@@ -22,6 +20,7 @@ import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.I
 import com.yanbinwa.stock.service.collection.entity.StockMetaData;
 import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 这里每一个Industry单独作为一个task，应该在CommissionIndustry中创建
@@ -31,11 +30,10 @@ import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
  *
  */
 @Data
+@Slf4j
 public class IndustryToStocksCollectionTask extends AbstractCollector
 {
 
-    private static Logger logger = Logger.getLogger(IndustryToStocksCollectionTask.class);
-    
 //    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
 //    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
 //    private static final int periodInterval = Period.SECOND_IN_MINUTE;
@@ -62,7 +60,7 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
     {
         if(industry == null)
         {
-            logger.error("industry is empty");
+            log.error("industry is empty");
         }
 
         String target = URLMapper.INDUSTRY_JSON.toString();
@@ -89,7 +87,7 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
         List<StockMetaData> stockMateDataList = getStockMetaDataFromQuery(json);
         updateStockMetaData(stockMateDataList);
         //StockTrendUtils.storeStockTrend(stockList, StockTrendType.TYPE_RAW);
-        logger.debug("result is json " + json);
+        log.debug("result is json " + json);
     }
 
     @Override

@@ -1,8 +1,11 @@
 package com.yanbinwa.stock.service.collection.service;
 
+import com.yanbinwa.stock.service.collection.request.FetchHistoryStockTrendRequest;
 import com.yanbinwa.stock.service.collection.request.StockTrendRequest;
 
 public interface CollectionService
 {
-    public String getStockTrend(StockTrendRequest request);
+    String getStockTrend(StockTrendRequest request);
+
+    void fetchHistoryStockTrend(FetchHistoryStockTrendRequest fetchHistoryStockTrendRequest);
 }

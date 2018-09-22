@@ -134,7 +134,7 @@ public class StockTradeUtils
      */
     public static double getAccountBalance(long accountId)
     {
-        Account account = stockTradeUtils.accountDao.findOne(accountId);
+        Account account = stockTradeUtils.accountDao.getOne(accountId);
         return account.getDeposit();
     }
     
@@ -163,7 +163,7 @@ public class StockTradeUtils
 //    }
 
     public static Account getAccountByAccountId(long accountId) {
-        return stockTradeUtils.accountDao.findOne(accountId);
+        return stockTradeUtils.accountDao.getOne(accountId);
     }
 
     public static void updateAccount(Account account) {
@@ -207,7 +207,7 @@ public class StockTradeUtils
     }
 
     public static boolean recallTradeStock(Long id) {
-        StockTradeApply stockTradeApply = stockTradeUtils.stockTradeApplyDao.findOne(id);
+        StockTradeApply stockTradeApply = stockTradeUtils.stockTradeApplyDao.getOne(id);
         if (stockTradeApply == null) {
             log.info("没有找到申请");
             return false;

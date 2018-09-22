@@ -1,5 +1,7 @@
 package com.yanbinwa.stock.common.http;
 
+import com.yanbinwa.stock.common.cookie.CookieUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +11,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
-
-import com.yanbinwa.stock.common.cookie.CookieUtils;
 
 public class HttpRequestHelper
 {

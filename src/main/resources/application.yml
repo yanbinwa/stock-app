@@ -1,0 +1,36 @@
+server:
+  port: ${SAI_SERVER_PORT:9112}
+
+spring:
+  datasource:
+    url: jdbc:mysql://${SAI_MYSQL_HOST:192.168.56.11}:${SAI_MYSQL_PORT:3306}/${SAI_MYSQL_DATABASE:test}?characterEncoding=UTF-8
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+
+  jpa:
+    database: mysql
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+
+  redis:
+    database: 0
+    host: ${SAI_REDIS_HOST:192.168.56.11}
+    port: ${SAI_REDIS_PORT:6379}
+    jedis:
+      pool:
+        max-active: 20
+        max-idle: 20
+        min-idle: 5
+        max-wait: -1ms
+
+stock:
+  taskFile: ${SAI_TASK_FILE:file/task.txt}
+  regularTaskFile: ${SAI_REGULAR_TASK_FILE:file/regularTask.txt}
+  areaCode: ${SAI_AREA_CODE:}
+  userId: ${SAI_USER_ID:}
+  passwd: ${SAI_PASSWD:}
+  rememberMe: ${SAI_REMEMBER_ME:}

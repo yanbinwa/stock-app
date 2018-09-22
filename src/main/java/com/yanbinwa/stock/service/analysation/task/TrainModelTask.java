@@ -16,7 +16,7 @@ import com.yanbinwa.stock.service.analysation.element.TrainData;
 import com.yanbinwa.stock.service.analysation.utils.TrainDataUtils;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 import lombok.Data;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.HttpURLConnection;
 import java.util.*;
@@ -28,9 +28,9 @@ import java.util.*;
  *
  */
 @Data
+@Slf4j
 public class TrainModelTask extends AbstractAnalysation
 {        
-    private static Logger logger = Logger.getLogger(TrainModelTask.class);
     private StockTrendType type;
     private int trendNum;
     private long startTimestamp;
@@ -135,11 +135,11 @@ public class TrainModelTask extends AbstractAnalysation
         HttpResponse response = HttpUtils.call(request, 10000);
         if (response.getStateCode() == HttpURLConnection.HTTP_OK)
         {
-            logger.info("analysationLogic is success");
+            log.info("analysationLogic is success");
         }
         else
         {
-            logger.error("analysationLogic is fail");
+            log.error("analysationLogic is fail");
         }
     }
 

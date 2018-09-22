@@ -1,15 +1,12 @@
 package com.yanbinwa.stock.common.aggragation;
 
-import org.apache.log4j.Logger;
-
 import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
 import com.yanbinwa.stock.common.type.Period;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class AbstractAggragation extends AbstractRegularTask implements Aggragation
 {
-
-    private static Logger logger = Logger.getLogger(AbstractAggragation.class);
-    
     public AbstractAggragation(String taskName)
     {
         super(taskName);
@@ -28,7 +25,7 @@ public abstract class AbstractAggragation extends AbstractRegularTask implements
     @Override
     public void execute()
     {
-        logger.debug(getClass().getSimpleName() + " aggragation...");
+        log.debug(getClass().getSimpleName() + " aggragation...");
         aggragationLogic();
     }
 

@@ -1,19 +1,19 @@
 package com.yanbinwa.stock.service.collection.utils;
 
+import com.emotibot.middleware.utils.JsonUtils;
+import com.emotibot.middleware.utils.StringUtils;
+import com.google.gson.reflect.TypeToken;
+import com.yanbinwa.stock.common.redis.RedisUtils;
+import com.yanbinwa.stock.entity.stockTrend.StockTrend;
+import com.yanbinwa.stock.service.collection.element.Industry;
+import com.yanbinwa.stock.service.collection.entity.StockMetaData;
+import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.emotibot.middleware.utils.JsonUtils;
-import com.emotibot.middleware.utils.StringUtils;
-import com.google.gson.reflect.TypeToken;
-import com.yanbinwa.stock.common.utils.RedisUtils;
-import com.yanbinwa.stock.entity.stockTrend.StockTrend;
-import com.yanbinwa.stock.service.collection.element.Industry;
-import com.yanbinwa.stock.service.collection.entity.StockMetaData;
-import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
 
 /**
  * 包含redis的操作
@@ -26,10 +26,7 @@ public class CollectionUtils
 {
     public static void setCommissionIndustry(String commissionIndustry)
     {
-        if (RedisUtils.isReady())
-        {
-            RedisUtils.set(generateKey(MyConstants.COMMISSION_INDUSTRY_KEY), commissionIndustry);
-        }
+        RedisUtils.redisUtils.set(generateKey(MyConstants.COMMISSION_INDUSTRY_KEY), commissionIndustry);
     }
     
     @SuppressWarnings("unchecked")
@@ -134,59 +131,42 @@ public class CollectionUtils
     
     private static Set<String> getRedisKeys(String keyPattern)
     {
-        Set<String> ret = null;
-        if (RedisUtils.isReady())
-        {
-            ret = RedisUtils.keys(keyPattern);
-        }
+        Set<String> ret = RedisUtils.redisUtils.keys(keyPattern);
         return ret;
     }
     
     private static String getRedisCache(String key)
     {
-        String ret = null;
-        if (RedisUtils.isReady())
-        {
-            ret = RedisUtils.get(key);
-        }
+        String ret = RedisUtils.redisUtils.get(key);
         return ret;
     }
     
     private static void setRedisCache(String key, String value)
     {
-        if (RedisUtils.isReady())
-        {
-            RedisUtils.set(key, value);
-        }
+        RedisUtils.redisUtils.set(key, value);
     }
     
     private static void deleteRedisCache(String key)
     {
-        if (RedisUtils.isReady())
-        {
-            RedisUtils.delete(key);
-        }
+        RedisUtils.redisUtils.remove(key);
     }
     
     private static void deleteAllRedisCache(String keyPattern)
     {
-        if (RedisUtils.isReady())
+        Set<String> keys = RedisUtils.redisUtils.keys(keyPattern);
+        if (keys == null)
         {
-            Set<String> keys = RedisUtils.keys(keyPattern);
-            if (keys == null)
-            {
-                return;
-            }
-            for (String key : keys)
-            {
-                RedisUtils.delete(key);
-            }
+            return;
+        }
+        for (String key : keys)
+        {
+            RedisUtils.redisUtils.remove(key);
         }
     }
     
     private static String generateKey(String originalKey)
     {
-        return MyConstants.COLLECTION_KEY + "-" + originalKey;
+        return RedisUtils.redisUtils.generalKey(MyConstants.COLLECTION_KEY, originalKey);
     }
 }
 

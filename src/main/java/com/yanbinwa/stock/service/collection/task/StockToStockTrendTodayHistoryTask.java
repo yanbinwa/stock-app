@@ -1,16 +1,5 @@
 package com.yanbinwa.stock.service.collection.task;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import lombok.Data;
-import org.apache.log4j.Logger;
-
 import com.emotibot.middleware.utils.JsonUtils;
 import com.emotibot.middleware.utils.StringUtils;
 import com.emotibot.middleware.utils.TimeUtils;
@@ -25,12 +14,21 @@ import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1d;
 import com.yanbinwa.stock.utils.StockTrendUtils;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+@Slf4j
 @Data
 public class StockToStockTrendTodayHistoryTask extends AbstractCollector
 {
-    private static Logger logger = Logger.getLogger(StockToStockTrendTodayHistoryTask.class);
-    
     private String stockId;
     
     public StockToStockTrendTodayHistoryTask(String taskName)
@@ -49,7 +47,7 @@ public class StockToStockTrendTodayHistoryTask extends AbstractCollector
     {
         if(StringUtils.isEmpty(stockId))
         {
-            logger.error("stockId is null");
+            log.error("stockId is null");
         }
         
         String target = URLMapper.STOCK_JSON.toString();

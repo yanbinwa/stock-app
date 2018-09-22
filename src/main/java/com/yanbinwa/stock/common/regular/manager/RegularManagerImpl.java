@@ -1,6 +1,5 @@
 package com.yanbinwa.stock.common.regular.manager;
 
-import com.emotibot.middleware.conf.ConfigManager;
 import com.emotibot.middleware.utils.JsonUtils;
 import com.emotibot.middleware.utils.StringUtils;
 import com.google.gson.reflect.TypeToken;
@@ -8,6 +7,7 @@ import com.yanbinwa.stock.common.constants.Constants;
 import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
 import com.yanbinwa.stock.common.regular.task.RegularTaskWarp;
 import com.yanbinwa.stock.common.utils.FileUtils;
+import com.yanbinwa.stock.config.EnvConfig;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
@@ -39,8 +39,8 @@ public class RegularManagerImpl implements RegularManager
     private Map<String, Future<?>> runningTaskMap = new ConcurrentHashMap<String, Future<?>>();
     /* key为taskname, value为该task过期的时间点 */
     private Map<String, Long> runningTaskTimeoutMap = new ConcurrentHashMap<String, Long>();
-    private String taskStoreFile = ConfigManager.INSTANCE.getPropertyString(Constants.REGULAR_MANAGER_TASK_FILE_KEY);
-    private String regularTaskStoreFile = ConfigManager.INSTANCE.getPropertyString(Constants.REGULAR_MANAGER_INTRINSIC_TASK_FILE_KEY);
+    private String taskStoreFile = EnvConfig.envConfig.getTaskFile();
+    private String regularTaskStoreFile = EnvConfig.envConfig.getRegularTaskFile();
     private Thread regularPollThread = null;
     private Thread checkTaskFinishThread = null;
     

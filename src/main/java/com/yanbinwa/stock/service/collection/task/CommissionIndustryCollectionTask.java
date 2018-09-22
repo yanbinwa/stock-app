@@ -1,22 +1,5 @@
 package com.yanbinwa.stock.service.collection.task;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
-
-import lombok.Data;
-import org.apache.log4j.Logger;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import com.emotibot.middleware.utils.JsonUtils;
 import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.URLMapper;
@@ -29,6 +12,18 @@ import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.common.utils.UnicodeUtils;
 import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 这里的调用周期是每天一次，周一到周五，时间是早上8:00，将行业结果存入到redis中，之后有collector可以使用
@@ -39,10 +34,9 @@ import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
  *
  */
 @Data
+@Slf4j
 public class CommissionIndustryCollectionTask extends AbstractCollector
 {
-    private static Logger logger = Logger.getLogger(CommissionIndustryCollectionTask.class);
-    
     private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
     private static final HourWindow[] hourWindowArray = {HourWindow.HOUR8_FH};
     private static final int periodInterval = Period.SECOND_IN_DAY;
@@ -157,7 +151,7 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
             
             if (!addList.isEmpty() || !deleteList.isEmpty() || !updateList.isEmpty())
             {
-                logger.info("add list: " + addList + "; delete list: " + deleteList + "; update list: " + updateList);
+                log.info("add list: " + addList + "; delete list: " + deleteList + "; update list: " + updateList);
                 updateRegularManagerTask(addList, deleteList, updateList);
             }
         }

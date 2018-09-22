@@ -38,7 +38,7 @@ public class TransactionComponent {
         StockTrade stockTrade = new StockTrade(stockTradeApply);
         try {
             stockTradeDao.save(stockTrade);
-            stockTradeApplyDao.delete(stockTradeApply.getId());
+            stockTradeApplyDao.deleteById(stockTradeApply.getId());
             return true;
         } catch (Exception e) {
             return false;
@@ -81,7 +81,7 @@ public class TransactionComponent {
         }
 
         if (remainStockNum == 0) {
-            stockAccountDao.delete(stockAccount.getId());
+            stockAccountDao.deleteById(stockAccount.getId());
         } else {
             stockAccount.setNum(remainStockNum);
             stockAccountDao.save(stockAccount);
@@ -106,14 +106,14 @@ public class TransactionComponent {
     @Transactional
     public boolean recallBuyStockApply(StockTradeApply stockTradeApply) {
         double recallAmount = stockTradeApply.getPrice() * stockTradeApply.getPrice();
-        Account account = accountDao.findOne(stockTradeApply.getAccountId());
+        Account account = accountDao.getOne(stockTradeApply.getAccountId());
         if (account == null) {
             log.info("找不到账户");
             return false;
         }
         account.setDeposit(account.getDeposit() + recallAmount);
         accountDao.save(account);
-        stockTradeApplyDao.delete(stockTradeApply.getId());
+        stockTradeApplyDao.deleteById(stockTradeApply.getId());
         return true;
     }
 
@@ -135,7 +135,7 @@ public class TransactionComponent {
             stockAccount.setNum(stockAccount.getNum() + stockTradeApply.getNum());
         }
         stockAccountDao.save(stockAccount);
-        stockTradeApplyDao.delete(stockTradeApply.getId());
+        stockTradeApplyDao.deleteById(stockTradeApply.getId());
         return true;
     }
 }

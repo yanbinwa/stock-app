@@ -1,15 +1,5 @@
 package com.yanbinwa.stock.service.collection.task;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import lombok.Data;
-import org.apache.log4j.Logger;
-
 import com.emotibot.middleware.utils.JsonUtils;
 import com.emotibot.middleware.utils.StringUtils;
 import com.google.gson.JsonArray;
@@ -25,12 +15,20 @@ import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1d;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1m;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1w;
 import com.yanbinwa.stock.utils.StockTrendUtils;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Data
+@Slf4j
 public class StockToStockTrendHistoryTask extends AbstractCollector
 {
-    private static Logger logger = Logger.getLogger(StockToStockTrendHistoryTask.class);
-    
     private String stockId;
     private StockTrendType stockTrendType;
     private long startTimestamp;
@@ -64,13 +62,13 @@ public class StockToStockTrendHistoryTask extends AbstractCollector
     {
         if(StringUtils.isEmpty(stockId) || stockTrendType == null)
         {
-            logger.error("stockId or stockTrendType is null");
+            log.error("stockId or stockTrendType is null");
         }
 
         String stockPeriodStr = getStockPeriodStr();
         if (StringUtils.isEmpty(stockPeriodStr))
         {
-            logger.error("stockPeriodStr is empty");
+            log.error("stockPeriodStr is empty");
             return;
         }
         
@@ -176,7 +174,7 @@ public class StockToStockTrendHistoryTask extends AbstractCollector
             stockTrendClass = StockTrendAgg1m.class;
             break;
         default:
-            logger.info("invalid stockTrendType");
+            log.info("invalid stockTrendType");
             return null;    
         }
         JsonObject stockJsonObject = (JsonObject) JsonUtils.getObject(json, JsonObject.class);

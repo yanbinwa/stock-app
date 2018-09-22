@@ -1,15 +1,13 @@
 package com.yanbinwa.stock.common.trade;
 
-import org.apache.log4j.Logger;
-
 import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
 import com.yanbinwa.stock.common.type.Period;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class AbstractTrade extends AbstractRegularTask implements Trade
 {
 
-    private static Logger logger = Logger.getLogger(AbstractTrade.class);
-    
     public AbstractTrade(String taskName)
     {
         super(taskName);
@@ -28,7 +26,7 @@ public abstract class AbstractTrade extends AbstractRegularTask implements Trade
     @Override
     public void execute()
     {
-        logger.debug(getClass().getSimpleName() + " trade...");
+        log.debug(getClass().getSimpleName() + " trade...");
         tradeLogic();
     }
 
