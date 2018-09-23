@@ -1,12 +1,5 @@
 package com.yanbinwa.stock.service.collection.task;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.Data;
 import com.emotibot.middleware.utils.JsonUtils;
 import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.RequestParaBuilder;
@@ -20,7 +13,14 @@ import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.I
 import com.yanbinwa.stock.service.collection.entity.StockMetaData;
 import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 这里每一个Industry单独作为一个task，应该在CommissionIndustry中创建
@@ -119,17 +119,7 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
     {
         return JsonUtils.getJsonStr(industry);
     }
-    
-    public void setIndustry(Industry industry)
-    {
-        this.industry = industry;
-    }
-    
-    public Industry getIndutry()
-    {
-        return this.industry;
-    }
-    
+
     private List<StockTrend> getStockTrendFromQuery(String result)
     {
         try

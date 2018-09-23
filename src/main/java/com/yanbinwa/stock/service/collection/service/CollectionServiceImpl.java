@@ -9,6 +9,7 @@ import java.util.Map;
 import com.emotibot.middleware.utils.TimeUtils;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.service.collection.request.FetchHistoryStockTrendRequest;
+import com.yanbinwa.stock.service.collection.task.CommissionIndustryCollectionTask;
 import com.yanbinwa.stock.service.collection.task.StockToStockTrendByDateRootTask;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,12 @@ public class CollectionServiceImpl implements CollectionService
         long startTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getStartTime(), "yyyyMMdd").getTime();
         long endTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getEndTime(), "yyyyMMdd").getTime();
         StockToStockTrendByDateRootTask task = new StockToStockTrendByDateRootTask("StockToStockTrendByDateRootTask", startTimestamp, endTimestamp);
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
+
+    @Override
+    public void fetchIndustryInfo() {
+        CommissionIndustryCollectionTask task = new CommissionIndustryCollectionTask("CommissionIndustryCollectionTask");
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
 }

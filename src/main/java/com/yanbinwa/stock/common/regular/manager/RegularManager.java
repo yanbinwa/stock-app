@@ -17,9 +17,9 @@ import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
  */
 public interface RegularManager
 {
-    public boolean addRegularTask(AbstractRegularTask task);
+    boolean addRegularTask(AbstractRegularTask task);
     
-    public boolean updateRegularTask(AbstractRegularTask task);
+    boolean updateRegularTask(AbstractRegularTask task);
     
-    public boolean deleteRegularTask(String taskName, String taskClass);
+    boolean deleteRegularTask(String taskName, String taskClass);
 }

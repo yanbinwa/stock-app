@@ -8,4 +8,6 @@ public interface CollectionService
     String getStockTrend(StockTrendRequest request);
 
     void fetchHistoryStockTrend(FetchHistoryStockTrendRequest fetchHistoryStockTrendRequest);
+
+    void fetchIndustryInfo();
 }

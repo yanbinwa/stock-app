@@ -5,8 +5,6 @@ import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.URLMapper;
 import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
-import com.yanbinwa.stock.common.type.DayWindow;
-import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.common.utils.UnicodeUtils;
@@ -22,7 +20,10 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -37,9 +38,9 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 public class CommissionIndustryCollectionTask extends AbstractCollector
 {
-    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR8_FH};
-    private static final int periodInterval = Period.SECOND_IN_DAY;
+//    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
+//    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR8_FH};
+//    private static final int periodInterval = Period.SECOND_IN_DAY;
     
 //    private static final DayWindow[] dayWindowArray = {};
 //    private static final HourWindow[] hourWindowArray = {};
@@ -55,15 +56,18 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
     @Override
     public Period generatePeriod()
     {
+//        Period period = new Period();
+//        period.setPeriodType(PeriodType.PERIOD);
+//        period.setInterval(periodInterval);
+//        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
+//        Collections.addAll(dayWindowList, dayWindowArray);
+//        period.setDayWindowList(dayWindowList);
+//        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
+//        Collections.addAll(hourWindowList, hourWindowArray);
+//        period.setHourWindowList(hourWindowList);
+//        return period;
         Period period = new Period();
-        period.setPeriodType(PeriodType.PERIOD);
-        period.setInterval(periodInterval);
-        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
-        Collections.addAll(dayWindowList, dayWindowArray);
-        period.setDayWindowList(dayWindowList);
-        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
-        Collections.addAll(hourWindowList, hourWindowArray);
-        period.setHourWindowList(hourWindowList);
+        period.setPeriodType(PeriodType.NONE);
         return period;
     }
 

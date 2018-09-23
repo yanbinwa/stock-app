@@ -33,4 +33,10 @@ public class CollectionController
     public void fetchHistoryStockTrend(@RequestBody FetchHistoryStockTrendRequest fetchHistoryStockTrendRequest) {
         collectionService.fetchHistoryStockTrend(fetchHistoryStockTrendRequest);
     }
+
+
+    @PostMapping(value = "/fetchIndustryInfo")
+    public void fetchIndustryInfo() {
+        collectionService.fetchIndustryInfo();
+    }
 }
