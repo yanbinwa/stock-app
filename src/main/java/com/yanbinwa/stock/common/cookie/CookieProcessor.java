@@ -1,5 +1,6 @@
 package com.yanbinwa.stock.common.cookie;
 
+import com.emotibot.middleware.utils.StringUtils;
 import com.yanbinwa.stock.common.http.RequestParaBuilder;
 import com.yanbinwa.stock.config.EnvConfig;
 
@@ -16,7 +17,7 @@ public interface CookieProcessor
         Boolean rememberMe = Boolean.valueOf(EnvConfig.envConfig.getRememberMe());
 
         HttpURLConnection connection = null;
-        if (userID != null && passwd != null) 
+        if (!StringUtils.isEmpty(userID) && !StringUtils.isEmpty(passwd))
         {
             connection = login(areacode, userID, passwd, rememberMe);
         }
