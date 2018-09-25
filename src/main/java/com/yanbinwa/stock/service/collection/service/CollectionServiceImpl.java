@@ -1,22 +1,17 @@
 package com.yanbinwa.stock.service.collection.service;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.emotibot.middleware.utils.JsonUtils;
 import com.emotibot.middleware.utils.TimeUtils;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
+import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.service.collection.request.FetchHistoryStockTrendRequest;
+import com.yanbinwa.stock.service.collection.request.StockTrendRequest;
 import com.yanbinwa.stock.service.collection.task.CommissionIndustryCollectionTask;
-import com.yanbinwa.stock.service.collection.task.StockToStockTrendByDateRootTask;
+import com.yanbinwa.stock.service.collection.task.StockToStockTrendHistoryTask;
+import com.yanbinwa.stock.utils.StockTrendUtils;
 import org.springframework.stereotype.Service;
 
-import com.emotibot.middleware.utils.JsonUtils;
-import com.yanbinwa.stock.entity.stockTrend.StockTrend;
-import com.yanbinwa.stock.service.collection.request.StockTrendRequest;
-import com.yanbinwa.stock.utils.StockTrendUtils;
+import java.util.*;
 
 /**
  * 这里接受用户调用，对于collection进行增删改查的操作，不做对于数据的查询工作
@@ -58,7 +53,7 @@ public class CollectionServiceImpl implements CollectionService
     public void fetchHistoryStockTrend(FetchHistoryStockTrendRequest fetchHistoryStockTrendRequest) {
         long startTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getStartTime(), "yyyyMMdd").getTime();
         long endTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getEndTime(), "yyyyMMdd").getTime();
-        StockToStockTrendByDateRootTask task = new StockToStockTrendByDateRootTask("StockToStockTrendByDateRootTask", startTimestamp, endTimestamp);
+        StockToStockTrendHistoryTask task = new StockToStockTrendHistoryTask("StockToStockTrendHistoryTask", startTimestamp, endTimestamp);
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
 

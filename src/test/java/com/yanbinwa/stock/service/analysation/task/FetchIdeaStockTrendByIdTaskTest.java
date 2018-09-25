@@ -30,8 +30,8 @@ public class FetchIdeaStockTrendByIdTaskTest
     @Test
     public void test()
     {
-        Date startDate = TimeUtils.getDateFromStr("20180618", "yyyyMMdd");
-        Date endDate = TimeUtils.getDateFromStr("20180718", "yyyyMMdd");
+        Date startDate = TimeUtils.getDateFromStr("20180818", "yyyyMMdd");
+        Date endDate = TimeUtils.getDateFromStr("20180926", "yyyyMMdd");
         FetchIdeaStockTrendByIdTask task = new FetchIdeaStockTrendByIdTask("FetchIdeaStockTrendByIdTask", "SZ300022", startDate.getTime(), endDate.getTime(), strategy);
         task.execute();
     }
