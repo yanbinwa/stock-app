@@ -7,6 +7,7 @@ import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.service.collection.request.FetchHistoryStockTrendRequest;
 import com.yanbinwa.stock.service.collection.request.StockTrendRequest;
 import com.yanbinwa.stock.service.collection.task.CommissionIndustryCollectionTask;
+import com.yanbinwa.stock.service.collection.task.StockToStockTrendHistoryRootTask;
 import com.yanbinwa.stock.service.collection.task.StockToStockTrendHistoryTask;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class CollectionServiceImpl implements CollectionService
     public void fetchHistoryStockTrend(FetchHistoryStockTrendRequest fetchHistoryStockTrendRequest) {
         long startTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getStartTime(), "yyyyMMdd").getTime();
         long endTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getEndTime(), "yyyyMMdd").getTime();
-        StockToStockTrendHistoryTask task = new StockToStockTrendHistoryTask("StockToStockTrendHistoryTask", startTimestamp, endTimestamp);
+        StockToStockTrendHistoryRootTask task = new StockToStockTrendHistoryRootTask("StockToStockTrendHistoryTask", startTimestamp, endTimestamp);
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
 
