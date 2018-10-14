@@ -1,6 +1,7 @@
 package com.yanbinwa.stock.controller.collection;
 
 import com.yanbinwa.stock.service.collection.request.FetchHistoryStockTrendRequest;
+import com.yanbinwa.stock.service.collection.request.FetchStockTrendByDateRequest;
 import com.yanbinwa.stock.service.collection.request.StockTrendRequest;
 import com.yanbinwa.stock.service.collection.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class CollectionController
     @PostMapping(value = "/fetchHistoryStockTrend")
     public void fetchHistoryStockTrend(@RequestBody FetchHistoryStockTrendRequest fetchHistoryStockTrendRequest) {
         collectionService.fetchHistoryStockTrend(fetchHistoryStockTrendRequest);
+    }
+
+    @PostMapping(value = "/fetchStockTrendByDate")
+    public void fetchStockTrendByDate(@RequestBody FetchStockTrendByDateRequest fetchStockTrendByDateRequest) {
+        collectionService.fetchStockTrendByDate(fetchStockTrendByDateRequest);
     }
 
 
