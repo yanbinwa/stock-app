@@ -76,4 +76,20 @@ public class HolidayUtils
         }
         return false;
     }
+
+    public static List<Date> removeHolidayAndWeekendDate(List<Date> dates) {
+        List<Date> ret = new ArrayList<>();
+        for (Date date : dates) {
+            if (isHoliday(date)) {
+                continue;
+            }
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+                continue;
+            }
+            ret.add(date);
+        }
+        return ret;
+    }
 }

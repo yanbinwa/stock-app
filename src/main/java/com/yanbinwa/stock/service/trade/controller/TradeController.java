@@ -1,4 +1,4 @@
-package com.yanbinwa.stock.controller.trade;
+package com.yanbinwa.stock.service.trade.controller;
 
 import com.yanbinwa.stock.service.trade.element.BuildAccountRequest;
 import com.yanbinwa.stock.service.trade.element.StockTradeRequest;

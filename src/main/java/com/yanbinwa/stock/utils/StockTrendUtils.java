@@ -594,4 +594,17 @@ public class StockTrendUtils
         }
         return ret;
     }
+
+    public static List<StockTrend> sortStockTrendByTimestamp(List<StockTrend> stockTrends) {
+        Collections.sort(stockTrends, (o1, o2) -> {
+            if (o1.getCreatedate().before(o2.getCreatedate())) {
+                return -1;
+            } else if (o1.getCreatedate().after(o2.getCreatedate())) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+        return stockTrends;
+    }
 }

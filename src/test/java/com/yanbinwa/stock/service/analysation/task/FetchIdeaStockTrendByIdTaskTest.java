@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.yanbinwa.stock.service.analysation.strategy.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,29 +17,24 @@ import com.yanbinwa.stock.service.analysation.script.ScriptCollection;
 import com.yanbinwa.stock.service.analysation.script.ScriptCompare;
 import com.yanbinwa.stock.service.analysation.script.ScriptEle;
 import com.yanbinwa.stock.service.analysation.script.ScriptTarget;
-import com.yanbinwa.stock.service.analysation.strategy.ContinueIncreaseStrategy;
-import com.yanbinwa.stock.service.analysation.strategy.ScriptStrategy;
-import com.yanbinwa.stock.service.analysation.strategy.Strategy;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = StockApplication.class)
 @WebAppConfiguration
 public class FetchIdeaStockTrendByIdTaskTest
 {
-    private Strategy strategy = getStrategy1();
-    
     @Test
     public void test()
     {
         Date startDate = TimeUtils.getDateFromStr("20180818", "yyyyMMdd");
         Date endDate = TimeUtils.getDateFromStr("20180926", "yyyyMMdd");
-        FetchIdeaStockTrendByIdTask task = new FetchIdeaStockTrendByIdTask("FetchIdeaStockTrendByIdTask", "SZ300022", startDate.getTime(), endDate.getTime(), strategy);
+        FetchIdeaStockTrendByIdTask task = new FetchIdeaStockTrendByIdTask("FetchIdeaStockTrendByIdTask", "SZ300022", startDate.getTime(), endDate.getTime(), getStrategy1());
         task.execute();
     }
 
     public static Strategy getStrategy1()
     {
-        return new ContinueIncreaseStrategy(4, 10d, 20);
+        return new ContinueIncreaseStrategy(4, 15d, 20);
     }
     
     public static Strategy getStrategy2()
@@ -57,5 +53,17 @@ public class FetchIdeaStockTrendByIdTaskTest
         scriptCollections.add(scriptCollection2);
         
         return new ScriptStrategy(scriptCollections);
+    }
+
+    public static Strategy getStrategy3() {
+        return new ContinueIncreaseStrategy2(4, 10);
+    }
+
+    public static Strategy getStrategy4() {
+        return new ChangeRateTrendStrategy(4, 5, 7, 3, 10);
+    }
+
+    public static Strategy getStrategy5() {
+        return new DabanStrategy(2, 9.98, null, 20);
     }
 }

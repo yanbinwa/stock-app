@@ -5,10 +5,9 @@ import com.emotibot.middleware.utils.TimeUtils;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.service.collection.request.FetchHistoryStockTrendRequest;
+import com.yanbinwa.stock.service.collection.request.FetchStockTrendByDateRequest;
 import com.yanbinwa.stock.service.collection.request.StockTrendRequest;
-import com.yanbinwa.stock.service.collection.task.CommissionIndustryCollectionTask;
-import com.yanbinwa.stock.service.collection.task.StockToStockTrendHistoryRootTask;
-import com.yanbinwa.stock.service.collection.task.StockToStockTrendHistoryTask;
+import com.yanbinwa.stock.service.collection.task.*;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 import org.springframework.stereotype.Service;
 
@@ -54,13 +53,27 @@ public class CollectionServiceImpl implements CollectionService
     public void fetchHistoryStockTrend(FetchHistoryStockTrendRequest fetchHistoryStockTrendRequest) {
         long startTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getStartTime(), "yyyyMMdd").getTime();
         long endTimestamp = TimeUtils.getDateFromStr(fetchHistoryStockTrendRequest.getEndTime(), "yyyyMMdd").getTime();
-        StockToStockTrendHistoryRootTask task = new StockToStockTrendHistoryRootTask("StockToStockTrendHistoryTask", startTimestamp, endTimestamp);
+        StockToStockTrendHistoryRootTask task = new StockToStockTrendHistoryRootTask(StockToStockTrendHistoryRootTask.class.getSimpleName(), startTimestamp, endTimestamp);
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
+
+    @Override
+    public void fetchStockTrendByDate(FetchStockTrendByDateRequest fetchStockTrendByDateRequest) {
+        long startTimestamp = TimeUtils.getDateFromStr(fetchStockTrendByDateRequest.getStartTime(), "yyyyMMdd").getTime();
+        long endTimestamp = TimeUtils.getDateFromStr(fetchStockTrendByDateRequest.getEndTime(), "yyyyMMdd").getTime();
+        StockToStockTrendByDateRootTask task = new StockToStockTrendByDateRootTask(StockToStockTrendByDateRootTask.class.getSimpleName(), startTimestamp, endTimestamp);
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
 
     @Override
     public void fetchIndustryInfo() {
-        CommissionIndustryCollectionTask task = new CommissionIndustryCollectionTask("CommissionIndustryCollectionTask");
+        CommissionIndustryCollectionTask task = new CommissionIndustryCollectionTask(CommissionIndustryCollectionTask.class.getSimpleName());
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
+
+    @Override
+    public void fetchStockMetaData() {
+        HouShenCollectionTask task = new HouShenCollectionTask(HouShenCollectionTask.class.getSimpleName());
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
 }

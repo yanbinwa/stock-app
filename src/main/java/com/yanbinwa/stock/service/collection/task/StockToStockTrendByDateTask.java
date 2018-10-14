@@ -50,7 +50,7 @@ public class StockToStockTrendByDateTask extends AbstractCollector
         {
             log.error("stockId or date is null");
         }
-        List<StockTrend> ret = new ArrayList<StockTrend>();
+        List<StockTrend> ret = new ArrayList<>();
         for (Date date : dateList)
         {
             List<StockTrend> stockTrendList = getStockTrendByDate(date);
@@ -130,6 +130,6 @@ public class StockToStockTrendByDateTask extends AbstractCollector
     
     class MyConstants
     {
-        public static final int TIMEOUT = 1000;
+        public static final int TIMEOUT = 3000;
     }
 }

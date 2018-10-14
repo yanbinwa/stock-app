@@ -3,6 +3,7 @@ package com.yanbinwa.stock.service.collection.task;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +24,8 @@ public class HouShenCollectionTaskTest
     {
         Thread.sleep(1000);
         HouShenCollectionTask houShenCollectionTask = new HouShenCollectionTask(taskString);
-        houShenCollectionTask.collectLogic();
+//        houShenCollectionTask.collectLogic();
+        RegularManagerSingleton.getInstance().addRegularTask(houShenCollectionTask);
         Thread.sleep(100000);
     }
 }

@@ -1,4 +1,4 @@
-package com.yanbinwa.stock.controller.collection;
+package com.yanbinwa.stock.service.collection.controller;
 
 import com.yanbinwa.stock.service.collection.request.FetchHistoryStockTrendRequest;
 import com.yanbinwa.stock.service.collection.request.FetchStockTrendByDateRequest;
@@ -22,8 +22,7 @@ public class CollectionController
      * 这里可以输入多个stockId，以及开始时间和截止时间
      */
     @PostMapping(value = "/getStockTrend")
-    public String getStockTrend(@RequestBody StockTrendRequest request)
-    {
+    public String getStockTrend(@RequestBody StockTrendRequest request) {
         return collectionService.getStockTrend(request);
     }
 
@@ -40,9 +39,13 @@ public class CollectionController
         collectionService.fetchStockTrendByDate(fetchStockTrendByDateRequest);
     }
 
-
     @PostMapping(value = "/fetchIndustryInfo")
     public void fetchIndustryInfo() {
         collectionService.fetchIndustryInfo();
+    }
+
+    @PostMapping(value = "fetchStockMetaData")
+    public void fetchStockMetaData() {
+        collectionService.fetchStockMetaData();
     }
 }

@@ -6,6 +6,7 @@ import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import com.yanbinwa.stock.utils.HolidayUtils;
 import lombok.Data;
 
 import java.io.IOException;
@@ -40,11 +41,11 @@ public class StockToStockTrendByDateRootTask extends AbstractCollector
         List<String> stockIdList = CollectionUtils.getAllStockId();
         stockIdList.stream().forEach(stockId -> {
             StockToStockTrendByDateTask task = new StockToStockTrendByDateTask("StockToStockTrendByDateTask-" + startTimestamp + "-" + endTimestamp + "-" + stockId, 
-                    stockId, TimeUtils.getDateListFromStartAndEndTimestamp(startTimestamp, endTimestamp));
+                    stockId, HolidayUtils.removeHolidayAndWeekendDate(TimeUtils.getDateListFromStartAndEndTimestamp(startTimestamp, endTimestamp)));
             RegularManagerSingleton.getInstance().addRegularTask(task);
             try
             {
-                Thread.sleep(30);
+                Thread.sleep(50);
             } 
             catch (InterruptedException e)
             {

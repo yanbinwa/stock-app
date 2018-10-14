@@ -34,11 +34,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class RegularManagerImpl implements RegularManager
 {
     private ExecutorService executorService = Executors.newFixedThreadPool(Constants.REGULAR_MANAGER_THREAD_POOL_SIZE);
-    private Map<String, AbstractRegularTask> taskMap = new ConcurrentHashMap<String, AbstractRegularTask>();
+    private Map<String, AbstractRegularTask> taskMap = new ConcurrentHashMap<>();
     /* key为taskname，value为对于的future task */
-    private Map<String, Future<?>> runningTaskMap = new ConcurrentHashMap<String, Future<?>>();
+    private Map<String, Future<?>> runningTaskMap = new ConcurrentHashMap<>();
     /* key为taskname, value为该task过期的时间点 */
-    private Map<String, Long> runningTaskTimeoutMap = new ConcurrentHashMap<String, Long>();
+    private Map<String, Long> runningTaskTimeoutMap = new ConcurrentHashMap<>();
     private String taskStoreFile = EnvConfig.envConfig.getTaskFile();
     private String regularTaskStoreFile = EnvConfig.envConfig.getRegularTaskFile();
     private Thread regularPollThread = null;
@@ -60,7 +60,7 @@ public class RegularManagerImpl implements RegularManager
             log.error(String.format("Task %s has already added", task.getTaskName()));
             return false;
         }
-        log.info(String.format("Task %s is added", task.getTaskName()));
+        log.debug(String.format("Task %s is added", task.getTaskName()));
         taskMap.put(taskKey, task);
         storeTask();
         return true;
@@ -72,11 +72,11 @@ public class RegularManagerImpl implements RegularManager
         String taskKey = generateTaskKey(task);
         if (!taskMap.containsKey(taskKey))
         {
-            log.info(String.format("Task %s is not added yet, just add it", task.getTaskName()));
+            log.debug(String.format("Task %s is not added yet, just add it", task.getTaskName()));
             taskMap.put(taskKey, task);
             return true;
         }
-        log.info(String.format("Task %s is updated", task.getTaskName()));
+        log.debug(String.format("Task %s is updated", task.getTaskName()));
         taskMap.put(taskKey, task);
         storeTask();
         return true;
@@ -91,7 +91,7 @@ public class RegularManagerImpl implements RegularManager
             log.error(String.format("Task %s is not added yet", taskName));
             return false;
         }
-        log.info(String.format("Task %s is removed", taskName));
+        log.debug(String.format("Task %s is removed", taskName));
         taskMap.remove(taskKey);
         storeTask();
         return true;
@@ -281,6 +281,7 @@ public class RegularManagerImpl implements RegularManager
                     }
                     else
                     {
+                        log.debug("remove task: " + taskKey);
                         taskMap.remove(taskKey);
                         isTaskRemoved = true;
                     }

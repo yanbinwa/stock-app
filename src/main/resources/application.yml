@@ -34,3 +34,12 @@ stock:
   userId: ${SAI_USER_ID:}
   passwd: ${SAI_PASSWD:}
   rememberMe: ${SAI_REMEMBER_ME:}
+
+logging:
+  path: ${SAI_LOG_PATH:log}
+  level:
+    com.yanbinwa.stock: ${SAI_LOG_LEVEL:debug}
+    org.springfromework.web: info
+    org.hibernate: error
+
+

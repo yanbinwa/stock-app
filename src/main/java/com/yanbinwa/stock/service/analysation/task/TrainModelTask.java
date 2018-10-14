@@ -83,25 +83,7 @@ public class TrainModelTask extends AbstractAnalysation
         for (Map.Entry<String, List<StockTrend>> entry : stockIdToStockListMap.entrySet())
         {
             List<StockTrend> stockTrendList = entry.getValue();
-            Collections.sort(stockTrendList, new Comparator<StockTrend>() {
-
-                @Override
-                public int compare(StockTrend o1, StockTrend o2)
-                {
-                    if (o1.getCreatedate().before(o2.getCreatedate()))
-                    {
-                        return -1;
-                    }
-                    else if (o1.getCreatedate().after(o2.getCreatedate()))
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            });
+            StockTrendUtils.sortStockTrendByTimestamp(stockTrendList);
         }
         
         //3. 查找每只股票满足increaseRate的数据集, 以及不满足要求的数据集

@@ -108,8 +108,9 @@ public class CollectionUtils
         {
             return null;
         }
-        List<String> ret = new ArrayList<String>();
+        List<String> ret = new ArrayList<>();
         keys.stream().map(key -> key.replace(MyConstants.COLLECTION_KEY + "-" + MyConstants.STOCK_META_DATA_KEY + "-", "")).forEach(stockId -> ret.add(stockId));
+
         return ret;
     }
     

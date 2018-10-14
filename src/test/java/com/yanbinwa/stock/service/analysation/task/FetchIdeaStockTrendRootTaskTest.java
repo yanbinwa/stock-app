@@ -18,14 +18,14 @@ import com.yanbinwa.stock.service.analysation.strategy.Strategy;
 public class FetchIdeaStockTrendRootTaskTest
 {
 
-    private Strategy strategy = FetchIdeaStockTrendByIdTaskTest.getStrategy1();
+    private Strategy strategy = FetchIdeaStockTrendByIdTaskTest.getStrategy4();
     
     @Test
     public void test() throws InterruptedException
     {
         Thread.sleep(1000);
-        Date startDate = TimeUtils.getDateFromStr("20180626", "yyyyMMdd");
-        Date endDate = TimeUtils.getDateFromStr("20180726", "yyyyMMdd");
+        Date startDate = TimeUtils.getDateFromStr("20180801", "yyyyMMdd");
+        Date endDate = TimeUtils.getDateFromStr("20181014", "yyyyMMdd");
         FetchIdeaStockTrendRootTask task = new FetchIdeaStockTrendRootTask("FetchIdeaStockTrendRootTask", startDate.getTime(), endDate.getTime(), strategy);
         task.execute();
         Thread.sleep(10000000);

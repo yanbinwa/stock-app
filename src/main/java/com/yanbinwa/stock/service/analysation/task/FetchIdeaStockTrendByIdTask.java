@@ -10,8 +10,7 @@ import com.yanbinwa.stock.utils.DrawStockTrendUtils;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 import lombok.Data;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 这里是通过不同策略来选择股票的
@@ -51,6 +50,8 @@ public class FetchIdeaStockTrendByIdTask extends AbstractAnalysation
         {
             return;
         }
+        //对于重复的数据（stockId和timestamp都是一致的）进行去重，方便画图
+        chooseStockTrendLists = adjustChooseStockTrendLists(chooseStockTrendLists);
         chooseStockTrendLists.stream().forEach(chooseStockTrendList -> {
             try
             {
@@ -61,6 +62,23 @@ public class FetchIdeaStockTrendByIdTask extends AbstractAnalysation
                 e.printStackTrace();
             }
         });
+    }
+
+    private List<List<StockTrend>> adjustChooseStockTrendLists(List<List<StockTrend>> chooseStockTrendLists) {
+        List<List<StockTrend>> ret = new ArrayList<>();
+        for (List<StockTrend> stockTrends : chooseStockTrendLists) {
+            Set<String> stockIdAndTimeSet = new HashSet<>();
+            List<StockTrend> tmp = new ArrayList<>();
+            for (StockTrend stockTrend : stockTrends) {
+                if (stockIdAndTimeSet.contains(stockTrend.getStockId() + ":" + stockTrend.getCreatedate().getTime())) {
+                    continue;
+                }
+                tmp.add(stockTrend);
+                stockIdAndTimeSet.add(stockTrend.getStockId() + ":" + stockTrend.getCreatedate().getTime());
+            }
+            ret.add(tmp);
+        }
+        return ret;
     }
 
     @Override

@@ -64,6 +64,6 @@ public class FetchIdeaStockTrendRootTask extends AbstractAnalysation
 
     class MyConstants
     {
-        public static final int TIMEOUT = 10000;
+        public static final int TIMEOUT = 100000;
     }
 }

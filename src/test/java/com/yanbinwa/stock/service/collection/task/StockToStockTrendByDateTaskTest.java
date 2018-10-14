@@ -24,10 +24,10 @@ public class StockToStockTrendByDateTaskTest
     @Test
     public void test() throws MalformedURLException, IOException
     {
-        List<Date> dateList = new ArrayList<Date>();
-        dateList.add(TimeUtils.getDateFromStr("20180727", "yyyyMMdd"));
-        dateList.add(TimeUtils.getDateFromStr("20180924", "yyyyMMdd"));
-        StockToStockTrendByDateTask task = new StockToStockTrendByDateTask("StockToStockTrendByDateTask", "SZ300219", dateList);
+        Date startDate = TimeUtils.getDateFromStr("20180928", "yyyyMMdd");
+        Date endDate = TimeUtils.getDateFromStr("20181013", "yyyyMMdd");
+        List<Date> dateList = TimeUtils.getDateListFromStartAndEndTimestamp(startDate.getTime(), endDate.getTime());
+        StockToStockTrendByDateTask task = new StockToStockTrendByDateTask("StockToStockTrendByDateTask", "SZ000651", dateList);
         task.collectLogic();
     }
 

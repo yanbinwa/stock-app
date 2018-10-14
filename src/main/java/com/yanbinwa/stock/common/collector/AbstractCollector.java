@@ -30,8 +30,6 @@ public abstract class AbstractCollector extends AbstractRegularTask implements C
     @Override
     public void execute()
     {
-        log.debug(getClass().getSimpleName() + " collecting...");
-
         int retryTime = MyConstants.RETRY_TIME;
 
         try 
@@ -51,7 +49,13 @@ public abstract class AbstractCollector extends AbstractRegularTask implements C
                     {
                         throw e;
                     }
-                    log.debug("Collector:   -> " + loopTime + " times");
+                    log.error(e.getMessage());
+                    log.error("Collector: " + this.taskName + "  -> " + loopTime + " times");
+                    try {
+                        Thread.sleep(50);
+                    } catch (Exception e1) {
+
+                    }
                     updateCookie(MyConstants.WEBSITE);
                     loopTime ++;
                 }
