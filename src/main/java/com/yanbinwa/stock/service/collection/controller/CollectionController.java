@@ -44,7 +44,7 @@ public class CollectionController
         collectionService.fetchIndustryInfo();
     }
 
-    @PostMapping(value = "fetchStockMetaData")
+    @PostMapping(value = "/fetchStockMetaData")
     public void fetchStockMetaData() {
         collectionService.fetchStockMetaData();
     }
