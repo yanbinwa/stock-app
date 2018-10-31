@@ -16,40 +16,37 @@ import java.util.List;
 
 public class FetchIdeaStockTrendXlsxRootTask extends AbstractAnalysation {
 
-    public static final String FILE_PATH = "file/xlsx/stock.xlsx";
+    public static final String FILE_PATH = "file/xlsx";
 
     private long startTimestamp;
     private long endTimestamp;
     private StrategyXlsx strategy;
+    private String stockId;
 
-    public FetchIdeaStockTrendXlsxRootTask(String taskName)
-    {
-        super(taskName);
-    }
-
-    public FetchIdeaStockTrendXlsxRootTask(String taskName, long startTimestamp, long endTimestamp, StrategyXlsx strategy)
+    public FetchIdeaStockTrendXlsxRootTask(String taskName, long startTimestamp, long endTimestamp, StrategyXlsx strategy, String stockId)
     {
         super(taskName);
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
         this.strategy = strategy;
+        this.stockId = stockId;
     }
 
     @Override
     public void analysationLogic()
     {
         List<String> stockIdList = CollectionUtils.getAllStockId();
-        List<List<String>> contents = new ArrayList<>();
+        List<List<String>> ret = new ArrayList<>();
         for (String stockId : stockIdList) {
             List<StockTrend> stockTrendList = StockTrendUtils.getStockTrendByDate(StockTrendType.TYPE_1D, stockId,
                     new Date(startTimestamp), new Date(endTimestamp));
-            List<String> content = strategy.getIdealStockTrendList(stockTrendList);
-            if (content != null)
+            List<List<String>> contents = strategy.getIdealStockTrendList(stockTrendList);
+            if (contents != null)
             {
-                contents.add(content);
+                ret.addAll(contents);
             }
         }
-        FileUtils.writeLogForXls(FILE_PATH, contents);
+        FileUtils.writeLogForXls(FILE_PATH + "/" + strategy.getClass().getSimpleName() + ".xlsx", ret);
     }
 
     @Override

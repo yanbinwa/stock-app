@@ -49,7 +49,7 @@ public class ConfirmModelTask extends AbstractAnalysation
     @Override
     public void analysationLogic()
     {
-      //1. 获取所有限定时间段内股票的信息
+        //1. 获取所有限定时间段内股票的信息
         List<StockTrend> allStockTrendList = StockTrendUtils.getStockTrendByDate(type, null, new Date(startTimestamp), new Date(endTimestamp));
         if (allStockTrendList == null || allStockTrendList.isEmpty())
         {
@@ -57,40 +57,11 @@ public class ConfirmModelTask extends AbstractAnalysation
         }
         
         //2. 对于每个股票的信息进行聚合，并按照时间排序
-        Map<String, List<StockTrend>> stockIdToStockListMap = new HashMap<String, List<StockTrend>>();
-        for (StockTrend stockTrend : allStockTrendList)
-        {
-            String stockId = stockTrend.getStockId();
-            List<StockTrend> stockTrendList = stockIdToStockListMap.get(stockId);
-            if (stockTrendList == null)
-            {
-                stockTrendList = new ArrayList<StockTrend>();
-                stockIdToStockListMap.put(stockId, stockTrendList);
-            }
-            stockTrendList.add(stockTrend);
-        }
+        Map<String, List<StockTrend>> stockIdToStockListMap = StockTrendUtils.classifyStockTrendById(allStockTrendList);
         for (Map.Entry<String, List<StockTrend>> entry : stockIdToStockListMap.entrySet())
         {
             List<StockTrend> stockTrendList = entry.getValue();
-            Collections.sort(stockTrendList, new Comparator<StockTrend>() {
-
-                @Override
-                public int compare(StockTrend o1, StockTrend o2)
-                {
-                    if (o1.getCreatedate().before(o2.getCreatedate()))
-                    {
-                        return -1;
-                    }
-                    else if (o1.getCreatedate().after(o2.getCreatedate()))
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            });
+            StockTrendUtils.sortStockTrendByTimestamp(stockTrendList);
         }
         
         //3. 查找每只股票满足increaseRate的数据集, 以及不满足要求的数据集

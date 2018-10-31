@@ -36,7 +36,7 @@ public class DabanStrategy implements Strategy {
         if ((index - dayNum) < 0) {
             return null;
         }
-        for (int i = index - dayNum; i <= index; i ++) {
+        for (int i = index - dayNum + 1; i <= index; i ++) {
             StockTrend stockTrend = stockTrendList.get(i);
             if (stockTrend.getPercent() < group_limit) {
                 return null;

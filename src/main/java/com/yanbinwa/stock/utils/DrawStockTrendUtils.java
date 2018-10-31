@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.emotibot.middleware.utils.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -54,6 +55,9 @@ public class DrawStockTrendUtils
         {
             return;
         }
+        //需要按时间对stockTrend去重
+
+
         Collections.sort(stockTrendList);
         OHLCSeriesCollection seriesCollection = new OHLCSeriesCollection();
         OHLCSeries series1 = new OHLCSeries("k_up");
@@ -68,11 +72,17 @@ public class DrawStockTrendUtils
         int days = 0;
         String startDate = null;
         String endDate = null;
-        List<Date> workDateList = new ArrayList<Date>();
-        
-        String stockId = stockTrendList.get(0).getStockId();
-        StockMetaData stockMetaData = CollectionUtils.getStockMetaData(stockId);
-        String title = stockMetaData.getName() + ":" + stockId;
+        List<Date> workDateList = new ArrayList<>();
+
+        String title;
+        StockMetaData stockMetaData = null;
+        if (!StringUtils.isEmpty(stockTrendList.get(0).getStockId())) {
+            String stockId = stockTrendList.get(0).getStockId();
+            stockMetaData = CollectionUtils.getStockMetaData(stockId);
+            title = stockMetaData.getName() + ":" + stockId;
+        } else {
+            title = "分析结果";
+        }
         
         for (int i = 0; i < stockTrendList.size(); i ++)
         {
@@ -202,7 +212,12 @@ public class DrawStockTrendUtils
         domainXYPlot.setGap(10);//设置两个图形区域对象之间的间隔空间
         
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, domainXYPlot, true);
-        String filePath = MyConstants.DIR + "/" + stockMetaData.getName() + "_" + stockId + "_" + df.format(sda) + "_" + df.format(eda) + ".png";
+        String filePath;
+        if (stockMetaData != null) {
+            filePath = MyConstants.DIR + "/" + stockMetaData.getName() + "_" + stockMetaData.getStockId() + "_" + df.format(sda) + "_" + df.format(eda) + ".png";
+        } else {
+            filePath = MyConstants.DIR + "/" + title + ".png";
+        }
         File file = new File(filePath);
         if (file.exists())
         {

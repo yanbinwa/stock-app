@@ -25,7 +25,7 @@ public abstract class AbstractAnalysation extends AbstractRegularTask implements
     @Override
     public void execute()
     {
-        log.debug(getClass().getSimpleName() + " aggragation...");
+        log.debug(getClass().getSimpleName() + " analysation...");
         analysationLogic();
     }
 }

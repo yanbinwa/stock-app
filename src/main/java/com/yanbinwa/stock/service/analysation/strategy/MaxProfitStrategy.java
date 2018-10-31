@@ -6,6 +6,7 @@ import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class MaxProfitStrategy implements StrategyXlsx {
     }
 
     @Override
-    public List<String> getIdealStockTrendList(List<StockTrend> stockTrendList) {
+    public List<List<String>> getIdealStockTrendList(List<StockTrend> stockTrendList) {
         if (stockTrendList == null || stockTrendList.isEmpty()) {
             return null;
         }
@@ -55,7 +56,7 @@ public class MaxProfitStrategy implements StrategyXlsx {
         content.add(String.valueOf(maxProfitRate));
         content.add(String.valueOf(startDate));
         content.add(String.valueOf(endDate));
-        return content;
+        return Arrays.asList(content);
     }
 
 }

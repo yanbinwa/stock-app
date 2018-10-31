@@ -45,6 +45,7 @@ public class FetchIdeaStockTrendByIdTask extends AbstractAnalysation
     {
         List<StockTrend> stockTrendList = StockTrendUtils.getStockTrendByDate(StockTrendType.TYPE_1D, stockId, 
                 new Date(startTimestamp), new Date(endTimestamp));
+        stockTrendList = StockTrendUtils.removeDuplateStockTrend(stockTrendList);
         List<List<StockTrend>> chooseStockTrendLists = strategy.getIdealStockTrendList(stockTrendList);
         if (chooseStockTrendLists == null)
         {

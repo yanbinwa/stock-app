@@ -1,5 +1,6 @@
 package com.yanbinwa.stock.utils;
 
+import com.emotibot.middleware.utils.StringUtils;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.aggragation.dao.*;
@@ -606,5 +607,35 @@ public class StockTrendUtils
             }
         });
         return stockTrends;
+    }
+
+    public static Map<String, List<StockTrend>> classifyStockTrendById(List<StockTrend> stockTrends) {
+        Map<String, List<StockTrend>> stockIdToStockTrendMap = new HashMap<>();
+        for (StockTrend stockTrend : stockTrends) {
+            String stockId = stockTrend.getStockId();
+            List<StockTrend> stockTrendList = stockIdToStockTrendMap.get(stockId);
+            if (stockTrendList == null) {
+                stockTrendList = new ArrayList<>();
+                stockIdToStockTrendMap.put(stockId, stockTrendList);
+            }
+            stockTrendList.add(stockTrend);
+        }
+        return stockIdToStockTrendMap;
+    }
+
+    /**
+     * stockId + createTime, stockId 可以为空
+     *
+     * @param stockTrends
+     * @return
+     */
+    public static List<StockTrend> removeDuplateStockTrend(List<StockTrend> stockTrends) {
+        Map<String, StockTrend> ret = new HashMap<>();
+        for (StockTrend stockTrend : stockTrends) {
+            String stockId = StringUtils.isEmpty(stockTrend.getStockId()) ? "" : stockTrend.getStockId();
+            String key = stockId + "_" + stockTrend.getCreatedate().getTime();
+            ret.put(key, stockTrend);
+        }
+        return new ArrayList<>(ret.values());
     }
 }

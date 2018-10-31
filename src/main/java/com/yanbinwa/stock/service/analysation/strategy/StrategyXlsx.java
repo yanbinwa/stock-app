@@ -9,5 +9,5 @@ import java.util.List;
  *
  */
 public interface StrategyXlsx {
-    List<String> getIdealStockTrendList(List<StockTrend> stockTrendList);
+    List<List<String>> getIdealStockTrendList(List<StockTrend> stockTrendList);
 }
