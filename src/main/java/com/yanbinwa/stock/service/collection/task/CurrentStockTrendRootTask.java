@@ -36,7 +36,7 @@ public class CurrentStockTrendRootTask extends AbstractCollector
             RegularManagerSingleton.getInstance().addRegularTask(task);
             try
             {
-                Thread.sleep(30);
+                Thread.sleep(50);
             } 
             catch (InterruptedException e)
             {

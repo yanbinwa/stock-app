@@ -15,4 +15,6 @@ public interface CollectionService
     void fetchIndustryInfo();
 
     void fetchStockMetaData();
+
+    void fetchCurrentStockTrend();
 }

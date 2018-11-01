@@ -44,7 +44,7 @@ public class CurrentStockTrendTask extends AbstractCollector
 {
     private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
     private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9_SH, HourWindow.HOUR10_FH, HourWindow.HOUR10_SH, HourWindow.HOUR11_FH, HourWindow.HOUR13_FH, HourWindow.HOUR13_SH, HourWindow.HOUR14_FH, HourWindow.HOUR14_SH};
-    private static final int periodInterval = 20;
+    private static final int periodInterval = 120;
     
     private static final String[] STOCK_PREFIX = {"SH60", "SZ30", "SZ00"};
     

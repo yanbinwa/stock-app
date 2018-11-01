@@ -8,4 +8,5 @@ public interface AnalysationService {
     void changeRateTrendAnalysation(ChangeRateTrendRequest changeRateTrendRequest);
     void lianbanHistoryAnalysation(LianbanHistoryRequest lianbanHistoryRequest);
     void dabanIncomeByIdAnalysation(DabanIncomeByIdRequest dabanIncomeByIdRequest);
+    void lowPriceStockAnalysation(LowPriceStockRequest request);
 }

@@ -76,4 +76,10 @@ public class CollectionServiceImpl implements CollectionService
         HouShenCollectionTask task = new HouShenCollectionTask(HouShenCollectionTask.class.getSimpleName());
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
+
+    @Override
+    public void fetchCurrentStockTrend() {
+        CurrentStockTrendRootTask task = new CurrentStockTrendRootTask(CurrentStockTrendRootTask.class.getSimpleName(), 6000, 100);
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
 }

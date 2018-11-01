@@ -40,6 +40,7 @@ public class FetchIdeaStockTrendXlsxRootTask extends AbstractAnalysation {
         for (String stockId : stockIdList) {
             List<StockTrend> stockTrendList = StockTrendUtils.getStockTrendByDate(StockTrendType.TYPE_1D, stockId,
                     new Date(startTimestamp), new Date(endTimestamp));
+            stockTrendList = StockTrendUtils.sortStockTrendByTimestamp(stockTrendList);
             List<List<String>> contents = strategy.getIdealStockTrendList(stockTrendList);
             if (contents != null)
             {

@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LianbanHistoryRequest extends AnalysationBaseRequest{
-    private int dayNum;
-    private double group_limit;
+public class LowPriceStockRequest extends AnalysationBaseRequest {
+    private double priceRate;
     private int window_gap;
+    private String targetTime;
 }

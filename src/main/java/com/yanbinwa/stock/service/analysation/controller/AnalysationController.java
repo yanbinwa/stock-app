@@ -39,4 +39,9 @@ public class AnalysationController {
     public void dabanIncomeByIdAnalysation(@RequestBody DabanIncomeByIdRequest request) {
         analysationService.dabanIncomeByIdAnalysation(request);
     }
+
+    @PostMapping(value = "/lowPriceStockAnalysation")
+    public void lowPriceStockAnalysation(@RequestBody LowPriceStockRequest request) {
+        analysationService.lowPriceStockAnalysation(request);
+    }
 }

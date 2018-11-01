@@ -1,10 +1,12 @@
 package com.yanbinwa.stock.utils;
 
 import com.emotibot.middleware.utils.StringUtils;
+import com.emotibot.middleware.utils.TimeUtils;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.aggragation.dao.*;
 import com.yanbinwa.stock.service.aggragation.entity.*;
+import com.yanbinwa.stock.service.analysation.service.AnalysationServiceImpl;
 import com.yanbinwa.stock.service.collection.dao.StockTrendRawDao;
 import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
 import lombok.extern.slf4j.Slf4j;
@@ -637,5 +639,20 @@ public class StockTrendUtils
             ret.put(key, stockTrend);
         }
         return new ArrayList<>(ret.values());
+    }
+
+
+    public static int getTargetStockTrendIndex(List<StockTrend> stockTrendList, String dabanTime) {
+        if (StringUtils.isEmpty(dabanTime)) {
+            return stockTrendList.size() - 1;
+        }
+        Date date = TimeUtils.getDateFromStr(dabanTime, AnalysationServiceImpl.DATE_FORMAT);
+        for (int i = 0; i < stockTrendList.size(); i ++) {
+            StockTrend stockTrend = stockTrendList.get(i);
+            if (stockTrend.getCreatedate().equals(date)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

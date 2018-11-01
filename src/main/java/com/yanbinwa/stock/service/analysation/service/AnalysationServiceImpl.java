@@ -111,4 +111,25 @@ public class AnalysationServiceImpl implements AnalysationService {
         }
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
+
+    @Override
+    public void lowPriceStockAnalysation(LowPriceStockRequest lowPriceStockRequest) {
+        LowPriceStockStratey strategy = new LowPriceStockStratey(
+                lowPriceStockRequest.getPriceRate(),
+                lowPriceStockRequest.getWindow_gap(),
+                lowPriceStockRequest.getTargetTime()
+        );
+        Date startDate = TimeUtils.getDateFromStr(lowPriceStockRequest.getStartTime(), DATE_FORMAT);
+        Date endDate = TimeUtils.getDateFromStr(lowPriceStockRequest.getEndTime(), DATE_FORMAT);
+        AbstractRegularTask task;
+        if (StringUtils.isEmpty(lowPriceStockRequest.getStockId())) {
+            task = new FetchIdeaStockTrendRootTask(FetchIdeaStockTrendRootTask.class.getSimpleName() + startDate.getTime() + "-" + endDate.getTime(),
+                    startDate.getTime(), endDate.getTime(), strategy);
+        } else {
+            task = new FetchIdeaStockTrendByIdTask(
+                    FetchIdeaStockTrendByIdTask.class.getSimpleName() + startDate.getTime() + "-" + endDate.getTime() + "-" + lowPriceStockRequest.getStockId(),
+                    lowPriceStockRequest.getStockId(), startDate.getTime(), endDate.getTime(), strategy);
+        }
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
 }

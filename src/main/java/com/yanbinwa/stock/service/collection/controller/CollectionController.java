@@ -48,4 +48,9 @@ public class CollectionController
     public void fetchStockMetaData() {
         collectionService.fetchStockMetaData();
     }
+
+    @PostMapping(value = "/fetchCurrentStockTrend")
+    public void fetchCurrentStockTrend() {
+        collectionService.fetchCurrentStockTrend();
+    }
 }
