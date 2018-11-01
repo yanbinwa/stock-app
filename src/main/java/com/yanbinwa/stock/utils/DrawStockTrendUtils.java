@@ -46,10 +46,14 @@ import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
  */
 public class DrawStockTrendUtils
 {
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd"); 
-    
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
+
+    public static final int TIME_SCALE = 7;
+    public static final double UP_OR_DOWN_RANGE = 0.1d;
+    public static final String DIR = "./file/stock";
+
     @SuppressWarnings("deprecation")
-    public static void stockKChart(List<StockTrend> stockTrendList) throws ParseException, IOException 
+    public static void stockKChart(List<StockTrend> stockTrendList, String pathPrefix) throws ParseException, IOException
     {
         if (stockTrendList == null || stockTrendList.isEmpty())
         {
@@ -176,7 +180,7 @@ public class DrawStockTrendUtils
         y1Axis.setAutoRange(false);
         y1Axis.setUpperMargin(0.5D);
         y1Axis.setLabelFont(new Font("微软雅黑", Font.BOLD, 12));
-        y1Axis.setRange(mLow - (mLow * MyConstants.UP_OR_DOWN_RANGE), mHigh + (mHigh * MyConstants.UP_OR_DOWN_RANGE));
+        y1Axis.setRange(mLow - (mLow * UP_OR_DOWN_RANGE), mHigh + (mHigh * UP_OR_DOWN_RANGE));
         
         XYPlot plot = new XYPlot(seriesCollection, domainAxis, y1Axis, candlestickRender);//生成画图细节
         plot.setBackgroundPaint(Color.BLACK);//设置曲线图背景色
@@ -212,11 +216,16 @@ public class DrawStockTrendUtils
         domainXYPlot.setGap(10);//设置两个图形区域对象之间的间隔空间
         
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, domainXYPlot, true);
+        String dirPath = DIR + "/" + pathPrefix;
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
         String filePath;
         if (stockMetaData != null) {
-            filePath = MyConstants.DIR + "/" + stockMetaData.getName() + "_" + stockMetaData.getStockId() + "_" + df.format(sda) + "_" + df.format(eda) + ".png";
+            filePath = dirPath + "/" + stockMetaData.getName() + "_" + stockMetaData.getStockId() + "_" + df.format(sda) + "_" + df.format(eda) + ".png";
         } else {
-            filePath = MyConstants.DIR + "/" + title + ".png";
+            filePath = dirPath + "/" + title + ".png";
         }
         File file = new File(filePath);
         if (file.exists())
@@ -224,12 +233,5 @@ public class DrawStockTrendUtils
             file.delete();
         }
         ChartUtilities.saveChartAsPNG(file, chart, 520, 250);
-    }
-    
-    class MyConstants
-    {
-        public static final int TIME_SCALE = 7;
-        public static final double UP_OR_DOWN_RANGE = 0.1d;
-        public static final String DIR = "./file/stock";
     }
 }

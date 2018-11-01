@@ -57,7 +57,7 @@ public class FetchIdeaStockTrendByIdTask extends AbstractAnalysation
         chooseStockTrendLists.stream().forEach(chooseStockTrendList -> {
             try
             {
-                DrawStockTrendUtils.stockKChart(chooseStockTrendList);
+                DrawStockTrendUtils.stockKChart(chooseStockTrendList, strategy.getClass().getSimpleName());
             }
             catch(Exception e)
             {

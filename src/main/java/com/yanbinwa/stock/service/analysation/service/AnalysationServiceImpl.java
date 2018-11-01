@@ -10,8 +10,10 @@ import com.yanbinwa.stock.service.analysation.task.FetchAllIdeaStockTrendTask;
 import com.yanbinwa.stock.service.analysation.task.FetchIdeaStockTrendByIdTask;
 import com.yanbinwa.stock.service.analysation.task.FetchIdeaStockTrendRootTask;
 import com.yanbinwa.stock.service.analysation.task.FetchIdeaStockTrendXlsxRootTask;
+import com.yanbinwa.stock.utils.DrawStockTrendUtils;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Date;
 
 @Service
@@ -23,6 +25,7 @@ public class AnalysationServiceImpl implements AnalysationService {
     @Override
     public void dabanAnalysation(DabanRequest dabanRequest) {
         DabanStrategy strategy = new DabanStrategy(dabanRequest.getDayNum(), dabanRequest.getGroup_limit(), dabanRequest.getDabanTime(), WINDOW_GAP);
+        clearDir(strategy.getClass().getSimpleName());
         Date startDate = TimeUtils.getDateFromStr(dabanRequest.getStartTime(), DATE_FORMAT);
         Date endDate = TimeUtils.getDateFromStr(dabanRequest.getEndTime(), DATE_FORMAT);
         AbstractRegularTask task;
@@ -41,6 +44,7 @@ public class AnalysationServiceImpl implements AnalysationService {
     @Override
     public void dabanIncomeAnalysation(DabanIncomeRequest dabanIncomeRequest) {
         DabanIncomeStrategy strategy = new DabanIncomeStrategy(dabanIncomeRequest.getIncomeRate(), dabanIncomeRequest.getTag());
+        clearDir(strategy.getClass().getSimpleName());
         Date startDate = TimeUtils.getDateFromStr(dabanIncomeRequest.getStartTime(), DATE_FORMAT);
         Date endDate = TimeUtils.getDateFromStr(dabanIncomeRequest.getEndTime(), DATE_FORMAT);
         AbstractRegularTask task = new FetchAllIdeaStockTrendTask(FetchAllIdeaStockTrendTask.class.getSimpleName() + startDate.getTime() + "-" + endDate.getTime(),
@@ -56,6 +60,7 @@ public class AnalysationServiceImpl implements AnalysationService {
                 changeRateTrendRequest.getTargetChangeRateDay(),
                 changeRateTrendRequest.getTargetChangeRate(),
                 WINDOW_GAP);
+        clearDir(strategy.getClass().getSimpleName());
         Date startDate = TimeUtils.getDateFromStr(changeRateTrendRequest.getStartTime(), DATE_FORMAT);
         Date endDate = TimeUtils.getDateFromStr(changeRateTrendRequest.getEndTime(), DATE_FORMAT);
         AbstractRegularTask task;
@@ -78,6 +83,7 @@ public class AnalysationServiceImpl implements AnalysationService {
                 lianbanHistoryRequest.getGroup_limit(),
                 lianbanHistoryRequest.getWindow_gap()
         );
+        clearDir(strategy.getClass().getSimpleName());
         Date startDate = TimeUtils.getDateFromStr(lianbanHistoryRequest.getStartTime(), DATE_FORMAT);
         Date endDate = TimeUtils.getDateFromStr(lianbanHistoryRequest.getEndTime(), DATE_FORMAT);
         AbstractRegularTask task;
@@ -98,6 +104,7 @@ public class AnalysationServiceImpl implements AnalysationService {
                 dabanIncomeByIdRequest.getIncomeRate(),
                 dabanIncomeByIdRequest.getTag()
         );
+        clearDir(strategy.getClass().getSimpleName());
         Date startDate = TimeUtils.getDateFromStr(dabanIncomeByIdRequest.getStartTime(), DATE_FORMAT);
         Date endDate = TimeUtils.getDateFromStr(dabanIncomeByIdRequest.getEndTime(), DATE_FORMAT);
         AbstractRegularTask task;
@@ -119,6 +126,7 @@ public class AnalysationServiceImpl implements AnalysationService {
                 lowPriceStockRequest.getWindow_gap(),
                 lowPriceStockRequest.getTargetTime()
         );
+        clearDir(strategy.getClass().getSimpleName());
         Date startDate = TimeUtils.getDateFromStr(lowPriceStockRequest.getStartTime(), DATE_FORMAT);
         Date endDate = TimeUtils.getDateFromStr(lowPriceStockRequest.getEndTime(), DATE_FORMAT);
         AbstractRegularTask task;
@@ -131,5 +139,22 @@ public class AnalysationServiceImpl implements AnalysationService {
                     lowPriceStockRequest.getStockId(), startDate.getTime(), endDate.getTime(), strategy);
         }
         RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
+
+    private void clearDir(String dirPrefix) {
+        File dir = new File(DrawStockTrendUtils.DIR + "/" + dirPrefix);
+        if (!dir.exists()) {
+            return;
+        }
+        if (dir.isFile()) {
+            dir.delete();
+            return;
+        } else {
+            for (File file : dir.listFiles()) {
+                file.delete();
+            }
+        }
+        dir.delete();
+        return;
     }
 }

@@ -28,7 +28,7 @@ public class DrawStockTrendUtilsTest
         long endTimestamp = System.currentTimeMillis();
         long startTimestamp = endTimestamp - (long)TimeUtils.MILLISECOND_IN_DAY * 50;
         List<StockTrend> stockTrendList = StockTrendUtils.getStockTrendByDate(StockTrendType.TYPE_1D, "SZ002389", new Date(startTimestamp), new Date(endTimestamp));
-        DrawStockTrendUtils.stockKChart(stockTrendList);
+        DrawStockTrendUtils.stockKChart(stockTrendList, "test");
     }
 
 }

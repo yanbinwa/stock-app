@@ -69,7 +69,7 @@ public class FetchAllIdeaStockTrendTask extends AbstractAnalysation {
         try
         {
             for (List<StockTrend> stockTrends : chooseStockTrendLists) {
-                DrawStockTrendUtils.stockKChart(stockTrends);
+                DrawStockTrendUtils.stockKChart(stockTrends, strategy.getClass().getSimpleName());
             }
         }
         catch(Exception e)
