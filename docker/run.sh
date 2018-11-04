@@ -33,7 +33,7 @@ DOCKER_IMAGE=$REPO/$CONTAINER:$TAG
 # - restart = always
 globalConf="
   -v /etc/localtime:/etc/localtime \
-  -v /usr/src/stock-app/file/stock:/opt/data/stock \
+  -v /opt/data/stock:/usr/src/stock-app/file/stock \
   -m 20G \
   --restart always \
 "
