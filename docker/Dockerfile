@@ -16,6 +16,7 @@ WORKDIR /usr/src/${SERVICE_NAME}
 COPY launch ./bin
 COPY docker ./docker
 COPY file ./file
+COPY file/stockTmp ./file/stock
 
 # Download main jar
 COPY target/${SERVICE_NAME}.jar target/${SERVICE_NAME}.jar
