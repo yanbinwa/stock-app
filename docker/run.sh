@@ -33,6 +33,7 @@ DOCKER_IMAGE=$REPO/$CONTAINER:$TAG
 # - restart = always
 globalConf="
   -v /etc/localtime:/etc/localtime \
+  -v /usr/src/stock-app/file/stock:/opt/data/stock \
   -m 20G \
   --restart always \
 "
@@ -51,7 +52,7 @@ moduleConf="
 # </EDIT_ME>
 
 docker rm -f -v $CONTAINER
-cmd="docker run -d --net=host --name $CONTAINER \
+cmd="docker run -d --name $CONTAINER \
   $globalConf \
   $moduleConf \
   $DOCKER_IMAGE \
