@@ -1,6 +1,6 @@
 /target/
 /log/
-/file/stock
+/file/stock/
 /file/xlsx
 /file/*.txt
 !.mvn/wrapper/maven-wrapper.jar
@@ -27,3 +27,5 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+!/file/stock/*.txt
