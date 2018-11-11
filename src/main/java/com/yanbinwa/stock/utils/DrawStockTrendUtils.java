@@ -219,7 +219,7 @@ public class DrawStockTrendUtils
         String dirPath = DIR + "/" + pathPrefix;
         File dir = new File(dirPath);
         if (!dir.exists()) {
-            dir.mkdir();
+            dir.mkdirs();
         }
         String filePath;
         if (stockMetaData != null) {

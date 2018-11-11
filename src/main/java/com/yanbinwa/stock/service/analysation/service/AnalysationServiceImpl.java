@@ -6,10 +6,7 @@ import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.service.analysation.request.*;
 import com.yanbinwa.stock.service.analysation.strategy.*;
-import com.yanbinwa.stock.service.analysation.task.FetchAllIdeaStockTrendTask;
-import com.yanbinwa.stock.service.analysation.task.FetchIdeaStockTrendByIdTask;
-import com.yanbinwa.stock.service.analysation.task.FetchIdeaStockTrendRootTask;
-import com.yanbinwa.stock.service.analysation.task.FetchIdeaStockTrendXlsxRootTask;
+import com.yanbinwa.stock.service.analysation.task.*;
 import com.yanbinwa.stock.utils.DrawStockTrendUtils;
 import org.springframework.stereotype.Service;
 
@@ -138,6 +135,28 @@ public class AnalysationServiceImpl implements AnalysationService {
                     FetchIdeaStockTrendByIdTask.class.getSimpleName() + startDate.getTime() + "-" + endDate.getTime() + "-" + lowPriceStockRequest.getStockId(),
                     lowPriceStockRequest.getStockId(), startDate.getTime(), endDate.getTime(), strategy);
         }
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
+
+    @Override
+    public void dabanTopNAnalysation(DabanTopNRequest request) {
+        DabanTopNStrategy strategy = new DabanTopNStrategy(request.getTopN(), request.getDayNum(), request.getGroup_limit(), request.getWindow_gap());
+        clearDir(strategy.getClass().getSimpleName());
+        Date startDate = TimeUtils.getDateFromStr(request.getStartTime(), DATE_FORMAT);
+        Date endDate = TimeUtils.getDateFromStr(request.getEndTime(), DATE_FORMAT);
+        AbstractRegularTask task = new FetchAllIdeaStockTrendTask(FetchAllIdeaStockTrendTask.class.getSimpleName() + startDate.getTime() + "-" + endDate.getTime(),
+                startDate.getTime(), endDate.getTime(), strategy, null, null);
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
+
+    @Override
+    public void dabanTopNByIndustryAnalysation(DabanTopNRequest request) {
+        DabanTopNStrategy strategy = new DabanTopNStrategy(request.getTopN(), request.getDayNum(), request.getGroup_limit(), request.getWindow_gap());
+        clearDir(strategy.getClass().getSimpleName());
+        Date startDate = TimeUtils.getDateFromStr(request.getStartTime(), DATE_FORMAT);
+        Date endDate = TimeUtils.getDateFromStr(request.getEndTime(), DATE_FORMAT);
+        AbstractRegularTask task = new FetchIdeaStockTrendByIndustryTask(FetchIdeaStockTrendByIndustryTask.class.getSimpleName() + startDate.getTime() + "-" + endDate.getTime(),
+                startDate.getTime(), endDate.getTime(), strategy, null, null);
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
 

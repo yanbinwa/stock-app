@@ -10,10 +10,7 @@ import com.yanbinwa.stock.service.collection.entity.StockMetaData;
 import com.yanbinwa.stock.service.collection.entity.StockTrendRaw;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -72,6 +69,18 @@ public class CollectionUtils
         Type stockIdType = new TypeToken<List<String>>(){}.getType();
         List<String> stockIdList = (List<String>) JsonUtils.getObject(json, stockIdType);
         return stockIdList;
+    }
+
+    public static Map<String, String> getStockIdToIndustryNameMap() {
+        List<String> industryNames = getAllIndustryName();
+        Map<String, String> stockInToIndustryNameMap = new HashMap<>();
+        for (String industryName : industryNames) {
+            List<String> stockIds = getIndustryToStockId(industryName);
+            for (String stockId : stockIds) {
+                stockInToIndustryNameMap.put(stockId, industryName);
+            }
+        }
+        return stockInToIndustryNameMap;
     }
     
     public static void deleteIndustryToStockId(String industryName)

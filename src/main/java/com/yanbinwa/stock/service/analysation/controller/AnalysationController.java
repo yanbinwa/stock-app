@@ -44,4 +44,14 @@ public class AnalysationController {
     public void lowPriceStockAnalysation(@RequestBody LowPriceStockRequest request) {
         analysationService.lowPriceStockAnalysation(request);
     }
+
+    @PostMapping(value = "/dabanTopNAnalysation")
+    public void dabanTopNAnalysation(@RequestBody DabanTopNRequest request) {
+        analysationService.dabanTopNAnalysation(request);
+    }
+
+    @PostMapping(value = "/dabanTopNByIndustryAnalysation")
+    public void dabanTopNByIndustryAnalysation(@RequestBody DabanTopNRequest request) {
+        analysationService.dabanTopNByIndustryAnalysation(request);
+    }
 }

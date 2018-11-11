@@ -9,4 +9,6 @@ public interface AnalysationService {
     void lianbanHistoryAnalysation(LianbanHistoryRequest lianbanHistoryRequest);
     void dabanIncomeByIdAnalysation(DabanIncomeByIdRequest dabanIncomeByIdRequest);
     void lowPriceStockAnalysation(LowPriceStockRequest request);
+    void dabanTopNAnalysation(DabanTopNRequest request);
+    void dabanTopNByIndustryAnalysation(DabanTopNRequest request);
 }
