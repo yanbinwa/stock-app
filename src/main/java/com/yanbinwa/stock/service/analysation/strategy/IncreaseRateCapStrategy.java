@@ -1,12 +1,16 @@
 package com.yanbinwa.stock.service.analysation.strategy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.emotibot.middleware.utils.TimeUtils;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 在一个时间窗口中，一只股票的连续收益情况大于预期收益，将图形画出
+ *
+ */
 public class IncreaseRateCapStrategy implements Strategy
 {
     private static final int DAY_NUM = 3;

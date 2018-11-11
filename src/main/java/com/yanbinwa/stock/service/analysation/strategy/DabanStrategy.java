@@ -1,16 +1,13 @@
 package com.yanbinwa.stock.service.analysation.strategy;
 
-import com.emotibot.middleware.utils.StringUtils;
 import com.emotibot.middleware.utils.TimeUtils;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
-import com.yanbinwa.stock.service.analysation.service.AnalysationServiceImpl;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

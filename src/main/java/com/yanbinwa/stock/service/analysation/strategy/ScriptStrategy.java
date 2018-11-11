@@ -6,6 +6,10 @@ import java.util.List;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.service.analysation.script.ScriptCollection;
 
+/**
+ * 匹配历史当中有哪只股票的趋势与当前股票类似
+ *
+ */
 public class ScriptStrategy implements Strategy
 {
     private List<ScriptCollection> scriptList;

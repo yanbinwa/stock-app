@@ -3,7 +3,6 @@ package com.yanbinwa.stock.service.analysation.task;
 import com.emotibot.middleware.utils.FileUtils;
 import com.yanbinwa.stock.common.analysation.AbstractAnalysation;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.analysation.strategy.StrategyXlsx;
@@ -53,9 +52,7 @@ public class FetchIdeaStockTrendXlsxRootTask extends AbstractAnalysation {
     @Override
     public Period generatePeriod()
     {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override

@@ -10,6 +10,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 获取一只股票在一段时间内的最大收益率
+ *
+ */
 public class MaxProfitStrategy implements StrategyXlsx {
 
     private double targetProfitRate;

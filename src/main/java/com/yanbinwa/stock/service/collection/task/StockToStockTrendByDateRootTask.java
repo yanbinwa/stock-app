@@ -4,7 +4,6 @@ import com.emotibot.middleware.utils.TimeUtils;
 import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
 import com.yanbinwa.stock.utils.HolidayUtils;
 import lombok.Data;
@@ -57,9 +56,7 @@ public class StockToStockTrendByDateRootTask extends AbstractCollector
     @Override
     public Period generatePeriod()
     {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override

@@ -4,16 +4,11 @@ import com.yanbinwa.stock.common.aggragation.AbstractAggragation;
 import com.yanbinwa.stock.common.type.DayWindow;
 import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1d;
 import com.yanbinwa.stock.utils.StockTrendUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Data
 @Slf4j
@@ -43,16 +38,7 @@ public class StockTrendAggragation1dTask extends AbstractAggragation
     @Override
     public Period generatePeriod()
     {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.PERIOD);
-        period.setInterval(periodInterval);
-        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
-        Collections.addAll(dayWindowList, dayWindowArray);
-        period.setDayWindowList(dayWindowList);
-        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
-        Collections.addAll(hourWindowList, hourWindowArray);
-        period.setHourWindowList(hourWindowList);
-        return period;
+        return buildPeriod(periodInterval, dayWindowArray, hourWindowArray);
     }
 
     @Override

@@ -166,7 +166,7 @@ public class DrawStockTrendUtils
         domainAxis.setTickMarkPosition(DateTickMarkPosition.START);//设置标记的位置
         domainAxis.setLabelFont(new Font("微软雅黑", Font.BOLD, 12));
         domainAxis.setStandardTickUnits(DateAxis.createStandardDateTickUnits());
-        domainAxis.setTickUnit(new DateTickUnit(DateTickUnit.DAY, days));
+        domainAxis.setTickUnit(new DateTickUnit(DateTickUnit.DAY, days/3 + 1));
         domainAxis.setDateFormatOverride(df);//设置时间格式
         SegmentedTimeline timeline = SegmentedTimeline.newMondayThroughFridayTimeline();
         for(Date holiday : allHolidys)

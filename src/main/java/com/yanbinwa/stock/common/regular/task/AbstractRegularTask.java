@@ -2,12 +2,18 @@ package com.yanbinwa.stock.common.regular.task;
 
 import com.emotibot.middleware.utils.JsonUtils;
 import com.yanbinwa.stock.common.constants.Constants;
+import com.yanbinwa.stock.common.type.DayWindow;
+import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.common.type.Period;
 import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.utils.DTOUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -143,5 +149,24 @@ public abstract class AbstractRegularTask implements RegularTask
         {
             period.setNextTime();
         }
+    }
+
+    protected Period buildPeriod(int periodInterval, DayWindow[] dayWindowArray, HourWindow[] hourWindowArray) {
+        Period period = new Period();
+        period.setPeriodType(PeriodType.PERIOD);
+        period.setInterval(periodInterval);
+        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
+        Collections.addAll(dayWindowList, dayWindowArray);
+        period.setDayWindowList(dayWindowList);
+        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
+        Collections.addAll(hourWindowList, hourWindowArray);
+        period.setHourWindowList(hourWindowList);
+        return period;
+    }
+
+    protected Period buildEmptyPeriod() {
+        Period period = new Period();
+        period.setPeriodType(PeriodType.NONE);
+        return period;
     }
 }

@@ -2,6 +2,7 @@ package com.yanbinwa.stock.utils;
 
 import com.emotibot.middleware.utils.StringUtils;
 import com.emotibot.middleware.utils.TimeUtils;
+import com.yanbinwa.stock.entity.stockTrend.AbstractStockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.aggragation.dao.*;
@@ -20,6 +21,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -112,7 +114,7 @@ public class StockTrendUtils
     
     public static List<StockTrendRaw> stockTrendListToStockTrendRawList(List<StockTrend> stockList)
     {
-        List<StockTrendRaw> newStockTrendList = new ArrayList<StockTrendRaw>();
+        List<StockTrendRaw> newStockTrendList = new ArrayList<>();
         for (StockTrend stockTrend : stockList)
         {
             newStockTrendList.add((StockTrendRaw)stockTrend);
@@ -122,7 +124,7 @@ public class StockTrendUtils
     
     public static List<StockTrendAgg1Min> stockTrendListToStockTrendAgg1MinList(List<StockTrend> stockList)
     {
-        List<StockTrendAgg1Min> newStockTrendList = new ArrayList<StockTrendAgg1Min>();
+        List<StockTrendAgg1Min> newStockTrendList = new ArrayList<>();
         for (StockTrend stockTrend : stockList)
         {
             newStockTrendList.add((StockTrendAgg1Min)stockTrend);
@@ -132,7 +134,7 @@ public class StockTrendUtils
     
     public static List<StockTrendAgg5Min> stockTrendListToStockTrendAgg5MinList(List<StockTrend> stockList)
     {
-        List<StockTrendAgg5Min> newStockTrendList = new ArrayList<StockTrendAgg5Min>();
+        List<StockTrendAgg5Min> newStockTrendList = new ArrayList<>();
         for (StockTrend stockTrend : stockList)
         {
             newStockTrendList.add((StockTrendAgg5Min)stockTrend);
@@ -142,7 +144,7 @@ public class StockTrendUtils
     
     public static List<StockTrendAgg1h> stockTrendListToStockTrendAgg1hList(List<StockTrend> stockList)
     {
-        List<StockTrendAgg1h> newStockTrendList = new ArrayList<StockTrendAgg1h>();
+        List<StockTrendAgg1h> newStockTrendList = new ArrayList<>();
         for (StockTrend stockTrend : stockList)
         {
             newStockTrendList.add((StockTrendAgg1h)stockTrend);
@@ -152,7 +154,7 @@ public class StockTrendUtils
     
     public static List<StockTrendAgg1d> stockTrendListToStockTrendAgg1dList(List<StockTrend> stockList)
     {
-        List<StockTrendAgg1d> newStockTrendList = new ArrayList<StockTrendAgg1d>();
+        List<StockTrendAgg1d> newStockTrendList = new ArrayList<>();
         for (StockTrend stockTrend : stockList)
         {
             newStockTrendList.add((StockTrendAgg1d)stockTrend);
@@ -162,7 +164,7 @@ public class StockTrendUtils
     
     public static List<StockTrendAgg1w> stockTrendListToStockTrendAgg1wList(List<StockTrend> stockList)
     {
-        List<StockTrendAgg1w> newStockTrendList = new ArrayList<StockTrendAgg1w>();
+        List<StockTrendAgg1w> newStockTrendList = new ArrayList<>();
         for (StockTrend stockTrend : stockList)
         {
             newStockTrendList.add((StockTrendAgg1w)stockTrend);
@@ -172,7 +174,7 @@ public class StockTrendUtils
     
     public static List<StockTrendAgg1m> stockTrendListToStockTrendAgg1mList(List<StockTrend> stockList)
     {
-        List<StockTrendAgg1m> newStockTrendList = new ArrayList<StockTrendAgg1m>();
+        List<StockTrendAgg1m> newStockTrendList = new ArrayList<>();
         for (StockTrend stockTrend : stockList)
         {
             newStockTrendList.add((StockTrendAgg1m)stockTrend);
@@ -201,193 +203,64 @@ public class StockTrendUtils
         }
         return null;
     }
+
+    private static Predicate getPredicate(Root<? extends AbstractStockTrend> root, CriteriaQuery<?> paramCriteriaQuery,
+                                          CriteriaBuilder cb, String stockId, Date startDate, Date endDate) {
+        List<Predicate> predicates = new ArrayList<>();
+        if (startDate != null)
+        {
+            predicates.add(cb.greaterThanOrEqualTo(root.get("createdate").as(Date.class), startDate));
+        }
+        if (endDate != null)
+        {
+            predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
+        }
+        if (stockId != null)
+        {
+            predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
+        }
+        return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+    }
     
     private static Specification<StockTrendRaw> getSpecificationForStockTrendRawByDate(String stockId, Date startDate, Date endDate)
     {
-        Specification<StockTrendRaw> querySpecifi = new Specification<StockTrendRaw>() 
-        {
-            @Override
-            public Predicate toPredicate(Root<StockTrendRaw> root, CriteriaQuery<?> paramCriteriaQuery,
-                    CriteriaBuilder cb)
-            {
-                List<Predicate> predicates = new ArrayList<>();
-                if (startDate != null)
-                {
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("createdate").as(Date.class), startDate));
-                }
-                if (endDate != null)
-                {
-                    predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
-                }
-                if (stockId != null)
-                {
-                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            } 
-        };
+        Specification<StockTrendRaw> querySpecifi = (Specification<StockTrendRaw>) (root, paramCriteriaQuery, cb) -> getPredicate(root, paramCriteriaQuery, cb, stockId, startDate, endDate);
         return querySpecifi;
     }
     
     private static Specification<StockTrendAgg1Min> getSpecificationForStockTrendAgg1MinByDate(String stockId, Date startDate, Date endDate)
     {
-        Specification<StockTrendAgg1Min> querySpecifi = new Specification<StockTrendAgg1Min>() 
-        {
-            @Override
-            public Predicate toPredicate(Root<StockTrendAgg1Min> root, CriteriaQuery<?> paramCriteriaQuery,
-                    CriteriaBuilder cb)
-            {
-                List<Predicate> predicates = new ArrayList<>();
-                if (startDate != null)
-                {
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("createdate").as(Date.class), startDate));
-                }
-                if (endDate != null)
-                {
-                    predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
-                }
-                if (stockId != null)
-                {
-                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            } 
-        };
+        Specification<StockTrendAgg1Min> querySpecifi = (Specification<StockTrendAgg1Min>) (root, paramCriteriaQuery, cb) -> getPredicate(root, paramCriteriaQuery, cb, stockId, startDate, endDate);
         return querySpecifi;
     }
     
     private static Specification<StockTrendAgg5Min> getSpecificationForStockTrendAgg5MinByDate(String stockId, Date startDate, Date endDate)
     {
-        Specification<StockTrendAgg5Min> querySpecifi = new Specification<StockTrendAgg5Min>() 
-        {
-            @Override
-            public Predicate toPredicate(Root<StockTrendAgg5Min> root, CriteriaQuery<?> paramCriteriaQuery,
-                    CriteriaBuilder cb)
-            {
-                List<Predicate> predicates = new ArrayList<>();
-                if (startDate != null)
-                {
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("createdate").as(Date.class), startDate));
-                }
-                if (endDate != null)
-                {
-                    predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
-                }
-                if (stockId != null)
-                {
-                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            } 
-        };
+        Specification<StockTrendAgg5Min> querySpecifi = (Specification<StockTrendAgg5Min>) (root, paramCriteriaQuery, cb) -> getPredicate(root, paramCriteriaQuery, cb, stockId, startDate, endDate);
         return querySpecifi;
     }
     
     private static Specification<StockTrendAgg1h> getSpecificationForStockTrendAgg1hByDate(String stockId, Date startDate, Date endDate)
     {
-        Specification<StockTrendAgg1h> querySpecifi = new Specification<StockTrendAgg1h>() 
-        {
-            @Override
-            public Predicate toPredicate(Root<StockTrendAgg1h> root, CriteriaQuery<?> paramCriteriaQuery,
-                    CriteriaBuilder cb)
-            {
-                List<Predicate> predicates = new ArrayList<>();
-                if (startDate != null)
-                {
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("createdate").as(Date.class), startDate));
-                }
-                if (endDate != null)
-                {
-                    predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
-                }
-                if (stockId != null)
-                {
-                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            } 
-        };
+        Specification<StockTrendAgg1h> querySpecifi = (Specification<StockTrendAgg1h>) (root, paramCriteriaQuery, cb) -> getPredicate(root, paramCriteriaQuery, cb, stockId, startDate, endDate);
         return querySpecifi;
     }
     
     private static Specification<StockTrendAgg1d> getSpecificationForStockTrendAgg1dByDate(String stockId, Date startDate, Date endDate)
     {
-        Specification<StockTrendAgg1d> querySpecifi = new Specification<StockTrendAgg1d>() 
-        {
-            @Override
-            public Predicate toPredicate(Root<StockTrendAgg1d> root, CriteriaQuery<?> paramCriteriaQuery,
-                    CriteriaBuilder cb)
-            {
-                List<Predicate> predicates = new ArrayList<>();
-                if (startDate != null)
-                {
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("createdate").as(Date.class), startDate));
-                }
-                if (endDate != null)
-                {
-                    predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
-                }
-                if (stockId != null)
-                {
-                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            } 
-        };
+        Specification<StockTrendAgg1d> querySpecifi = (Specification<StockTrendAgg1d>) (root, paramCriteriaQuery, cb) -> getPredicate(root, paramCriteriaQuery, cb, stockId, startDate, endDate);
         return querySpecifi;
     }
     
     private static Specification<StockTrendAgg1w> getSpecificationForStockTrendAgg1wByDate(String stockId, Date startDate, Date endDate)
     {
-        Specification<StockTrendAgg1w> querySpecifi = new Specification<StockTrendAgg1w>() 
-        {
-            @Override
-            public Predicate toPredicate(Root<StockTrendAgg1w> root, CriteriaQuery<?> paramCriteriaQuery,
-                    CriteriaBuilder cb)
-            {
-                List<Predicate> predicates = new ArrayList<>();
-                if (startDate != null)
-                {
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("createdate").as(Date.class), startDate));
-                }
-                if (endDate != null)
-                {
-                    predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
-                }
-                if (stockId != null)
-                {
-                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            } 
-        };
+        Specification<StockTrendAgg1w> querySpecifi = (Specification<StockTrendAgg1w>) (root, paramCriteriaQuery, cb) -> getPredicate(root, paramCriteriaQuery, cb, stockId, startDate, endDate);
         return querySpecifi;
     }
     
     private static Specification<StockTrendAgg1m> getSpecificationForStockTrendAgg1mByDate(String stockId, Date startDate, Date endDate)
     {
-        Specification<StockTrendAgg1m> querySpecifi = new Specification<StockTrendAgg1m>() 
-        {
-            @Override
-            public Predicate toPredicate(Root<StockTrendAgg1m> root, CriteriaQuery<?> paramCriteriaQuery,
-                    CriteriaBuilder cb)
-            {
-                List<Predicate> predicates = new ArrayList<>();
-                if (startDate != null)
-                {
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("createdate").as(Date.class), startDate));
-                }
-                if (endDate != null)
-                {
-                    predicates.add(cb.lessThanOrEqualTo(root.get("createdate").as(Date.class), endDate));
-                }
-                if (stockId != null)
-                {
-                    predicates.add(cb.equal(root.get("stockId").as(String.class), stockId));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            } 
-        };
+        Specification<StockTrendAgg1m> querySpecifi = (Specification<StockTrendAgg1m>) (root, paramCriteriaQuery, cb) -> getPredicate(root, paramCriteriaQuery, cb, stockId, startDate, endDate);
         return querySpecifi;
     }
     
@@ -446,7 +319,7 @@ public class StockTrendUtils
         ret.addAll(queryResult);
         return ret;
     }
-    
+
     public static void deleteStockTrendByDate(StockTrendType type, String stockId, Date startDate, Date endDate)
     {
         List<StockTrend> deleteStockTrendList = getStockTrendByDate(type, stockId, startDate, endDate);
@@ -539,19 +412,8 @@ public class StockTrendUtils
             log.info("fetchStockTrendList is empty");
             return;
         }
-        Map<String, List<StockTrend>> stockIdToStockTrendListMap = new HashMap<String, List<StockTrend>>();
-        for (StockTrend stockTrend : fetchStockTrendList)
-        {
-            String stockId = stockTrend.getStockId();
-            List<StockTrend> stockTrendList = stockIdToStockTrendListMap.get(stockId);
-            if (stockTrendList == null)
-            {
-                stockTrendList = new ArrayList<StockTrend>();
-                stockIdToStockTrendListMap.put(stockId, stockTrendList);
-            }
-            stockTrendList.add(stockTrend);
-        }
-        List<StockTrend> resultStockTrendList = new ArrayList<StockTrend>();
+        Map<String, List<StockTrend>> stockIdToStockTrendListMap = fetchStockTrendList.stream().collect(Collectors.groupingBy(StockTrend::getStockId));
+        List<StockTrend> resultStockTrendList = new ArrayList<>();
         for (Map.Entry<String, List<StockTrend>> entry : stockIdToStockTrendListMap.entrySet())
         {
             String stockId = entry.getKey();

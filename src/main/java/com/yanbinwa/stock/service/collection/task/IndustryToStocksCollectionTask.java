@@ -5,7 +5,6 @@ import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.RequestParaBuilder;
 import com.yanbinwa.stock.common.http.URLMapper;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.element.IndustryToStockCollection.IndustryToStock;
@@ -24,7 +23,8 @@ import java.util.List;
 
 /**
  * 这里每一个Industry单独作为一个task，应该在CommissionIndustry中创建
- * 在query时要考虑当前是否已经交
+ *
+ * 这里需要获取每一支股票所属的industry，之后可以按着行业来聚合股票数据
  * 
  * @author emotibot
  *
@@ -33,15 +33,6 @@ import java.util.List;
 @Slf4j
 public class IndustryToStocksCollectionTask extends AbstractCollector
 {
-
-//    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-//    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9, HourWindow.HOUR10, HourWindow.HOUR13, HourWindow.HOUR14};
-//    private static final int periodInterval = Period.SECOND_IN_MINUTE;
-    
-//    private static final DayWindow[] dayWindowArray = {};
-//    private static final HourWindow[] hourWindowArray = {};
-//    private static final int periodInterval = Period.SECOND_IN_MINUTE;
-    
     private Industry industry;
     
     public IndustryToStocksCollectionTask(String taskName)
@@ -84,28 +75,13 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
         String json = request(url);
         List<StockTrend> stockList = getStockTrendFromQuery(json);
         updateIndustryToStockId(stockList, industry.getIndustryName());
-        List<StockMetaData> stockMateDataList = getStockMetaDataFromQuery(json);
-        updateStockMetaData(stockMateDataList);
-        //StockTrendUtils.storeStockTrend(stockList, StockTrendType.TYPE_RAW);
         log.debug("result is json " + json);
     }
 
     @Override
     public Period generatePeriod()
     {
-//        Period period = new Period();
-//        period.setPeriodType(PeriodType.PERIOD);
-//        period.setInterval(periodInterval);
-//        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
-//        Collections.addAll(dayWindowList, dayWindowArray);
-//        period.setDayWindowList(dayWindowList);
-//        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
-//        Collections.addAll(hourWindowList, hourWindowArray);
-//        period.setHourWindowList(hourWindowList);
-//        return period;
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override
@@ -130,7 +106,7 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
             {
                 return null;
             }
-            List<StockTrend> ret = new ArrayList<StockTrend>();
+            List<StockTrend> ret = new ArrayList<>();
             for (IndustryToStock industryToStock : element.getData())
             {
                 ret.add(new StockTrendRaw(industryToStock));
@@ -145,7 +121,7 @@ public class IndustryToStocksCollectionTask extends AbstractCollector
     
     private void updateIndustryToStockId(List<StockTrend> stockTrendList, String industryName)
     {
-        List<String> stockIds = new ArrayList<String>();
+        List<String> stockIds = new ArrayList<>();
         for (StockTrend stockTrend : stockTrendList)
         {
             stockIds.add(stockTrend.getStockId());

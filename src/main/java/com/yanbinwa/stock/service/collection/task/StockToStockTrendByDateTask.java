@@ -8,7 +8,6 @@ import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.RequestParaBuilder;
 import com.yanbinwa.stock.common.http.URLMapper;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.aggragation.entity.StockTrendAgg1d;
@@ -50,6 +49,8 @@ public class StockToStockTrendByDateTask extends AbstractCollector
         {
             log.error("stockId or date is null");
         }
+        //先在数据库中把该段时间的数据删除，之后再写入
+        StockTrendUtils.deleteStockTrendByDate(StockTrendType.TYPE_1D, stockId, dateList.get(0), dateList.get(dateList.size() - 1));
         List<StockTrend> ret = new ArrayList<>();
         for (Date date : dateList)
         {
@@ -65,9 +66,7 @@ public class StockToStockTrendByDateTask extends AbstractCollector
     @Override
     public Period generatePeriod()
     {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override

@@ -5,8 +5,9 @@ import com.yanbinwa.stock.common.collector.AbstractCollector;
 import com.yanbinwa.stock.common.http.URLMapper;
 import com.yanbinwa.stock.common.regular.task.AbstractRegularTask;
 import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
+import com.yanbinwa.stock.common.type.DayWindow;
+import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.common.utils.UnicodeUtils;
 import com.yanbinwa.stock.service.collection.element.Industry;
 import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
@@ -38,13 +39,9 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 public class CommissionIndustryCollectionTask extends AbstractCollector
 {
-//    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-//    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR8_FH};
-//    private static final int periodInterval = Period.SECOND_IN_DAY;
-    
-//    private static final DayWindow[] dayWindowArray = {};
-//    private static final HourWindow[] hourWindowArray = {};
-//    private static final int periodInterval = Period.SECOND_IN_MINUTE;
+    private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
+    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR8_FH};
+    private static final int periodInterval = Period.SECOND_IN_DAY;
     
     private ReentrantLock lock = new ReentrantLock();
     
@@ -56,19 +53,7 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
     @Override
     public Period generatePeriod()
     {
-//        Period period = new Period();
-//        period.setPeriodType(PeriodType.PERIOD);
-//        period.setInterval(periodInterval);
-//        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
-//        Collections.addAll(dayWindowList, dayWindowArray);
-//        period.setDayWindowList(dayWindowList);
-//        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
-//        Collections.addAll(hourWindowList, hourWindowArray);
-//        period.setHourWindowList(hourWindowList);
-//        return period;
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override
@@ -80,7 +65,7 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
     @Override
     public void collectLogic() throws MalformedURLException, IOException
     {
-        Map<String, Industry> res = new HashMap<String, Industry>();
+        Map<String, Industry> res = new HashMap<>();
         String target = URLMapper.COMPREHENSIVE_PAGE.toString();
         String content = request(new URL(target));
         Document doc = Jsoup.parse(content);
@@ -111,10 +96,10 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
      */
     private void updateCommissionIndustry(Map<String, Industry> res)
     {
-        Map<String, Industry> oldIndustryMap = CollectionUtils.getCommissionIndustry();
+        Map<String, Industry> oldIndustryMap = null;//CollectionUtils.getCommissionIndustry();
         if (oldIndustryMap == null)
         {
-            oldIndustryMap = new HashMap<String, Industry>();
+            oldIndustryMap = new HashMap<>();
         }
         updateCommissionIndustryTask(res, oldIndustryMap);
         CollectionUtils.setCommissionIndustry(JsonUtils.getJsonStr(res));
@@ -125,9 +110,9 @@ public class CommissionIndustryCollectionTask extends AbstractCollector
         lock.lock();
         try
         {
-            List<Industry> addList = new ArrayList<Industry>();
-            List<Industry> deleteList = new ArrayList<Industry>();
-            List<Industry> updateList = new ArrayList<Industry>();
+            List<Industry> addList = new ArrayList<>();
+            List<Industry> deleteList = new ArrayList<>();
+            List<Industry> updateList = new ArrayList<>();
             
             for(Map.Entry<String, Industry> entry : newIndustryMap.entrySet())
             {

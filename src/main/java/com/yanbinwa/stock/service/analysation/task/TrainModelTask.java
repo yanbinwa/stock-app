@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import com.yanbinwa.stock.common.analysation.AbstractAnalysation;
 import com.yanbinwa.stock.common.constants.Constants;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.analysation.element.TrainData;
@@ -128,9 +127,7 @@ public class TrainModelTask extends AbstractAnalysation
     @Override
     public Period generatePeriod()
     {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override

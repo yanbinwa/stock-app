@@ -80,9 +80,7 @@ public class FetchAllIdeaStockTrendTask extends AbstractAnalysation {
 
     @Override
     public Period generatePeriod() {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override

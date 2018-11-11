@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 包含redis的操作
@@ -51,7 +52,15 @@ public class CollectionUtils
     {
         setRedisCache(generateKey(MyConstants.INDUSTRY_STOCKID_KEY + "-" + industryName), stockIds.toString());
     }
-    
+
+    public static List<String> getAllIndustryName() {
+        Map<String, Industry> industryMap = getCommissionIndustry();
+        if (industryMap == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(industryMap.keySet());
+    }
+
     @SuppressWarnings("unchecked")
     public static List<String> getIndustryToStockId(String industryName)
     {

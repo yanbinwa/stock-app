@@ -19,5 +19,5 @@ import com.yanbinwa.stock.common.cookie.CookieProcessor;
 
 public interface Collector extends CookieProcessor
 {
-    public void collectLogic() throws MalformedURLException, IOException;
+    void collectLogic() throws MalformedURLException, IOException;
 }

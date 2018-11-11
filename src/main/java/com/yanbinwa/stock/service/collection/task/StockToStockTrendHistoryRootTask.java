@@ -1,17 +1,21 @@
 package com.yanbinwa.stock.service.collection.task;
 
+import com.yanbinwa.stock.common.collector.AbstractCollector;
+import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
+import com.yanbinwa.stock.common.type.Period;
+import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
+import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
+import lombok.Data;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 
-import com.yanbinwa.stock.common.collector.AbstractCollector;
-import com.yanbinwa.stock.common.singleton.RegularManagerSingleton;
-import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
-import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
-import com.yanbinwa.stock.service.collection.utils.CollectionUtils;
-import lombok.Data;
+/**
+ * 这里是一次性获取一段时间内某只股票的数据
+ *
+ */
 
 @Data
 public class StockToStockTrendHistoryRootTask extends AbstractCollector
@@ -59,9 +63,7 @@ public class StockToStockTrendHistoryRootTask extends AbstractCollector
     @Override
     public Period generatePeriod()
     {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override

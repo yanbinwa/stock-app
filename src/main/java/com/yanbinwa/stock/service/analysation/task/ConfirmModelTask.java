@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import com.yanbinwa.stock.common.analysation.AbstractAnalysation;
 import com.yanbinwa.stock.common.constants.Constants;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.entity.stockTrend.StockTrend;
 import com.yanbinwa.stock.entity.stockTrend.StockTrendType;
 import com.yanbinwa.stock.service.analysation.element.TrainData;
@@ -19,7 +18,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.HttpURLConnection;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Slf4j
@@ -108,9 +109,7 @@ public class ConfirmModelTask extends AbstractAnalysation
     @Override
     public Period generatePeriod()
     {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.NONE);
-        return period;
+        return buildEmptyPeriod();
     }
 
     @Override

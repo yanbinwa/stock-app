@@ -4,13 +4,10 @@ import com.yanbinwa.stock.common.trade.AbstractTrade;
 import com.yanbinwa.stock.common.type.DayWindow;
 import com.yanbinwa.stock.common.type.HourWindow;
 import com.yanbinwa.stock.common.type.Period;
-import com.yanbinwa.stock.common.type.PeriodType;
 import com.yanbinwa.stock.service.trade.entity.StockTradeApply;
 import com.yanbinwa.stock.service.trade.utils.StockTradeUtils;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,16 +27,7 @@ public class StockTradeApplyClearTask extends AbstractTrade {
 
     @Override
     public Period generatePeriod() {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.PERIOD);
-        period.setInterval(periodInterval);
-        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
-        Collections.addAll(dayWindowList, dayWindowArray);
-        period.setDayWindowList(dayWindowList);
-        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
-        Collections.addAll(hourWindowList, hourWindowArray);
-        period.setHourWindowList(hourWindowList);
-        return period;
+        return buildPeriod(periodInterval, dayWindowArray, hourWindowArray);
     }
 
     @Override

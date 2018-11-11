@@ -2,7 +2,6 @@ package com.yanbinwa.stock.service.collection.task;
 
 import com.emotibot.middleware.utils.JsonUtils;
 import com.emotibot.middleware.utils.StringUtils;
-import com.emotibot.middleware.utils.TimeUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.yanbinwa.stock.common.collector.AbstractCollector;
@@ -26,27 +25,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * 获取任意一只股票和大盘指数的当天数据
+ * 获取任意一只股票和大盘指数的实时数据
  *
  */
 @Slf4j
 @Data
-public class StockToStockTrendTodayHistoryTask extends AbstractCollector
+public class StockToStockTrendCurrentTask extends AbstractCollector
 {
     private static final DayWindow[] dayWindowArray = {DayWindow.MONDAY, DayWindow.TUESDAY, DayWindow.WEDNESDAY, DayWindow.THURSDAY, DayWindow.FRIDAY};
-    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR16_FH};
+    private static final HourWindow[] hourWindowArray = {HourWindow.HOUR9_SH, HourWindow.HOUR10_FH, HourWindow.HOUR10_SH, HourWindow.HOUR11_FH, HourWindow.HOUR13_FH, HourWindow.HOUR13_SH, HourWindow.HOUR14_FH, HourWindow.HOUR14_SH};
     private static final int periodInterval = 120;
 
     private String stockId;
 
-    public StockToStockTrendTodayHistoryTask(String taskName)
+    public StockToStockTrendCurrentTask(String taskName)
     {
         super(taskName);
     }
-    
-    public StockToStockTrendTodayHistoryTask(String taskName, String stockId)
+
+    public StockToStockTrendCurrentTask(String taskName, String stockId)
     {
         super(taskName);
         this.stockId = stockId;
@@ -59,11 +57,11 @@ public class StockToStockTrendTodayHistoryTask extends AbstractCollector
         {
             log.error("stockId is null");
         }
-        
+
         String target = URLMapper.STOCK_JSON.toString();
         RequestParaBuilder builder = new RequestParaBuilder(target);
         builder.addParameter("code", stockId);
-        
+
         URL url = new URL(builder.build());
         String json = request(url);
         List<StockTrend> stockTrendList = getStockTrendFromQuery(json);
@@ -71,7 +69,7 @@ public class StockToStockTrendTodayHistoryTask extends AbstractCollector
         {
             return;
         }
-        StockTrendUtils.storeStockTrend(stockTrendList, StockTrendType.TYPE_1D);
+        StockTrendUtils.storeStockTrend(stockTrendList, StockTrendType.TYPE_RAW);
     }
 
     @Override
@@ -85,15 +83,15 @@ public class StockToStockTrendTodayHistoryTask extends AbstractCollector
     {
         this.timeout = MyConstants.TIMEOUT;
     }
-    
+
     public void setStockId(String stockId)
     {
         this.stockId = stockId;
     }
-    
+
     /**
      * 在写入当天的股票信息的同时，需要将redis中缓存的当天分时的信息清楚掉
-     * 
+     *
      * @param json
      * @return
      */
@@ -109,7 +107,7 @@ public class StockToStockTrendTodayHistoryTask extends AbstractCollector
                 StockTrend stockTrend = new StockTrendAgg1d();
                 stockTrend.setStockId(stockId);
                 stockTrend.setCurrentPrice(stockObj.get("current").getAsDouble());
-                stockTrend.setCreatedate(new Date(TimeUtils.getTodayTimestamp()));
+                stockTrend.setCreatedate(new Date());
                 stockTrend.setOpen(stockObj.get("open").getAsDouble());
                 stockTrend.setHigh(stockObj.get("high").getAsDouble());
                 stockTrend.setClose(stockObj.get("close").getAsDouble());

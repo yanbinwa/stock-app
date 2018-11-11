@@ -73,16 +73,7 @@ public class StockTradeDealTask extends AbstractTrade {
 
     @Override
     public Period generatePeriod() {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.PERIOD);
-        period.setInterval(periodInterval);
-        List<DayWindow> dayWindowList = new ArrayList<DayWindow>();
-        Collections.addAll(dayWindowList, dayWindowArray);
-        period.setDayWindowList(dayWindowList);
-        List<HourWindow> hourWindowList = new ArrayList<HourWindow>();
-        Collections.addAll(hourWindowList, hourWindowArray);
-        period.setHourWindowList(hourWindowList);
-        return period;
+        return buildPeriod(periodInterval, dayWindowArray, hourWindowArray);
     }
 
     @Override
