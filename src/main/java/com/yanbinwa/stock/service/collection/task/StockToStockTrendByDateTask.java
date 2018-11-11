@@ -48,6 +48,7 @@ public class StockToStockTrendByDateTask extends AbstractCollector
         if(StringUtils.isEmpty(stockId) || dateList == null || dateList.isEmpty())
         {
             log.error("stockId or date is null");
+            return;
         }
         //先在数据库中把该段时间的数据删除，之后再写入
         StockTrendUtils.deleteStockTrendByDate(StockTrendType.TYPE_1D, stockId, dateList.get(0), dateList.get(dateList.size() - 1));
