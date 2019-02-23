@@ -11,4 +11,5 @@ public interface AnalysationService {
     void lowPriceStockAnalysation(LowPriceStockRequest request);
     void dabanTopNAnalysation(DabanTopNRequest request);
     void dabanTopNByIndustryAnalysation(DabanTopNRequest request);
+    void dabanNumAnalysation(DabanRequest request);
 }

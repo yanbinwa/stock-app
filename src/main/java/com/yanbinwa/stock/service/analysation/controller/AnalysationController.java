@@ -54,4 +54,9 @@ public class AnalysationController {
     public void dabanTopNByIndustryAnalysation(@RequestBody DabanTopNRequest request) {
         analysationService.dabanTopNByIndustryAnalysation(request);
     }
+
+    @PostMapping(value = "/dabanNumAnalysation")
+    public void dabanNumAnalysation(@RequestBody DabanNumRequest request) {
+        analysationService.dabanNumAnalysation(request);
+    }
 }

@@ -54,7 +54,7 @@ public class FetchIdeaStockTrendByIndustryTask extends AbstractAnalysation {
         stockTrendList = StockTrendUtils.removeDuplateStockTrend(stockTrendList);
         Map<String, String> stockIdToIndustryMap = CollectionUtils.getStockIdToIndustryNameMap();
         Map<String, List<StockTrend>> industryNameToStockTrendListMap = stockTrendList.stream().
-                collect(Collectors.groupingBy(stockTrend -> stockIdToIndustryMap.containsKey(stockTrend) ? stockIdToIndustryMap.get(stockTrend) : OTHER_INDUSTRY_NAME));
+                collect(Collectors.groupingBy(stockTrend -> stockIdToIndustryMap.containsKey(stockTrend.getStockId()) ? stockIdToIndustryMap.get(stockTrend.getStockId()) : OTHER_INDUSTRY_NAME));
         for (String industryName : industryNameToStockTrendListMap.keySet()) {
             List<List<StockTrend>> chooseStockTrendLists = strategy.getIdealStockTrendList(industryNameToStockTrendListMap.get(industryName));
             if (chooseStockTrendLists == null)

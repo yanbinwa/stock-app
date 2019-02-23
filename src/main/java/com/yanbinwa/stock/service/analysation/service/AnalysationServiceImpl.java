@@ -160,6 +160,25 @@ public class AnalysationServiceImpl implements AnalysationService {
         RegularManagerSingleton.getInstance().addRegularTask(task);
     }
 
+    @Override
+    public void dabanNumAnalysation(DabanRequest request) {
+        DabanNumStrategy strategy = new DabanNumStrategy(request.getDayNum(), request.getGroup_limit(), request.getDabanTime(), WINDOW_GAP);
+        clearDir(strategy.getClass().getSimpleName());
+        Date startDate = TimeUtils.getDateFromStr(request.getStartTime(), DATE_FORMAT);
+        Date endDate = TimeUtils.getDateFromStr(request.getEndTime(), DATE_FORMAT);
+        AbstractRegularTask task;
+        if (StringUtils.isEmpty(request.getStockId())) {
+            task = new FetchIdeaStockTrendRootTask(FetchIdeaStockTrendByIdTask.class.getSimpleName() + startDate.getTime() + "-" + endDate.getTime(),
+                    startDate.getTime(), endDate.getTime(), strategy);
+        } else {
+            task = new FetchIdeaStockTrendByIdTask(
+                    FetchIdeaStockTrendByIdTask.class.getSimpleName() + startDate.getTime() + "-" + endDate.getTime() + "-" + request.getStockId(),
+                    request.getStockId(), startDate.getTime(), endDate.getTime(), strategy);
+
+        }
+        RegularManagerSingleton.getInstance().addRegularTask(task);
+    }
+
     private void clearDir(String dirPrefix) {
         File dir = new File(DrawStockTrendUtils.DIR + "/" + dirPrefix);
         if (!dir.exists()) {
